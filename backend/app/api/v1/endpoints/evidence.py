@@ -13,6 +13,8 @@ from backend.app.core.config import settings
 
 router = APIRouter()
 
+MAX_BYTES = settings.MAX_UPLOAD_SIZE_MB * 1024 * 1024
+
 @router.post("/transcribe", response_model=AudioTranscriptionResponse)
 async def transcribe_audio_endpoint(
     audio_file: Optional[UploadFile] = File(None),
@@ -22,15 +24,39 @@ async def transcribe_audio_endpoint(
     Transcribes teacher or mentor audio voice note.
     """
     file_path = None
+    audio_bytes = None
+    mime_type = "audio/webm"
+
     if audio_file:
+        if audio_file.content_type and audio_file.content_type not in settings.ALLOWED_AUDIO_TYPES:
+            # Check extension as well
+            ext = os.path.splitext(audio_file.filename or "")[1].lower()
+            if ext not in [".webm", ".wav", ".mp3", ".ogg", ".m4a"]:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Unsupported audio format. Please provide webm, wav, mp3, ogg, or m4a."
+                )
+
+        audio_bytes = await audio_file.read()
+        if len(audio_bytes) > MAX_BYTES:
+            raise HTTPException(
+                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                detail=f"Audio file exceeds maximum allowed size of {settings.MAX_UPLOAD_SIZE_MB}MB."
+            )
+
+        mime_type = audio_file.content_type or "audio/webm"
         file_ext = os.path.splitext(audio_file.filename or "")[1] or ".webm"
         file_name = f"audio_{uuid.uuid4().hex[:12]}{file_ext}"
         file_path = os.path.join(settings.UPLOAD_DIR, file_name)
         with open(file_path, "wb") as f:
-            content = await audio_file.read()
-            f.write(content)
+            f.write(audio_bytes)
             
-    res = await audio_service.transcribe_audio(file_path=file_path, language=language)
+    res = await audio_service.transcribe_audio(
+        file_path=file_path,
+        language=language,
+        audio_bytes=audio_bytes,
+        mime_type=mime_type
+    )
     return res
 
 @router.post("/upload")
@@ -45,30 +71,50 @@ async def upload_evidence(
     db: Session = Depends(get_db)
 ):
     """
-    Accepts real multipart evidence (tracker image and/or audio recording) and saves it.
+    Accepts real multipart evidence (tracker image and/or audio recording) and validates file boundaries.
     """
     image_url = None
+    img_bytes = None
     if tracker_photo:
+        img_bytes = await tracker_photo.read()
+        if len(img_bytes) > MAX_BYTES:
+            raise HTTPException(
+                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                detail=f"Image file exceeds maximum allowed size of {settings.MAX_UPLOAD_SIZE_MB}MB."
+            )
+
         ext = os.path.splitext(tracker_photo.filename or "")[1] or ".jpg"
         img_name = f"tracker_{uuid.uuid4().hex[:12]}{ext}"
         img_path = os.path.join(settings.UPLOAD_DIR, img_name)
         with open(img_path, "wb") as f:
-            f.write(await tracker_photo.read())
+            f.write(img_bytes)
         image_url = f"/uploads/{img_name}"
 
     audio_url = None
+    aud_bytes = None
     if audio_file:
+        aud_bytes = await audio_file.read()
+        if len(aud_bytes) > MAX_BYTES:
+            raise HTTPException(
+                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                detail=f"Audio file exceeds maximum allowed size of {settings.MAX_UPLOAD_SIZE_MB}MB."
+            )
+
         ext = os.path.splitext(audio_file.filename or "")[1] or ".webm"
         aud_name = f"voice_{uuid.uuid4().hex[:12]}{ext}"
         aud_path = os.path.join(settings.UPLOAD_DIR, aud_name)
         with open(aud_path, "wb") as f:
-            f.write(await audio_file.read())
+            f.write(aud_bytes)
         audio_url = f"/uploads/{aud_name}"
 
     # If transcript was not provided but audio was, transcribe it
     final_transcript = transcript
     if not final_transcript and audio_file:
-        trans_res = await audio_service.transcribe_audio(language=language)
+        trans_res = await audio_service.transcribe_audio(
+            language=language,
+            audio_bytes=aud_bytes,
+            mime_type=audio_file.content_type or "audio/webm"
+        )
         final_transcript = trans_res.get("transcript")
 
     evidence_id = f"ev-{int(time.time() * 1000)}"
@@ -106,15 +152,38 @@ async def analyze_practice_endpoint(
     db: Session = Depends(get_db)
 ):
     """
-    Full AI Practice Rubric analysis pipeline.
+    Full AI Practice Rubric analysis pipeline with safe boundary checks.
     """
+    img_bytes = None
+    if tracker_photo:
+        img_bytes = await tracker_photo.read()
+        if len(img_bytes) > MAX_BYTES:
+            raise HTTPException(
+                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                detail=f"Image file exceeds maximum allowed size of {settings.MAX_UPLOAD_SIZE_MB}MB."
+            )
+
+    aud_bytes = None
+    if audio_file:
+        aud_bytes = await audio_file.read()
+        if len(aud_bytes) > MAX_BYTES:
+            raise HTTPException(
+                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                detail=f"Audio file exceeds maximum allowed size of {settings.MAX_UPLOAD_SIZE_MB}MB."
+            )
+
     final_transcript = transcript
     if not final_transcript and audio_file:
-        trans_res = await audio_service.transcribe_audio(language=language)
+        trans_res = await audio_service.transcribe_audio(
+            language=language,
+            audio_bytes=aud_bytes,
+            mime_type=audio_file.content_type or "audio/webm"
+        )
         final_transcript = trans_res.get("transcript")
 
     analysis_data = ai_service.generate_practice_analysis(
         tracker_image_path=tracker_image_url,
+        tracker_image_bytes=img_bytes,
         transcript_text=final_transcript,
         language=language
     )
