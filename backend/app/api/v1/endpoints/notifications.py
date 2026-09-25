@@ -1,0 +1,37 @@
+from typing import List, Dict, Any
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from backend.app.api.deps import get_db
+from backend.app.models.entities import Notification
+
+router = APIRouter()
+
+@router.get("", response_model=List[Dict[str, Any]])
+def get_notifications(db: Session = Depends(get_db)):
+    notifs = db.query(Notification).order_by(Notification.created_at.desc()).all()
+    return [
+        {
+            "id": n.id,
+            "type": n.type,
+            "title": n.title,
+            "description": n.description,
+            "time": n.time,
+            "unread": n.unread,
+            "targetRoute": n.target_route
+        }
+        for n in notifs
+    ]
+
+@router.patch("/{notif_id}/read")
+def mark_read(notif_id: str, db: Session = Depends(get_db)):
+    notif = db.query(Notification).filter(Notification.id == notif_id).first()
+    if notif:
+        notif.unread = False
+        db.commit()
+    return {"success": True, "id": notif_id, "unread": False}
+
+@router.post("/mark-all-read")
+def mark_all_read(db: Session = Depends(get_db)):
+    db.query(Notification).update({"unread": False})
+    db.commit()
+    return {"success": True, "message": "All notifications marked read"}
