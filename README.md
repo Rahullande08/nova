@@ -1,5 +1,4 @@
-# nova
-# Practice Layer
+# Practice Layer: EdTech Fidelity Platform
 
 ### AI-powered classroom practice monitoring and coaching for real-world implementation of proven education interventions.
 
@@ -24,618 +23,116 @@ The same evidence can then support mentors/CRPs during school visits and help pr
 
 ---
 
-# 🎯 The Problem
-
-Education programs often have well-designed interventions and extensive teacher training, but there is a major gap between:
-
-**Training → Classroom Practice**
-
-Program teams may know:
-
-* Which teachers attended training
-* Which schools received support
-* Which learning outcomes were measured
-
-But they often cannot easily see:
-
-> **What is actually happening inside the classroom every week?**
-
-Existing monitoring systems frequently depend on:
-
-* Manual data entry
-* Long checklists
-* Tablet-based forms
-* Periodic classroom observations
-* Reports prepared after the fact
-
-This creates additional workload for teachers and mentors while producing limited real-time information about classroom practice.
-
----
-
-# 💡 Our Solution
-
-Practice Layer creates a lightweight **Practice Intelligence Loop**:
+## 🌟 The Practice Intelligence Loop
 
 ```text
 TEACHER EVIDENCE
       ↓
 CAPTURE
-Photo + Voice Note
+Photo + Voice Note (Marathi / Hindi / English)
       ↓
-AI UNDERSTANDS
-Speech + Evidence Analysis
+UNDERSTAND
+AI extracts practice signals via 5-point non-judgmental rubric
       ↓
-AI COACHES
-One Specific Next Step
+COACH
+One concise next step for tomorrow's classroom + TTS Voice Guidance
       ↓
-MENTOR / CRP
-Prioritized Support
+ROUTE
+Cluster Resource Person (CRP) deterministic visit queue (Rule-based SLA)
       ↓
 VERIFY
-Practice Observation
+Classroom demonstration & observed pedagogical shift
       ↓
-PROGRAM INSIGHT
-Training → Practice
-      ↓
-Better Support
+LEARN
+State training modules calibrated from classroom friction
       ↺
 ```
 
-The goal is not to replace teachers or mentors.
+---
 
-The goal is to make their existing work **more visible, actionable and measurable**.
+## 🎨 Visual Source of Truth & Stitch Design System
+
+This frontend is faithfully implemented from the **Practice Layer Stitch Design System** (Project ID: `16814568900563264006`):
+- **Typography:** Geist (Headings & Metrics) + Inter (Optical Body Legibility)
+- **Palette:** Institutional Navy (`#0F172A`), Electric Interactive Blue (`#2563EB`), Emerald Verified (`#059669`), Coral Attention (`#DC2626`)
+- **Elevation:** Low-contrast keylines (`1px solid #E2E8F0`) with hyper-diffuse contact drop shadows
+- **Responsiveness:** Full multi-tier support for Desktop (1440px), Tablet (1024px), and Mobile Touch (390px)
 
 ---
 
-# ⭐ Key Features
+## ⭐ Core Modules & Implemented Workflows
 
-## 1. 📸 Low-Effort Evidence Capture
+### 1. 📊 Overview Dashboard
+- Live Operational Pulse header & Haveli cluster sync status
+- 6-Stage Interactive Practice Loop stepper banner
+- 2x2 Top KPI Cards (Schools Covered, Teachers Active, Practice Signals, Actions Closed)
+- Practice Health Funnel (Observed → Acted On → Field Verified)
+- AI Practice Pulse (Dominant friction callout & suggested system response)
+- Priority Schools Action Queue with pedagogical tags & deterministic reasons
+- 8-Week Competency Adoption SVG Area Chart
 
-Teachers don't need to complete complicated digital forms.
+### 2. 👩‍🏫 Teacher Practice
+- **Capture Evidence:**
+  - Rapid capture pipeline (< 60s)
+  - Group Tracker Photo OCR upload & TaRL Level Matrix (Beginner, Letter, Word, Paragraph)
+  - Real microphone voice note recording with live frequency visualizer & timer
+  - Multilingual speech selector (Hindi, Marathi, English, Auto Detect)
+  - Institutional trust guardrails (Zero child faces stored, audio purged post-transcription)
+- **AI Practice Analysis:**
+  - 5-Point non-judgmental rubric with confidence scores & evidence citations
+- **AI Instructional Coach:**
+  - "Tomorrow, try this: Your Next Step" (Concise single action)
+  - Targeted Activity Pick with materials & duration
+  - Text-To-Speech (TTS) Voice Coaching playback in Marathi / Hindi
+  - "Send to My Tomorrow Plan" micro-interaction
+- **My Practice History:**
+  - Practice logs timeline, strengths, and targeted focus areas
+- **Activity Library:**
+  - Searchable and filterable FLN activity catalogue with step-by-step facilitation guides
 
-They can submit:
+### 3. 👨‍🏫 Mentor / Cluster Resource Person (CRP)
+- **Mentor Dashboard:**
+  - Schools to visit, priority schools, actions due, follow-ups
+  - In-Visit Fast Capture with quick rubric taps & voice recording
+  - Deterministic governance rule breakdown ("Why this school?")
+- **Visit Plan:**
+  - Daily priority route calendar
+- **School Evidence Feed:**
+  - Deep-dive into teacher audio clips, trackers, and student level distribution
+- **Mentor Visit Workflow:**
+  - Structured classroom observation flow with AI note structuring & pre-drafted WhatsApp action notes
 
-* A photo of their existing tracker
-* A short voice note
-* Evidence in their preferred supported language
-
-The existing paper-based workflow can remain in place.
-
----
-
-## 2. 🎙️ Local-Language Voice Input
-
-Teachers can describe their classroom experience naturally through voice.
-
-The system can convert speech into structured information using speech recognition.
-
-Example:
-
-> "आज मुलांना त्यांच्या पातळीनुसार गट केले आणि नंबर लाईनचा वापर केला..."
-
-The goal is to reduce typing and data-entry burden.
-
----
-
-## 3. 🤖 AI Practice Analysis
-
-The AI analyzes submitted evidence against a defined classroom-practice rubric.
-
-Example:
-
-| Practice                       | Status             |
-| ------------------------------ | ------------------ |
-| Learners grouped by level      | ✅ Observed         |
-| Activity matched learner level | ✅ Observed         |
-| Understanding checked          | 🟡 Partly observed |
-| Learners actively practiced    | ✅ Observed         |
-| Instruction adapted            | ⚪ Not observed     |
-
-The system focuses on **observable practice**, not assumptions about teacher quality.
-
----
-
-## 4. 💡 AI Coach
-
-Instead of generating a long report, the system provides **one practical next step**.
-
-Example:
-
-> **Tomorrow, try this:**
-> After grouping learners, give each group a task matched to its current level and spend three minutes checking whether the task is working.
-
-The coaching can be connected to a library of activities and examples from experienced local teachers and mentors.
+### 4. 📋 Program Management & Governance
+- **Action Ledger:**
+  - Search, status filtering (Open, In Progress, Verified, Closed), SLA tracker, and verification drawer
+- **Training → Practice Analytics:**
+  - Workshop completion vs daily classroom practice adoption transfer gap analytics
+- **Reports & Insights:**
+  - Executive diagnostic metrics with one-click CSV export and print-ready PDF reporting
+- **AI Transparency & Governance:**
+  - Interactive pipeline detailing explicit separation between AI synthesis vs Human deterministic decisions
 
 ---
 
-## 5. 📚 Activity Library
+## 🛡️ Responsible AI & Privacy
 
-Teachers can discover practical classroom activities based on:
-
-* Grade
-* Subject
-* Learning level
-* Duration
-* Language
-* Practice area
-
-Example:
-
-**Number Line Challenge**
-
-* Grade: 3–5
-* Duration: 10 minutes
-* Materials: Chalk + number cards
-* Practice: Level-based learning
+Practice Layer is designed around responsible use of classroom evidence:
+- **Child faces are strictly prohibited** and never stored.
+- **Audio is purged** immediately following clinical transcription verification.
+- **Data is used solely for targeted coaching allocation**, never teacher evaluation or ranking.
+- **Human-in-the-loop audit trail** ensures all flags and priorities remain transparent.
 
 ---
 
-# 👨‍🏫 Mentor / CRP Support
+## 💻 Running the Application Locally
 
-Practice Layer converts teacher evidence into useful information for mentors and CRPs.
+```bash
+# 1. Install dependencies
+npm install
 
-### Mentor Dashboard
+# 2. Run local development server
+npm run dev
 
-Mentors can see:
-
-* Schools requiring support
-* Recent practice signals
-* Evidence history
-* Previous visits
-* Open actions
-* Recommended demonstration activities
-
----
-
-## 🗺️ Transparent Visit Planning
-
-The system uses a transparent rules-based approach to prioritize school visits.
-
-For example:
-
-```text
-Repeated Practice Signal
-        +
-No Recent Mentor Visit
-        +
-Teacher Requested Support
-        ↓
-Higher Support Priority
+# 3. Build for production
+npm run build
 ```
-
-The prioritization is deliberately **not a black-box AI prediction**.
-
-Mentors and officers should be able to understand why a school appears on their priority list.
-
----
-
-# 🎙️ Mentor Voice Notes
-
-After a school visit, mentors can record a natural voice observation instead of completing a long report.
-
-AI can convert the note into structured observations such as:
-
-* Observed
-* Partly observed
-* Not observed
-
-The mentor can then review and edit the generated observation before sharing it with the teacher.
-
----
-
-# 📋 Action Ledger
-
-The Action Ledger tracks decisions and follow-up actions.
-
-Each action contains:
-
-* Action
-* Owner
-* School
-* Created date
-* Due date
-* Evidence
-* Status
-
-Example:
-
-```text
-Action:
-Demonstrate level-based grouping
-
-Owner:
-CRP
-
-Due:
-25 September
-
-Status:
-In Progress
-```
-
-Actions can move through:
-
-**Open → In Progress → Verified → Closed**
-
----
-
-# 📊 Training → Practice
-
-One of the core differentiators of Practice Layer is the ability to connect:
-
-**Teacher Training → Classroom Practice**
-
-Program teams can see which training modules appear to translate into observable classroom practices.
-
-Example:
-
-| Training Module        | Adoption |
-| ---------------------- | -------: |
-| Level-Based Grouping   |      82% |
-| Checking Understanding |      71% |
-| Learner Practice       |      64% |
-| Adaptive Teaching      |      49% |
-
-This creates a feedback loop for improving future teacher training.
-
----
-
-# 🧠 What AI Does
-
-AI is used where it reduces manual effort and helps convert unstructured evidence into useful information.
-
-### AI-powered components
-
-* Speech-to-text
-* Voice-note understanding
-* Evidence extraction
-* Practice rubric coding
-* Coaching suggestions
-* Mentor note structuring
-* Activity recommendations
-* Training-to-practice analysis
-
----
-
-# 🚫 What AI Does NOT Decide
-
-Some decisions intentionally remain transparent and human-controlled.
-
-AI does **not** independently decide:
-
-* Which teacher should be penalized
-* Which teacher is "good" or "bad"
-* Final school support priorities
-* Whether a teacher has failed
-* Final program decisions
-
-The platform is designed for **support allocation, not teacher ranking**.
-
----
-
-# 🔄 Practice Intelligence Loop
-
-The complete system works as a continuous feedback loop:
-
-### 1. Capture
-
-Teacher submits evidence already produced during classroom practice.
-
-↓
-
-### 2. Understand
-
-AI converts speech and other evidence into structured practice signals.
-
-↓
-
-### 3. Coach
-
-Teacher receives one specific, actionable next step.
-
-↓
-
-### 4. Route
-
-Mentors receive evidence about where support may be needed.
-
-↓
-
-### 5. Verify
-
-Mentors observe practice and record follow-up evidence.
-
-↓
-
-### 6. Learn
-
-Program teams see which training and support approaches are translating into practice.
-
-↓
-
-### 7. Improve
-
-The insights inform future coaching and training.
-
----
-
-# 🏗️ System Architecture
-
-```text
-                    PRACTICE LAYER
-                         │
-          ┌──────────────┴──────────────┐
-          │                             │
-     TEACHER APP                  MENTOR / CRP
-          │                             │
-   Photo + Voice                  Visit + Voice
-          │                             │
-          └──────────────┬──────────────┘
-                         ↓
-                 EVIDENCE PROCESSING
-                         │
-              ┌──────────┴──────────┐
-              │                     │
-          Speech AI             Vision AI
-              │                     │
-              └──────────┬──────────┘
-                         ↓
-                 PRACTICE RUBRIC
-                         │
-                         ↓
-                 AI COACHING LAYER
-                         │
-              ┌──────────┴──────────┐
-              │                     │
-           Teacher              Mentor
-          Coaching             Support
-              │                     │
-              └──────────┬──────────┘
-                         ↓
-                  VERIFICATION
-                         │
-                         ↓
-                PROGRAM ANALYTICS
-                         │
-                         ↓
-                 TRAINING → PRACTICE
-```
-
----
-
-# 🛡️ Responsible AI & Privacy
-
-Practice Layer is designed around responsible use of classroom evidence.
-
-### Privacy principles
-
-* Child faces are not required
-* Audio can be deleted after transcription
-* Teachers should know what evidence is collected
-* Teachers can see the practice evidence associated with them
-* AI-generated observations can be reviewed by humans
-* Data is intended for support allocation rather than teacher ranking
-
-### Human-in-the-loop
-
-AI outputs should remain reviewable by teachers, mentors and program teams.
-
----
-
-# 📐 Measuring AI Performance
-
-The system should be evaluated against expert mentor coding.
-
-One proposed target is:
-
-> **Cohen's κ ≥ 0.6**
-
-for agreement between AI-generated practice coding and expert mentor coding.
-
-Other important metrics include:
-
-### Teacher Action Rate
-
-```text
-Teachers acting on AI suggestions
----------------------------------
-Teachers receiving suggestions
-```
-
-### Practice Adoption
-
-```text
-Observed practice after support
---------------------------------
-Target practice opportunities
-```
-
-### Mentor Efficiency
-
-Measure the reduction in time required to prepare school visits and observations.
-
-### Cost per Teacher
-
-Measure the actual operational cost of supporting each teacher rather than assuming a target cost.
-
----
-
-# 🧪 Current Prototype
-
-The current hackathon prototype focuses primarily on the **Teacher Practice Loop**.
-
-### Currently demonstrated
-
-* Teacher evidence capture
-* Voice input
-* AI practice analysis
-* Practice rubric
-* AI-generated coaching
-* Activity recommendations
-* Premium teacher dashboard
-
-### Prototype / Demo components
-
-The following components may use synthetic/demo data during the hackathon:
-
-* Mentor visit planning
-* Action Ledger
-* Training → Practice analytics
-* Program-level reports
-
-Synthetic data is clearly separated from real classroom data.
-
----
-
-# 🎯 Initial Scope
-
-To keep the solution focused, the initial implementation targets:
-
-**Grade 3–5 numeracy during the TaRL learning hour.**
-
-The system can later expand to additional:
-
-* Grades
-* Subjects
-* Learning interventions
-* Languages
-* States
-* Education programs
-
----
-
-# 🚀 Future Roadmap
-
-### Phase 1 — Prototype
-
-* Teacher evidence capture
-* Voice transcription
-* Practice analysis
-* AI coaching
-
-### Phase 2 — Mentor Integration
-
-* CRP dashboard
-* School visit planning
-* Voice-based observation
-* Action tracking
-
-### Phase 3 — Program Intelligence
-
-* Training → Practice analytics
-* Program dashboards
-* Evidence quality monitoring
-* Longitudinal practice tracking
-
-### Phase 4 — Scale
-
-* More Indian languages
-* More interventions
-* State-level deployments
-* Integration with existing education systems
-
----
-
-# 🌍 Potential Impact
-
-Practice Layer aims to make the **implementation layer of education programs measurable**.
-
-Instead of asking only:
-
-> "Did we train the teacher?"
-
-or:
-
-> "Did student outcomes improve?"
-
-the system helps answer:
-
-> **"What changed in classroom practice, and what support is needed next?"**
-
-This can help education programs move from:
-
-**Training → Monitoring → Reporting**
-
-toward:
-
-**Evidence → Coaching → Support → Verification → Learning**
-
----
-
-# 💻 Technology Direction
-
-The platform is designed to integrate:
-
-* Modern web frontend
-* Backend APIs
-* Speech recognition / Indic ASR
-* AI reasoning and structured extraction
-* Image/document understanding
-* Practice-rubric engine
-* Analytics dashboards
-* Secure data storage
-
-The exact AI and infrastructure stack can evolve as the prototype moves toward deployment.
-
----
-
-# 🏆 Why Practice Layer?
-
-Most education technology focuses directly on the learner.
-
-Practice Layer focuses on the **implementation layer between a proven intervention and its real-world classroom execution**.
-
-```text
-Proven Intervention
-        ↓
-Teacher Practice
-        ↓
-Evidence
-        ↓
-AI Support
-        ↓
-Mentor Action
-        ↓
-Verified Practice
-        ↓
-Program Learning
-```
-
-The platform is designed to make that layer **visible, actionable and measurable**.
-
----
-
-## 📌 Project Status
-
-**Status:** Hackathon Prototype 🚧
-
-The project is actively being developed and evaluated as a proof of concept.
-
-> The prototype demonstrates the core workflow. Some mentor, program-management and analytics components use synthetic data and are intended for future integration with real deployment systems.
-
----
-
-## 👥 Target Users
-
-* Teachers
-* CRPs / Mentors
-* Block-level education officers
-* Teacher trainers
-* Education program managers
-* NGOs and implementation organizations
-* Education departments
-
----
-
-## 📄 License
-
-Add the appropriate project license here.
-
----
-
-## ⭐ Core Idea
-
-> **Don't make teachers enter more data.
-> Make the evidence they already create useful.**
-
-**Practice Layer — Making classroom practice visible, actionable and measurable.**
