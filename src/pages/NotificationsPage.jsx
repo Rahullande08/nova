@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { TutorialButton } from '../components/TutorialButton';
 
 export function NotificationsPage() {
-  const { notifications, markNotificationRead, setCurrentRoute, showToast } = useApp();
+  const { notifications, markNotificationRead, markAllNotificationsRead, setCurrentRoute, showToast, t } = useApp();
   const [filter, setFilter] = useState('All');
 
   const filtered = notifications.filter(
@@ -17,14 +18,13 @@ export function NotificationsPage() {
   };
 
   const markAllAsRead = () => {
-    notifications.forEach((n) => markNotificationRead(n.id));
-    showToast('All notifications marked as read.');
+    markAllNotificationsRead();
   };
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-3xl mx-auto pb-6">
+    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-3xl mx-auto pb-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3">
         <div>
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed w-fit mb-1">
             <span className="material-symbols-outlined text-[14px]">notifications</span>
@@ -33,16 +33,19 @@ export function NotificationsPage() {
             </span>
           </div>
           <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
-            Notification Center
+            {t('systemNotifications', 'Notification Center')}
           </h1>
         </div>
 
-        <button
-          onClick={markAllAsRead}
-          className="text-xs font-bold text-secondary hover:underline"
-        >
-          Mark all as read
-        </button>
+        <div className="flex items-center gap-2">
+          <TutorialButton pageKey="system-notifications" variant="outline" />
+          <button
+            onClick={markAllAsRead}
+            className="text-xs font-bold text-secondary hover:underline cursor-pointer"
+          >
+            {t('markAllAsRead', 'Mark all as read')}
+          </button>
+        </div>
       </div>
 
       {/* Filter Tabs */}

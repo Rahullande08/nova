@@ -1,25 +1,34 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { TutorialButton } from '../components/TutorialButton';
 
 export function TrainingToPracticePage() {
-  const { trainingModules, showToast } = useApp();
+  const { trainingModules, showToast, t } = useApp();
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-5xl mx-auto pb-6">
-      {/* Header */}
-      <div className="flex flex-col gap-1">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed w-fit">
-          <span className="material-symbols-outlined text-[14px]">model_training</span>
-          <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
-            Pedagogical Transfer Analytics
-          </span>
+    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-5xl mx-auto pb-8">
+      {/* Header with Tutorial */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed w-fit">
+              <span className="material-symbols-outlined text-[14px]">model_training</span>
+              <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
+                Pedagogical Transfer Analytics
+              </span>
+            </div>
+            <span className="px-2.5 py-0.5 rounded-full font-label-sm text-[10px] font-bold bg-surface-container-high text-on-surface-variant border border-outline-variant/30">
+              DEMO DATA / FIELD SIMULATION
+            </span>
+          </div>
+          <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
+            {t('trainingToPractice', 'Training → Classroom Practice Transfer')}
+          </h1>
+          <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
+            Close the gap between workshop participation and verified daily classroom behaviors.
+          </p>
         </div>
-        <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
-          Training → Classroom Practice Transfer
-        </h1>
-        <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
-          Close the gap between workshop participation and verified daily classroom behaviors.
-        </p>
+        <TutorialButton pageKey="training-to-practice" variant="outline" className="shrink-0" />
       </div>
 
       {/* 4 Summary Cards */}

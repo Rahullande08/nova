@@ -1,26 +1,30 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { TutorialButton } from '../components/TutorialButton';
 
 export function VisitPlanPage() {
-  const { schools, setSelectedSchoolId, setCurrentRoute } = useApp();
+  const { schools, setSelectedSchoolId, setCurrentRoute, t } = useApp();
   const [selectedDate, setSelectedDate] = useState('Today');
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-4xl mx-auto pb-6">
+    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-4xl mx-auto pb-8">
       {/* Header */}
-      <div>
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed w-fit mb-1">
-          <span className="material-symbols-outlined text-[14px]">calendar_today</span>
-          <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
-            Field Routing Schedule
-          </span>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed w-fit mb-1">
+            <span className="material-symbols-outlined text-[14px]">calendar_today</span>
+            <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
+              Field Routing Schedule
+            </span>
+          </div>
+          <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
+            {t('visitPlan', 'Cluster Mentor Visit Plan')}
+          </h1>
+          <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
+            Deterministic daily visit prioritization based on classroom signals and SLA intervals.
+          </p>
         </div>
-        <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
-          Cluster Mentor Visit Plan
-        </h1>
-        <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
-          Deterministic daily visit prioritization based on classroom signals and SLA intervals.
-        </p>
+        <TutorialButton pageKey="visit-plan" variant="outline" className="shrink-0" />
       </div>
 
       {/* Date Filter Bar */}

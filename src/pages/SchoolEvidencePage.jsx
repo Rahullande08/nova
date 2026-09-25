@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { audioService } from '../services/audioService';
+import { TutorialButton } from '../components/TutorialButton';
 
 export function SchoolEvidencePage() {
-  const { schools, selectedSchoolId, setSelectedSchoolId, setCurrentRoute, showToast } = useApp();
+  const { schools, selectedSchoolId, setSelectedSchoolId, setCurrentRoute, showToast, t } = useApp();
   const [activeTab, setActiveTab] = useState('evidence'); // 'evidence' | 'cohort' | 'actions'
   const [playingClipId, setPlayingClipId] = useState(null);
 
@@ -24,8 +25,8 @@ export function SchoolEvidencePage() {
   };
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-4xl mx-auto pb-6">
-      {/* Header with School Selector */}
+    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-4xl mx-auto pb-8">
+      {/* Header with School Selector and Tutorial */}
       <div className="bg-surface-container-lowest p-4 md:p-5 rounded-xl shadow-sm border border-outline-variant/20 space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
@@ -65,9 +66,10 @@ export function SchoolEvidencePage() {
                 </option>
               ))}
             </select>
+            <TutorialButton pageKey="school-evidence-feed" variant="icon" />
             <button
               onClick={() => setCurrentRoute('mentor-visit-workflow')}
-              className="px-3 py-2 bg-secondary text-on-secondary rounded-lg text-xs font-bold shadow-sm hover:bg-secondary/90 flex items-center gap-1 shrink-0"
+              className="px-3 py-2 bg-secondary text-on-secondary rounded-lg text-xs font-bold shadow-sm hover:bg-secondary/90 flex items-center gap-1 shrink-0 cursor-pointer"
             >
               <span className="material-symbols-outlined text-[16px]">navigation</span>
               <span>Conduct Visit</span>

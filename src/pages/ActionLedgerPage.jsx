@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { TutorialButton } from '../components/TutorialButton';
 
 export function ActionLedgerPage() {
-  const { actions, setSelectedAction, createAction, showToast } = useApp();
+  const { actions, setSelectedAction, createAction, showToast, t } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -43,7 +44,7 @@ export function ActionLedgerPage() {
   };
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-5xl mx-auto pb-6">
+    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-5xl mx-auto pb-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
@@ -54,11 +55,14 @@ export function ActionLedgerPage() {
             </span>
           </div>
           <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
-            Action Ledger
+            {t('actionLedger', 'Action Ledger')}
           </h1>
           <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
             Track pedagogical commitments, field verifications, and SLA progress.
           </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <TutorialButton pageKey="action-ledger" variant="outline" />
         </div>
 
         <button

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { TutorialButton } from '../components/TutorialButton';
 
 export function ActivityLibraryPage() {
-  const { activities, setSelectedActivity, showToast } = useApp();
+  const { activities, setSelectedActivity, showToast, t } = useApp();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('All');
@@ -26,21 +27,24 @@ export function ActivityLibraryPage() {
   };
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-4xl mx-auto pb-6">
+    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-4xl mx-auto pb-8">
       {/* Header */}
-      <div>
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed/50 text-on-secondary-fixed w-fit mb-1">
-          <span className="material-symbols-outlined text-[14px]">menu_book</span>
-          <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
-            Pedagogical Bank
-          </span>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed/50 text-on-secondary-fixed w-fit mb-1">
+            <span className="material-symbols-outlined text-[14px]">menu_book</span>
+            <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
+              Pedagogical Bank
+            </span>
+          </div>
+          <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
+            {t('activityLibrary', 'Foundational Activity Library')}
+          </h1>
+          <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
+            TaRL and FLN certified 10-15 minute modular classroom activities.
+          </p>
         </div>
-        <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
-          Foundational Activity Library
-        </h1>
-        <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
-          TaRL and FLN certified 10-15 minute modular classroom activities.
-        </p>
+        <TutorialButton pageKey="activity-library" variant="outline" className="shrink-0" />
       </div>
 
       {/* Search & Filter Bar */}

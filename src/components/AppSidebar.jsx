@@ -8,47 +8,50 @@ export function AppSidebar() {
     isNavDrawerOpen,
     setIsNavDrawerOpen,
     currentRole,
-    setIsTransparencyModalOpen
+    setIsTransparencyModalOpen,
+    t,
+    openTutorial,
+    startFirstTimeTour
   } = useApp();
 
   const navGroups = [
     {
       title: 'Overview',
       items: [
-        { id: 'overview-dashboard', label: 'Dashboard', icon: 'dashboard' }
+        { id: 'overview-dashboard', label: t('overviewDashboard', 'Dashboard'), icon: 'dashboard' }
       ]
     },
     {
       title: 'Teacher Practice',
       items: [
-        { id: 'capture-evidence', label: 'Capture Evidence', icon: 'center_focus_strong' },
-        { id: 'ai-coach-chat', label: 'AI Coach & Rubric', icon: 'psychology' },
-        { id: 'my-practice-log', label: 'My Practice', icon: 'history_edu' },
-        { id: 'activity-library', label: 'Activity Library', icon: 'menu_book' }
+        { id: 'capture-evidence', label: t('captureEvidence', 'Capture Evidence'), icon: 'center_focus_strong' },
+        { id: 'ai-coach-chat', label: t('aiCoachChat', 'AI Coach & Rubric'), icon: 'psychology' },
+        { id: 'my-practice-log', label: t('myPracticeLog', 'My Practice'), icon: 'history_edu' },
+        { id: 'activity-library', label: t('activityLibrary', 'Activity Library'), icon: 'menu_book' }
       ]
     },
     {
       title: 'Mentor / CRP',
       items: [
-        { id: 'crp-mentor-dashboard', label: 'Mentor Dashboard', icon: 'supervisor_account' },
-        { id: 'visit-plan', label: 'Visit Plan', icon: 'calendar_today' },
-        { id: 'school-evidence-feed', label: 'School Evidence', icon: 'corporate_fare' },
-        { id: 'mentor-visit-workflow', label: 'In-Visit Capture', icon: 'bolt' }
+        { id: 'crp-mentor-dashboard', label: t('crpMentorDashboard', 'Mentor Dashboard'), icon: 'supervisor_account' },
+        { id: 'visit-plan', label: t('visitPlan', 'Visit Plan'), icon: 'calendar_today' },
+        { id: 'school-evidence-feed', label: t('schoolEvidenceFeed', 'School Evidence'), icon: 'corporate_fare' },
+        { id: 'mentor-visit-workflow', label: t('mentorVisitWorkflow', 'In-Visit Capture'), icon: 'bolt' }
       ]
     },
     {
       title: 'Program Management',
       items: [
-        { id: 'action-ledger', label: 'Action Ledger', icon: 'assignment' },
-        { id: 'training-to-practice', label: 'Training → Practice', icon: 'model_training' },
-        { id: 'reports-insights', label: 'Reports & Insights', icon: 'monitoring' }
+        { id: 'action-ledger', label: t('actionLedger', 'Action Ledger'), icon: 'assignment' },
+        { id: 'training-to-practice', label: t('trainingToPractice', 'Training → Practice'), icon: 'model_training' },
+        { id: 'reports-insights', label: t('reportsInsights', 'Reports & Insights'), icon: 'monitoring' }
       ]
     },
     {
       title: 'System',
       items: [
-        { id: 'system-notifications', label: 'Notifications', icon: 'notifications_none' },
-        { id: 'system-settings', label: 'Settings', icon: 'settings' }
+        { id: 'system-notifications', label: t('systemNotifications', 'Notifications'), icon: 'notifications_none' },
+        { id: 'system-settings', label: t('systemSettings', 'Settings'), icon: 'settings' }
       ]
     }
   ];
@@ -58,18 +61,24 @@ export function AppSidebar() {
       {/* Top logo */}
       <div className="p-4 flex items-center justify-between border-b border-surface-container">
         <div
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={() => setCurrentRoute('overview-dashboard')}
+          className="flex items-center gap-2 cursor-pointer select-none"
+          onClick={() => {
+            setCurrentRoute('overview-dashboard');
+            setIsNavDrawerOpen(false);
+          }}
         >
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-on-primary font-bold text-sm">
             PL
           </div>
-          <span className="font-headline-sm text-on-surface font-bold text-base">PRACTICE LAYER</span>
+          <span className="font-headline-sm text-on-surface font-bold text-base">
+            {t('appName', 'PRACTICE LAYER')}
+          </span>
         </div>
         {isNavDrawerOpen && (
           <button
             className="w-9 h-9 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container"
             onClick={() => setIsNavDrawerOpen(false)}
+            aria-label="Close navigation drawer"
           >
             <span className="material-symbols-outlined text-[20px]">close</span>
           </button>
@@ -88,7 +97,10 @@ export function AppSidebar() {
               return (
                 <button
                   key={item.id}
-                  onClick={() => setCurrentRoute(item.id)}
+                  onClick={() => {
+                    setCurrentRoute(item.id);
+                    setIsNavDrawerOpen(false);
+                  }}
                   className={`w-full flex items-center gap-2.5 px-2.5 h-10 rounded-lg text-left transition-all ${
                     isActive
                       ? 'bg-secondary/10 text-secondary font-semibold border-l-4 border-secondary pl-2'
@@ -109,17 +121,39 @@ export function AppSidebar() {
           </div>
         ))}
 
-        {/* AI Transparency Button in sidebar */}
-        <div className="pt-2">
+        {/* Quick Tour & AI Transparency Buttons */}
+        <div className="pt-2 space-y-1.5">
+          <button
+            onClick={() => {
+              openTutorial(currentRoute);
+              setIsNavDrawerOpen(false);
+            }}
+            className="w-full flex items-center gap-2 px-2.5 h-9 rounded-lg text-on-surface hover:bg-surface-container text-left border border-outline-variant/30 text-xs font-medium"
+          >
+            <span className="material-symbols-outlined text-[18px] text-secondary">help_outline</span>
+            <span>{t('openTutorial', 'Page Tutorial')}</span>
+          </button>
+
+          <button
+            onClick={() => {
+              startFirstTimeTour();
+              setIsNavDrawerOpen(false);
+            }}
+            className="w-full flex items-center gap-2 px-2.5 h-9 rounded-lg text-secondary hover:bg-secondary/10 text-left border border-secondary/30 text-xs font-semibold"
+          >
+            <span className="material-symbols-outlined text-[18px]">explore</span>
+            <span>Guided App Tour</span>
+          </button>
+
           <button
             onClick={() => {
               setIsTransparencyModalOpen(true);
               setIsNavDrawerOpen(false);
             }}
-            className="w-full flex items-center gap-2 px-2.5 h-10 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface text-left border border-outline-variant/30"
+            className="w-full flex items-center gap-2 px-2.5 h-9 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface text-left border border-outline-variant/30 text-xs font-medium"
           >
             <span className="material-symbols-outlined text-[18px] text-secondary">policy</span>
-            <span className="font-label-md text-xs font-semibold">AI Trust Architecture</span>
+            <span>AI Trust Architecture</span>
           </button>
         </div>
       </div>

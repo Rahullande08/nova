@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { audioService } from '../services/audioService';
 import { aiDiagnosticService } from '../services/aiDiagnosticService';
+import { TutorialButton } from '../components/TutorialButton';
 
 export function MentorVisitWorkflowPage() {
-  const { schools, selectedSchoolId, setCurrentRoute, createAction, showToast } = useApp();
+  const { schools, selectedSchoolId, setCurrentRoute, createAction, recordSchoolVisit, showToast, t } = useApp();
 
   const school = schools.find((s) => s.id === selectedSchoolId) || schools[0];
 
   const [currentStep, setCurrentStep] = useState(1); // 1: Review Evidence, 2: Record Observation, 3: AI Structuring & WhatsApp, 4: Action Created
   const [isRecording, setIsRecording] = useState(false);
+  const [recordedAudioUrl, setRecordedAudioUrl] = useState(null);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [micError, setMicError] = useState(null);
   const [mentorObservationText, setMentorObservationText] = useState(
     'Demonstrated 4-corner level grouping with 22 Grade 3 students. Teacher Sunita practiced peer flashcard checks for 8 minutes. Noticed significant improvement in beginner student engagement.'
   );
@@ -19,15 +23,40 @@ export function MentorVisitWorkflowPage() {
   const [isStructuring, setIsStructuring] = useState(false);
 
   const handleStartRecording = async () => {
+    setMicError(null);
     setIsRecording(true);
-    await audioService.startRecording();
+    const result = await audioService.startRecording();
+    if (result && !result.success) {
+      setIsRecording(false);
+      setMicError(result.error || 'Microphone permission required to record.');
+    }
   };
 
   const handleStopRecording = async () => {
     setIsRecording(false);
-    await audioService.stopRecording();
+    const res = await audioService.stopRecording();
+    if (res && res.url) {
+      setRecordedAudioUrl(res.url);
+    }
     showToast('Observation audio captured! Running AI structuring...');
     handleProcessObservation();
+  };
+
+  const handlePlayRecording = () => {
+    if (isPlayingAudio) {
+      audioService.stopAudio();
+      audioService.stopSpeech();
+      setIsPlayingAudio(false);
+    } else {
+      setIsPlayingAudio(true);
+      if (recordedAudioUrl && recordedAudioUrl.startsWith('blob:')) {
+        audioService.playAudioUrl(recordedAudioUrl, {
+          onEnded: () => setIsPlayingAudio(false)
+        });
+      } else {
+        audioService.speak(mentorObservationText, 'mr-IN').then(() => setIsPlayingAudio(false));
+      }
+    }
   };
 
   const handleProcessObservation = async () => {
@@ -48,8 +77,8 @@ export function MentorVisitWorkflowPage() {
     }
   };
 
-  const handleDispatchFeedbackAndAction = () => {
-    createAction({
+  const handleDispatchFeedbackAndAction = async () => {
+    await createAction({
       action: 'Conduct daily 10-min 4-corner word sorting in Grade 3',
       owner: 'Sunita Rao (Teacher)',
       targetTeacher: 'Sunita Rao',
@@ -60,26 +89,37 @@ export function MentorVisitWorkflowPage() {
       notes: mentorObservationText
     });
 
+    if (recordSchoolVisit) {
+      await recordSchoolVisit(school.id, {
+        teacher: 'Sunita Rao',
+        grade: 'Grade 3',
+        observationNote: mentorObservationText
+      });
+    }
+
     showToast('Feedback sent to Teacher WhatsApp & Action created in Ledger!');
     setCurrentStep(4);
   };
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-3xl mx-auto pb-6">
-      {/* Header */}
-      <div>
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed w-fit mb-1">
-          <span className="material-symbols-outlined text-[14px]">bolt</span>
-          <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
-            Active Classroom Observation Flow
-          </span>
+    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-3xl mx-auto pb-8">
+      {/* Header with TutorialButton */}
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed w-fit mb-1">
+            <span className="material-symbols-outlined text-[14px]">bolt</span>
+            <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
+              Active Classroom Observation Flow
+            </span>
+          </div>
+          <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
+            School Visit: {school.name}
+          </h1>
+          <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
+            Follow the structured 4-step observation, demonstration & coaching loop.
+          </p>
         </div>
-        <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
-          School Visit: {school.name}
-        </h1>
-        <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
-          Follow the structured 4-step observation, demonstration & coaching loop.
-        </p>
+        <TutorialButton pageKey="mentor-visit-workflow" variant="outline" className="shrink-0" />
       </div>
 
       {/* Stepper indicator */}
@@ -133,7 +173,7 @@ export function MentorVisitWorkflowPage() {
 
           <button
             onClick={() => setCurrentStep(2)}
-            className="w-full py-3 bg-secondary text-on-secondary rounded-lg font-bold text-xs shadow-sm hover:bg-secondary/90 flex items-center justify-center gap-1"
+            className="w-full py-3 bg-secondary text-on-secondary rounded-lg font-bold text-xs shadow-sm hover:bg-secondary/90 flex items-center justify-center gap-1 cursor-pointer"
           >
             <span>Proceed to Classroom Demonstration & Record</span>
             <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
@@ -157,10 +197,16 @@ export function MentorVisitWorkflowPage() {
             Speak what you demonstrated in class, how the teacher responded, and any immediate next step agreed upon.
           </p>
 
+          {micError && (
+            <div className="p-2.5 rounded-lg bg-error-container/20 border border-error/30 text-xs text-error font-semibold">
+              {micError}
+            </div>
+          )}
+
           <div className="p-4 bg-surface-container-low rounded-xl border border-outline-variant/20 flex flex-col items-center gap-3">
             <button
               onClick={isRecording ? handleStopRecording : handleStartRecording}
-              className={`w-16 h-16 rounded-full flex items-center justify-center shadow-lg transition-all ${
+              className={`w-16 h-16 rounded-full flex items-center justify-center shadow-lg transition-all cursor-pointer ${
                 isRecording ? 'bg-error text-on-error animate-pulse' : 'bg-secondary text-on-secondary'
               }`}
             >
@@ -171,6 +217,19 @@ export function MentorVisitWorkflowPage() {
             <span className="font-label-sm text-xs font-bold text-on-surface">
               {isRecording ? 'Recording Live Observation... Tap to Stop' : 'Tap to Record Voice Observation'}
             </span>
+
+            {recordedAudioUrl && (
+              <button
+                type="button"
+                onClick={handlePlayRecording}
+                className="inline-flex items-center gap-1.5 px-3 py-1 bg-surface-container-highest rounded-lg text-xs font-bold text-secondary hover:bg-surface-container"
+              >
+                <span className="material-symbols-outlined text-[16px]">
+                  {isPlayingAudio ? 'stop' : 'play_arrow'}
+                </span>
+                <span>{isPlayingAudio ? 'Stop Playback' : 'Play Observation Audio'}</span>
+              </button>
+            )}
           </div>
 
           <div className="space-y-1">
@@ -188,14 +247,14 @@ export function MentorVisitWorkflowPage() {
           <div className="flex items-center justify-between pt-2">
             <button
               onClick={() => setCurrentStep(1)}
-              className="px-3 py-2 text-xs font-bold text-on-surface-variant hover:bg-surface-container rounded-lg"
+              className="px-3 py-2 text-xs font-bold text-on-surface-variant hover:bg-surface-container rounded-lg cursor-pointer"
             >
               ← Back
             </button>
             <button
               onClick={handleProcessObservation}
               disabled={isStructuring}
-              className="px-5 py-2.5 bg-primary text-on-primary rounded-lg text-xs font-bold shadow-sm hover:opacity-90 flex items-center gap-1.5"
+              className="px-5 py-2.5 bg-primary text-on-primary rounded-lg text-xs font-bold shadow-sm hover:opacity-90 flex items-center gap-1.5 cursor-pointer"
             >
               {isStructuring && <span className="material-symbols-outlined text-[16px] animate-spin">progress_activity</span>}
               <span>Structure Observation with AI →</span>
@@ -244,13 +303,13 @@ export function MentorVisitWorkflowPage() {
           <div className="flex items-center justify-between pt-2">
             <button
               onClick={() => setCurrentStep(2)}
-              className="px-3 py-2 text-xs font-bold text-on-surface-variant hover:bg-surface-container rounded-lg"
+              className="px-3 py-2 text-xs font-bold text-on-surface-variant hover:bg-surface-container rounded-lg cursor-pointer"
             >
               ← Back
             </button>
             <button
               onClick={handleDispatchFeedbackAndAction}
-              className="px-5 py-2.5 bg-secondary text-on-secondary rounded-lg text-xs font-bold shadow-sm hover:bg-secondary/90 flex items-center gap-1.5"
+              className="px-5 py-2.5 bg-secondary text-on-secondary rounded-lg text-xs font-bold shadow-sm hover:bg-secondary/90 flex items-center gap-1.5 cursor-pointer"
             >
               <span className="material-symbols-outlined text-[16px]">send</span>
               <span>Send WhatsApp & Log Action</span>
@@ -278,13 +337,13 @@ export function MentorVisitWorkflowPage() {
           <div className="flex justify-center gap-3 pt-2">
             <button
               onClick={() => setCurrentRoute('action-ledger')}
-              className="px-4 py-2 bg-primary text-on-primary rounded-lg text-xs font-bold hover:opacity-90"
+              className="px-4 py-2 bg-primary text-on-primary rounded-lg text-xs font-bold hover:opacity-90 cursor-pointer"
             >
               View Action Ledger
             </button>
             <button
               onClick={() => setCurrentRoute('crp-mentor-dashboard')}
-              className="px-4 py-2 bg-surface-container text-on-surface rounded-lg text-xs font-bold hover:bg-surface-container-high"
+              className="px-4 py-2 bg-surface-container text-on-surface rounded-lg text-xs font-bold hover:bg-surface-container-high cursor-pointer"
             >
               Back to Dashboard
             </button>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
 import { APP_ROLES } from '../data/mockData';
+import { TutorialButton } from '../components/TutorialButton';
 
 export function SettingsPage() {
   const {
@@ -11,31 +12,36 @@ export function SettingsPage() {
     isDemoMode,
     setIsDemoMode,
     setIsTransparencyModalOpen,
-    showToast
+    resetAllData,
+    showToast,
+    t
   } = useApp();
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-3xl mx-auto pb-6">
+    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-3xl mx-auto pb-8">
       {/* Header */}
-      <div>
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed w-fit mb-1">
-          <span className="material-symbols-outlined text-[14px]">settings</span>
-          <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
-            Configuration & Trust Policy
-          </span>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed w-fit mb-1">
+            <span className="material-symbols-outlined text-[14px]">settings</span>
+            <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
+              Configuration & Trust Policy
+            </span>
+          </div>
+          <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
+            {t('systemSettings', 'Platform Settings')}
+          </h1>
+          <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
+            User roles, language preferences, data reset, and institutional privacy guardrails.
+          </p>
         </div>
-        <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
-          Platform Settings
-        </h1>
-        <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
-          User roles, language preferences, and institutional privacy guardrails.
-        </p>
+        <TutorialButton pageKey="system-settings" variant="outline" className="shrink-0" />
       </div>
 
       {/* Profile & Role Section */}
       <div className="p-4 md:p-5 bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 space-y-4">
         <h2 className="font-headline-sm text-sm md:text-base font-bold text-on-surface">
-          User Identity & Persona
+          User Identity & Operating Persona
         </h2>
 
         <div className="flex items-center gap-3 p-3 bg-surface-container-low rounded-xl">
@@ -105,6 +111,35 @@ export function SettingsPage() {
               <span className="text-[10px] block opacity-80 mt-0.5">{l.desc}</span>
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* Demo State Management */}
+      <div className="p-4 md:p-5 bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="font-headline-sm text-sm md:text-base font-bold text-on-surface">
+              Environment & State Management
+            </h2>
+            <p className="font-body-sm text-xs text-on-surface-variant">
+              Reset stored local classroom actions, visits, and evidence packets to initial baseline.
+            </p>
+          </div>
+        </div>
+
+        <div className="pt-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-on-tertiary-container"></span>
+            <span className="text-xs text-on-surface font-semibold">Local Storage Persistent Mode</span>
+          </div>
+          <button
+            onClick={resetAllData}
+            type="button"
+            className="px-3.5 py-1.5 bg-surface-container text-xs font-bold text-error rounded-lg hover:bg-surface-container-high border border-outline-variant/30 flex items-center gap-1.5"
+          >
+            <span className="material-symbols-outlined text-[16px]">restart_alt</span>
+            <span>Reset Demo State</span>
+          </button>
         </div>
       </div>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { APP_ROLES } from '../data/mockData';
+import { TutorialButton } from './TutorialButton';
 
 export function AppHeader() {
   const {
@@ -8,13 +9,15 @@ export function AppHeader() {
     setCurrentRoute,
     language,
     setLanguage,
+    t,
     isDemoMode,
     setIsDemoMode,
     setIsNavDrawerOpen,
     notifications,
     currentRole,
     setCurrentRole,
-    setIsTransparencyModalOpen
+    setIsTransparencyModalOpen,
+    startFirstTimeTour
   } = useApp();
 
   const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
@@ -24,35 +27,35 @@ export function AppHeader() {
   const getRouteTitle = () => {
     switch (currentRoute) {
       case 'overview-dashboard':
-        return 'Overview Dashboard';
+        return t('overviewDashboard', 'Overview Dashboard');
       case 'capture-evidence':
-        return 'Capture Evidence';
+        return t('captureEvidence', 'Capture Evidence');
       case 'ai-coach-chat':
-        return 'AI Practice Coach';
+        return t('aiCoachChat', 'AI Practice Coach');
       case 'my-practice-log':
-        return 'My Practice History';
+        return t('myPracticeLog', 'My Practice History');
       case 'activity-library':
-        return 'Activity Library';
+        return t('activityLibrary', 'Activity Library');
       case 'crp-mentor-dashboard':
-        return 'Mentor Dashboard';
+        return t('crpMentorDashboard', 'Mentor Dashboard');
       case 'visit-plan':
-        return 'CRP Visit Plan';
+        return t('visitPlan', 'CRP Visit Plan');
       case 'school-evidence-feed':
-        return 'School Evidence Feed';
+        return t('schoolEvidenceFeed', 'School Evidence Feed');
       case 'mentor-visit-workflow':
-        return 'In-Visit Fast Capture';
+        return t('mentorVisitWorkflow', 'In-Visit Fast Capture');
       case 'action-ledger':
-        return 'Action Ledger';
+        return t('actionLedger', 'Action Ledger');
       case 'training-to-practice':
-        return 'Training → Practice Analytics';
+        return t('trainingToPractice', 'Training → Practice Analytics');
       case 'reports-insights':
-        return 'Reports & Insights';
+        return t('reportsInsights', 'Reports & Insights');
       case 'system-notifications':
-        return 'Notification Center';
+        return t('systemNotifications', 'Notification Center');
       case 'system-settings':
-        return 'Platform Settings';
+        return t('systemSettings', 'Platform Settings');
       default:
-        return 'Practice Layer';
+        return t('appName', 'Practice Layer');
     }
   };
 
@@ -80,7 +83,7 @@ export function AppHeader() {
             </div>
             <div className="flex flex-col">
               <span className="font-headline-sm text-sm md:text-base text-on-surface uppercase tracking-tight font-bold">
-                PRACTICE LAYER
+                {t('appName', 'PRACTICE LAYER')}
               </span>
               <span className="font-label-sm text-[11px] text-on-surface-variant -mt-1 hidden sm:inline">
                 {getRouteTitle()}
@@ -95,20 +98,23 @@ export function AppHeader() {
             title="Click to toggle Demo Mode indicator"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-            {isDemoMode ? 'Demo Mode' : 'Live Sync'}
+            {isDemoMode ? t('demoMode', 'Demo Mode') : t('liveSync', 'Live Sync')}
           </button>
         </div>
 
         {/* Right controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Tutorial Button */}
+          <TutorialButton pageKey={currentRoute} variant="pill" className="hidden sm:inline-flex" />
+
           {/* AI Transparency Button */}
           <button
             onClick={() => setIsTransparencyModalOpen(true)}
-            className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container text-label-sm font-medium border border-outline-variant/40 transition-colors"
+            className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container text-label-sm font-medium border border-outline-variant/40 transition-colors"
             title="View Deterministic AI Transparency Pipeline"
           >
             <span className="material-symbols-outlined text-[16px] text-secondary">policy</span>
-            <span>AI Trust Guardrails</span>
+            <span>{t('aiTrustGuardrails', 'AI Trust Guardrails')}</span>
           </button>
 
           {/* Language Selector */}
@@ -122,6 +128,7 @@ export function AppHeader() {
                     ? 'font-bold bg-surface-container-lowest text-secondary shadow-[0_1px_3px_rgba(0,0,0,0.06)]'
                     : 'font-medium text-on-surface-variant hover:text-on-surface'
                 }`}
+                title={`Switch language to ${lang === 'EN' ? 'English' : lang === 'HI' ? 'हिन्दी (Hindi)' : 'मराठी (Marathi)'}`}
               >
                 {lang}
               </button>
@@ -132,12 +139,12 @@ export function AppHeader() {
           <button
             aria-label="Notifications"
             onClick={() => setCurrentRoute('system-notifications')}
-            className="relative w-10 h-10 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"
+            className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"
             type="button"
           >
-            <span className="material-symbols-outlined text-[22px]">notifications</span>
+            <span className="material-symbols-outlined text-[20px] sm:text-[22px]">notifications</span>
             {unreadCount > 0 && (
-              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-error ring-2 ring-surface-container-lowest animate-pulse"></span>
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-error ring-2 ring-surface-container-lowest animate-pulse"></span>
             )}
           </button>
 
@@ -169,7 +176,7 @@ export function AppHeader() {
 
                 <div className="p-1">
                   <p className="font-label-sm text-[10px] uppercase tracking-wider text-on-surface-variant px-2 py-1">
-                    Switch Role (Demo Simulation)
+                    {t('switchRole', 'Switch Role (Demo Simulation)')}
                   </p>
                   {Object.values(APP_ROLES).map((role) => (
                     <button
@@ -193,7 +200,17 @@ export function AppHeader() {
                   ))}
                 </div>
 
-                <div className="border-t border-surface-container p-1">
+                <div className="border-t border-surface-container p-1 space-y-0.5">
+                  <button
+                    onClick={() => {
+                      startFirstTimeTour();
+                      setIsRoleDropdownOpen(false);
+                    }}
+                    className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-left text-xs text-secondary font-medium hover:bg-secondary/10"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">explore</span>
+                    <span>Start Guided Tour</span>
+                  </button>
                   <button
                     onClick={() => {
                       setCurrentRoute('system-settings');
@@ -202,7 +219,7 @@ export function AppHeader() {
                     className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-left text-xs text-on-surface hover:bg-surface-container"
                   >
                     <span className="material-symbols-outlined text-[16px]">settings</span>
-                    <span>Platform Settings</span>
+                    <span>{t('settings', 'Platform Settings')}</span>
                   </button>
                 </div>
               </div>

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { audioService } from '../services/audioService';
+import { TutorialButton } from '../components/TutorialButton';
 
 export function MentorDashboardPage() {
-  const { setCurrentRoute, setSelectedSchoolId, showToast } = useApp();
+  const { setCurrentRoute, setSelectedSchoolId, showToast, t } = useApp();
 
   const [selectedChips, setSelectedChips] = useState({
     grouping: true,
@@ -42,21 +43,24 @@ export function MentorDashboardPage() {
   };
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-4xl mx-auto pb-6">
-      {/* Header */}
-      <div className="flex flex-col gap-1">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant w-fit">
-          <span className="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
-          <span className="font-label-sm text-[11px] uppercase tracking-wider font-bold">
-            Cluster Resource Person (CRP) Portal
-          </span>
+    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-4xl mx-auto pb-8">
+      {/* Header with Tutorial */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex flex-col gap-1">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant w-fit">
+            <span className="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
+            <span className="font-label-sm text-[11px] uppercase tracking-wider font-bold">
+              Cluster Resource Person (CRP) Portal
+            </span>
+          </div>
+          <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold tracking-tight">
+            {t('mentorDashboard', 'Mentor Dashboard')}
+          </h1>
+          <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
+            Know where your support can make the biggest difference.
+          </p>
         </div>
-        <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold tracking-tight">
-          Mentor Dashboard
-        </h1>
-        <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
-          Know where your support can make the biggest difference.
-        </p>
+        <TutorialButton pageKey="crp-mentor-dashboard" variant="outline" className="shrink-0" />
       </div>
 
       {/* 4 Metric Cards */}

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { TutorialButton } from '../components/TutorialButton';
 
 export function MyPracticePage() {
-  const { setCurrentRoute, currentRole } = useApp();
+  const { setCurrentRoute, currentRole, t } = useApp();
   const [selectedFilter, setSelectedFilter] = useState('all');
 
   const practiceLogs = [
@@ -45,8 +46,8 @@ export function MyPracticePage() {
   ];
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-4xl mx-auto pb-6">
-      {/* Header */}
+    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-4xl mx-auto pb-8">
+      {/* Header with Tutorial */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
         <div>
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed/50 text-on-secondary-fixed w-fit mb-1">
@@ -56,20 +57,23 @@ export function MyPracticePage() {
             </span>
           </div>
           <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
-            My Practice History
+            {t('myPractice', 'My Practice History')}
           </h1>
           <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
             Track your instructional progress, evidence logs, and coaching shifts.
           </p>
         </div>
 
-        <button
-          onClick={() => setCurrentRoute('capture-evidence')}
-          className="px-4 py-2 rounded-lg bg-secondary text-on-secondary font-bold text-xs flex items-center gap-1.5 shadow-sm hover:bg-secondary/90 self-start md:self-auto"
-        >
-          <span className="material-symbols-outlined text-[18px]">add</span>
-          <span>New Practice Capture</span>
-        </button>
+        <div className="flex items-center gap-2 self-start md:self-auto">
+          <TutorialButton pageKey="my-practice-log" variant="outline" />
+          <button
+            onClick={() => setCurrentRoute('capture-evidence')}
+            className="px-4 py-2 rounded-lg bg-secondary text-on-secondary font-bold text-xs flex items-center gap-1.5 shadow-sm hover:bg-secondary/90 cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-[18px]">add</span>
+            <span>New Practice Capture</span>
+          </button>
+        </div>
       </div>
 
       {/* Progress Cards */}

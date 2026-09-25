@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
+import { TutorialButton } from '../components/TutorialButton';
 
 export function ReportsInsightsPage() {
-  const { showToast, schools, actions } = useApp();
+  const { showToast, schools, actions, t } = useApp();
   const [reportPeriod, setReportPeriod] = useState('Month');
 
   const handleExportCSV = () => {
@@ -31,7 +32,7 @@ export function ReportsInsightsPage() {
   };
 
   return (
-    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-5xl mx-auto pb-6">
+    <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-5xl mx-auto pb-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
@@ -42,7 +43,7 @@ export function ReportsInsightsPage() {
             </span>
           </div>
           <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
-            Instructional Fidelity Reports
+            {t('reportsInsights', 'Instructional Fidelity Reports')}
           </h1>
           <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
             Multi-tier pedagogical adoption, mentor coverage and system health diagnostics.
@@ -50,18 +51,19 @@ export function ReportsInsightsPage() {
         </div>
 
         <div className="flex items-center gap-2">
+          <TutorialButton pageKey="reports-insights" variant="outline" />
           <button
             onClick={handleExportCSV}
-            className="px-3.5 py-2 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container text-xs font-bold border border-outline-variant/30 flex items-center gap-1.5 shadow-xs"
+            className="px-3.5 py-2 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container text-xs font-bold border border-outline-variant/30 flex items-center gap-1.5 shadow-xs cursor-pointer"
           >
             <span className="material-symbols-outlined text-[16px] text-secondary">
               download
             </span>
-            <span>Download CSV</span>
+            <span>{t('exportCsv', 'Download CSV')}</span>
           </button>
           <button
             onClick={handlePrintReport}
-            className="px-4 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold hover:opacity-90 flex items-center gap-1.5 shadow-sm"
+            className="px-4 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold hover:opacity-90 flex items-center gap-1.5 shadow-sm cursor-pointer"
           >
             <span className="material-symbols-outlined text-[16px]">print</span>
             <span>Export PDF</span>

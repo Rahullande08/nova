@@ -6,6 +6,7 @@ import { BottomNavBar } from './components/BottomNavBar';
 import { AITransparencyModal } from './components/AITransparencyModal';
 import { ActivityDetailModal } from './components/ActivityDetailModal';
 import { ActionDetailDrawer } from './components/ActionDetailDrawer';
+import { TutorialModal } from './components/TutorialModal';
 import { Toast } from './components/Toast';
 
 // Pages
@@ -63,24 +64,29 @@ function MainContent() {
   };
 
   return (
-    <div className="min-h-screen bg-surface flex flex-col font-body-md text-on-surface antialiased">
-      {/* Fixed Header */}
+    <div className="min-h-screen bg-surface flex flex-col font-body-md text-on-surface">
+      {/* Fixed Top Header (h-16, fixed, z-40) */}
       <AppHeader />
 
-      {/* Main Container with Sidebar (desktop) and Responsive Content */}
-      <div className="flex-1 flex pt-16">
+      {/* Main Body Shell: Desktop Sidebar (fixed w-64) + Full Scrollable Main Container */}
+      <div className="flex-1 w-full flex">
         <AppSidebar />
 
-        {/* Dynamic Page Container */}
-        <main className="flex-1 min-w-0 md:pl-64 p-4 md:p-8 pb-24 md:pb-12 max-w-7xl">
-          {renderActivePage()}
+        {/* Scrollable Main Content Container */}
+        {/* On desktop (md:), pl-64 ensures content begins cleanly after fixed sidebar */}
+        {/* pt-20 (80px) clears 64px topbar; pb-28 (112px) clears mobile bottom bar, pb-16 on desktop */}
+        <main className="flex-1 min-w-0 md:pl-64 pt-20 pb-28 md:pb-16 px-4 sm:px-6 md:px-8">
+          <div className="max-w-5xl mx-auto w-full">
+            {renderActivePage()}
+          </div>
         </main>
       </div>
 
-      {/* Mobile Fixed Bottom Nav */}
+      {/* Mobile Fixed Bottom Nav (hidden on desktop) */}
       <BottomNavBar />
 
       {/* Global Modals & Drawers */}
+      <TutorialModal />
       <AITransparencyModal />
       <ActivityDetailModal />
       <ActionDetailDrawer />

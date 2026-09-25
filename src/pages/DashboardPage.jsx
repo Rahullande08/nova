@@ -1,9 +1,10 @@
 import React from 'react';
 import { useApp } from '../context/AppContext';
 import { PracticeLoopBanner } from '../components/PracticeLoopBanner';
+import { TutorialButton } from '../components/TutorialButton';
 
 export function DashboardPage() {
-  const { setCurrentRoute, setSelectedSchoolId, showToast } = useApp();
+  const { setCurrentRoute, setSelectedSchoolId, showToast, t } = useApp();
 
   const handleSchoolClick = (schoolId) => {
     setSelectedSchoolId(schoolId);
@@ -21,13 +22,16 @@ export function DashboardPage() {
               Live Operational Pulse
             </span>
           </div>
-          <span className="font-label-sm text-xs text-on-surface-variant bg-surface-container-high px-2.5 py-0.5 rounded-full">
-            Block Haveli • Pune Rural
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="font-label-sm text-xs text-on-surface-variant bg-surface-container-high px-2.5 py-0.5 rounded-full">
+              Block Haveli • Pune Rural
+            </span>
+            <TutorialButton pageKey="overview-dashboard" variant="outline" />
+          </div>
         </div>
         <div>
           <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold tracking-tight">
-            Practice Overview
+            {t('overviewDashboard', 'Practice Overview')}
           </h1>
           <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
             See what is happening in classrooms — and where support is needed.
