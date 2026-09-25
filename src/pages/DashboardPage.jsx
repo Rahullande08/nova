@@ -41,7 +41,10 @@ export function DashboardPage() {
       {/* Top KPI Cards (2x2 on mobile, 4x1 on desktop) */}
       <section className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
         {/* KPI 1 */}
-        <div className="bg-surface-container-lowest rounded-xl p-3.5 md:p-4 shadow-sm border border-outline-variant/20 flex flex-col justify-between">
+        <div
+          onClick={() => setCurrentRoute('school-evidence-feed')}
+          className="bg-surface-container-lowest rounded-xl p-3.5 md:p-4 shadow-sm border border-outline-variant/20 flex flex-col justify-between cursor-pointer hover:border-secondary/40 transition-all hover:shadow-md active:scale-98"
+        >
           <div className="flex items-center justify-between">
             <span className="font-label-sm text-xs text-on-surface-variant">Schools Covered</span>
             <span className="w-7 h-7 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary">
@@ -60,7 +63,10 @@ export function DashboardPage() {
         </div>
 
         {/* KPI 2 */}
-        <div className="bg-surface-container-lowest rounded-xl p-3.5 md:p-4 shadow-sm border border-outline-variant/20 flex flex-col justify-between">
+        <div
+          onClick={() => setCurrentRoute('my-practice-log')}
+          className="bg-surface-container-lowest rounded-xl p-3.5 md:p-4 shadow-sm border border-outline-variant/20 flex flex-col justify-between cursor-pointer hover:border-secondary/40 transition-all hover:shadow-md active:scale-98"
+        >
           <div className="flex items-center justify-between">
             <span className="font-label-sm text-xs text-on-surface-variant">Teachers Active</span>
             <span className="w-7 h-7 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary">
@@ -78,7 +84,10 @@ export function DashboardPage() {
         </div>
 
         {/* KPI 3 */}
-        <div className="bg-surface-container-lowest rounded-xl p-3.5 md:p-4 shadow-sm border border-outline-variant/20 flex flex-col justify-between">
+        <div
+          onClick={() => setCurrentRoute('capture-evidence')}
+          className="bg-surface-container-lowest rounded-xl p-3.5 md:p-4 shadow-sm border border-outline-variant/20 flex flex-col justify-between cursor-pointer hover:border-secondary/40 transition-all hover:shadow-md active:scale-98"
+        >
           <div className="flex items-center justify-between">
             <span className="font-label-sm text-xs text-on-surface-variant">Practice Signals</span>
             <span className="w-7 h-7 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary">
@@ -96,7 +105,10 @@ export function DashboardPage() {
         </div>
 
         {/* KPI 4 */}
-        <div className="bg-surface-container-lowest rounded-xl p-3.5 md:p-4 shadow-sm border border-outline-variant/20 flex flex-col justify-between">
+        <div
+          onClick={() => setCurrentRoute('action-ledger')}
+          className="bg-surface-container-lowest rounded-xl p-3.5 md:p-4 shadow-sm border border-outline-variant/20 flex flex-col justify-between cursor-pointer hover:border-secondary/40 transition-all hover:shadow-md active:scale-98"
+        >
           <div className="flex items-center justify-between">
             <span className="font-label-sm text-xs text-on-surface-variant">Actions Closed</span>
             <span className="w-7 h-7 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary">
@@ -134,7 +146,10 @@ export function DashboardPage() {
         {/* 3 Step Progress Cards */}
         <div className="grid grid-cols-3 gap-2">
           {/* Step 1 */}
-          <div className="bg-surface-container-low rounded-lg p-2.5 flex flex-col justify-between border border-outline-variant/20">
+          <div
+            onClick={() => setCurrentRoute('capture-evidence')}
+            className="bg-surface-container-low rounded-lg p-2.5 flex flex-col justify-between border border-outline-variant/20 cursor-pointer hover:bg-surface-container transition-all"
+          >
             <div className="w-full bg-surface-container-high h-1.5 rounded-full mb-2 overflow-hidden">
               <div className="bg-secondary h-full rounded-full w-full"></div>
             </div>
@@ -153,7 +168,10 @@ export function DashboardPage() {
           </div>
 
           {/* Step 2 */}
-          <div className="bg-surface-container-low rounded-lg p-2.5 flex flex-col justify-between border border-outline-variant/20">
+          <div
+            onClick={() => setCurrentRoute('action-ledger')}
+            className="bg-surface-container-low rounded-lg p-2.5 flex flex-col justify-between border border-outline-variant/20 cursor-pointer hover:bg-surface-container transition-all"
+          >
             <div className="w-full bg-surface-container-high h-1.5 rounded-full mb-2 overflow-hidden">
               <div className="bg-secondary h-full rounded-full w-3/4"></div>
             </div>
@@ -172,7 +190,10 @@ export function DashboardPage() {
           </div>
 
           {/* Step 3 */}
-          <div className="bg-surface-container-low rounded-lg p-2.5 flex flex-col justify-between border border-outline-variant/20">
+          <div
+            onClick={() => setCurrentRoute('action-ledger')}
+            className="bg-surface-container-low rounded-lg p-2.5 flex flex-col justify-between border border-outline-variant/20 cursor-pointer hover:bg-surface-container transition-all"
+          >
             <div className="w-full bg-surface-container-high h-1.5 rounded-full mb-2 overflow-hidden">
               <div className="bg-on-tertiary-container h-full rounded-full w-[60%]"></div>
             </div>
@@ -227,14 +248,22 @@ export function DashboardPage() {
               Found in 28 of 44 submissions across Grade 3-4 classrooms.
             </p>
           </div>
-          <div className="bg-surface-container-low rounded-lg p-2.5 border border-outline-variant/20">
-            <div className="flex items-center gap-1.5 text-secondary font-label-md text-xs font-bold mb-0.5">
-              <span className="material-symbols-outlined text-[16px]">psychology_alt</span>
-              <span>Suggested System Response</span>
+          <div className="bg-surface-container-low rounded-lg p-2.5 border border-outline-variant/20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+              <div className="flex items-center gap-1.5 text-secondary font-label-md text-xs font-bold mb-0.5">
+                <span className="material-symbols-outlined text-[16px]">psychology_alt</span>
+                <span>Suggested System Response</span>
+              </div>
+              <p className="font-body-sm text-xs text-on-surface leading-relaxed">
+                Demonstrate grouping activity during CRP visits and deploy peer-learning rotation cards to 3 priority schools.
+              </p>
             </div>
-            <p className="font-body-sm text-xs text-on-surface leading-relaxed">
-              Demonstrate grouping activity during CRP visits and deploy peer-learning rotation cards to 3 priority schools.
-            </p>
+            <button
+              onClick={() => setCurrentRoute('crp-mentor-dashboard')}
+              className="px-3 py-1.5 rounded-lg bg-secondary text-on-secondary text-xs font-bold hover:bg-secondary/90 transition-all shrink-0 self-start sm:self-auto"
+            >
+              Route CRP Visits
+            </button>
           </div>
         </div>
       </section>
@@ -444,14 +473,20 @@ export function DashboardPage() {
         </div>
 
         <div className="grid grid-cols-2 gap-2 pt-1">
-          <div className="bg-surface-container-low rounded-lg p-2.5 flex items-center gap-2 border border-outline-variant/20">
+          <div
+            onClick={() => setCurrentRoute('my-practice-log')}
+            className="bg-surface-container-low rounded-lg p-2.5 flex items-center gap-2 border border-outline-variant/20 cursor-pointer hover:bg-surface-container transition-all"
+          >
             <span className="material-symbols-outlined text-[18px] text-secondary">record_voice_over</span>
             <div>
               <p className="font-label-sm text-[11px] text-on-surface-variant">Phonics Sounding</p>
               <p className="font-label-md text-xs font-bold text-on-surface">82% Verified</p>
             </div>
           </div>
-          <div className="bg-surface-container-low rounded-lg p-2.5 flex items-center gap-2 border border-outline-variant/20">
+          <div
+            onClick={() => setCurrentRoute('my-practice-log')}
+            className="bg-surface-container-low rounded-lg p-2.5 flex items-center gap-2 border border-outline-variant/20 cursor-pointer hover:bg-surface-container transition-all"
+          >
             <span className="material-symbols-outlined text-[18px] text-on-tertiary-container">group_work</span>
             <div>
               <p className="font-label-sm text-[11px] text-on-surface-variant">Level Grouping</p>
@@ -470,7 +505,10 @@ export function DashboardPage() {
 
         <div className="space-y-3">
           {/* Item 1 */}
-          <div className="flex items-start gap-3">
+          <div
+            onClick={() => setCurrentRoute('school-evidence-feed')}
+            className="flex items-start gap-3 cursor-pointer hover:bg-surface-container-low/60 p-2 rounded-lg transition-colors"
+          >
             <div className="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center flex-shrink-0 text-secondary border border-outline-variant/30">
               <span className="material-symbols-outlined text-[18px]">photo_camera</span>
             </div>
@@ -491,7 +529,10 @@ export function DashboardPage() {
           </div>
 
           {/* Item 2 */}
-          <div className="flex items-start gap-3">
+          <div
+            onClick={() => setCurrentRoute('ai-coach-chat')}
+            className="flex items-start gap-3 cursor-pointer hover:bg-surface-container-low/60 p-2 rounded-lg transition-colors"
+          >
             <div className="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center flex-shrink-0 text-primary border border-outline-variant/30">
               <span className="material-symbols-outlined text-[18px]">psychology</span>
             </div>
@@ -512,7 +553,10 @@ export function DashboardPage() {
           </div>
 
           {/* Item 3 */}
-          <div className="flex items-start gap-3">
+          <div
+            onClick={() => setCurrentRoute('crp-mentor-dashboard')}
+            className="flex items-start gap-3 cursor-pointer hover:bg-surface-container-low/60 p-2 rounded-lg transition-colors"
+          >
             <div className="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center flex-shrink-0 text-secondary border border-outline-variant/30">
               <span className="material-symbols-outlined text-[18px]">co_present</span>
             </div>

@@ -14,6 +14,11 @@ export function AIAnalysisCoachPage() {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [isPlayingCoachVoice, setIsPlayingCoachVoice] = useState(false);
   const [isAddedToPlan, setIsAddedToPlan] = useState(false);
+  const [expandedRubricId, setExpandedRubricId] = useState(null);
+
+  const toggleExpandRubric = (id) => {
+    setExpandedRubricId(expandedRubricId === id ? null : id);
+  };
 
   const handleVoiceExcerptPlayback = async () => {
     if (isPlayingAudio) {
@@ -21,6 +26,7 @@ export function AIAnalysisCoachPage() {
       setIsPlayingAudio(false);
     } else {
       setIsPlayingAudio(true);
+      showToast('Playing teacher audio clip...');
       await audioService.speak(
         'आज मी वर्गात वाचन गट केले होते, पण शब्द स्तरावरील मुलांना जास्तीचा वेळ लागला.',
         'mr-IN'
@@ -35,6 +41,7 @@ export function AIAnalysisCoachPage() {
       setIsPlayingCoachVoice(false);
     } else {
       setIsPlayingCoachVoice(true);
+      showToast('Playing AI Coach voice guidance in Marathi...');
       await audioService.speak(
         'उद्या वर्गात गट केल्यानंतर, प्रत्येक गटाला त्यांच्या स्तरानुसार एक कृती द्या आणि तीन मिनिटांत प्रत्येक मूल योग्य काम करत आहे का ते तपासा.',
         'mr-IN'
@@ -148,13 +155,17 @@ export function AIAnalysisCoachPage() {
             </div>
             <button
               onClick={handleVoiceExcerptPlayback}
-              className="flex items-center gap-1 px-2.5 py-0.5 rounded bg-surface-container-lowest shadow-xs text-on-surface hover:text-secondary text-xs font-semibold transition-colors border border-outline-variant/20"
+              className={`flex items-center gap-1 px-2.5 py-1 rounded text-xs font-bold transition-all shadow-xs ${
+                isPlayingAudio
+                  ? 'bg-error text-on-error animate-pulse'
+                  : 'bg-surface-container-lowest text-on-surface hover:text-secondary'
+              }`}
               type="button"
             >
               <span className="material-symbols-outlined text-[16px]">
                 {isPlayingAudio ? 'pause' : 'play_arrow'}
               </span>
-              <span>{isPlayingAudio ? 'Pause' : 'Listen'}</span>
+              <span>{isPlayingAudio ? 'Playing Audio...' : 'Listen to Audio'}</span>
             </button>
           </div>
           <p className="font-body-sm text-xs text-on-surface italic leading-relaxed">
@@ -184,11 +195,13 @@ export function AIAnalysisCoachPage() {
           {practiceRubric.map((item) => {
             const isObserved = item.statusType === 'observed';
             const isPartly = item.statusType === 'partly_observed';
+            const isExpanded = expandedRubricId === item.id;
 
             return (
               <div
                 key={item.id}
-                className="p-3 rounded-lg bg-surface-container-low/70 space-y-1 border border-outline-variant/20"
+                onClick={() => toggleExpandRubric(item.id)}
+                className="p-3 rounded-lg bg-surface-container-low/70 space-y-1 border border-outline-variant/20 cursor-pointer hover:bg-surface-container transition-all"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2">
@@ -230,6 +243,17 @@ export function AIAnalysisCoachPage() {
                   <span className="text-outline">{item.tag}</span>
                   <span className="font-semibold text-secondary">{item.confidence}</span>
                 </div>
+
+                {isExpanded && (
+                  <div className="mt-2 pl-7 pt-2 border-t border-surface-container text-xs text-on-surface space-y-1 animate-in fade-in">
+                    <span className="font-bold text-secondary text-[11px] block">
+                      Clinical Pedagogical Note:
+                    </span>
+                    <p className="text-on-surface-variant leading-relaxed">
+                      Neutral observation recorded from submitted voice reflection. No teacher evaluation or ranking is inferred.
+                    </p>
+                  </div>
+                )}
               </div>
             );
           })}
@@ -332,15 +356,19 @@ export function AIAnalysisCoachPage() {
           {/* Audio Coaching Button */}
           <button
             onClick={handleCoachVoicePlayback}
-            className="w-full h-11 flex items-center justify-center gap-2 rounded-lg bg-surface-container-high text-on-surface font-label-md text-xs font-bold hover:bg-surface-container transition-colors border border-outline-variant/20"
+            className={`w-full h-11 flex items-center justify-center gap-2 rounded-lg font-label-md text-xs font-bold transition-all border ${
+              isPlayingCoachVoice
+                ? 'bg-secondary text-on-secondary border-secondary shadow-md animate-pulse'
+                : 'bg-surface-container-high text-on-surface hover:bg-surface-container border-outline-variant/20'
+            }`}
             type="button"
           >
-            <span className="material-symbols-outlined text-[20px] text-secondary">
+            <span className="material-symbols-outlined text-[20px]">
               {isPlayingCoachVoice ? 'pause_circle' : 'play_circle'}
             </span>
             <span>
               {isPlayingCoachVoice
-                ? 'Playing Marathi Audio Note...'
+                ? 'Playing Marathi Voice Coaching (Tap to Pause)...'
                 : 'Listen to Coaching (Marathi / Hindi)'}
             </span>
           </button>
