@@ -693,10 +693,48 @@ export const ONBOARDING_TOUR_STEPS = {
   ]
 };
 
+const ROUTE_ALIASES = {
+  dashboard: 'overview-dashboard',
+  'overview-dashboard': 'overview-dashboard',
+  capture: 'capture-evidence',
+  'capture-evidence': 'capture-evidence',
+  coach: 'ai-coach-chat',
+  'ai-coach': 'ai-coach-chat',
+  'ai-coach-chat': 'ai-coach-chat',
+  practice: 'my-practice-log',
+  'my-practice': 'my-practice-log',
+  'my-practice-log': 'my-practice-log',
+  activities: 'activity-library',
+  activity: 'activity-library',
+  'activity-library': 'activity-library',
+  mentor: 'crp-mentor-dashboard',
+  crp: 'crp-mentor-dashboard',
+  'crp-mentor-dashboard': 'crp-mentor-dashboard',
+  visits: 'visit-plan',
+  'visit-plan': 'visit-plan',
+  schools: 'school-evidence-feed',
+  evidence: 'school-evidence-feed',
+  'evidence-feed': 'school-evidence-feed',
+  'school-evidence-feed': 'school-evidence-feed',
+  'mentor-visit': 'mentor-visit-workflow',
+  'mentor-visit-workflow': 'mentor-visit-workflow',
+  actions: 'action-ledger',
+  'action-ledger': 'action-ledger',
+  training: 'training-to-practice',
+  'training-to-practice': 'training-to-practice',
+  reports: 'reports-insights',
+  'reports-insights': 'reports-insights',
+  notifications: 'system-notifications',
+  'system-notifications': 'system-notifications',
+  settings: 'system-settings',
+  'system-settings': 'system-settings'
+};
+
 export function getTutorialData(pageKey, lang = 'EN') {
   const normLang = (lang || 'EN').toUpperCase();
   const dict = TUTORIALS_DATA[normLang] || TUTORIALS_DATA.EN;
-  return dict[pageKey] || dict['overview-dashboard'] || TUTORIALS_DATA.EN['overview-dashboard'];
+  const canonicalKey = ROUTE_ALIASES[pageKey] || pageKey || 'overview-dashboard';
+  return dict[canonicalKey] || dict['overview-dashboard'] || TUTORIALS_DATA.EN['overview-dashboard'];
 }
 
 export function getTourSteps(lang = 'EN') {

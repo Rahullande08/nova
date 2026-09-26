@@ -410,8 +410,59 @@ export const TRANSLATIONS = {
     audioPurgeDesc: 'Voice notes are deleted immediately after clinical transcription is verified.',
     childFacePrivacy: 'Child Face Privacy:',
     childFacePrivacyDesc: 'Facial recognition is strictly prohibited. Only learning artifacts and trackers are mapped.',
-    nonPunitiveSupportPolicy: 'Non-Punitive Support Policy:',
-    nonPunitiveSupportDesc: 'Data is exclusively used for targeted CRP coaching allocation, never teacher rankings.'
+    nonPunitiveSupportDesc: 'Data is exclusively used for targeted CRP coaching allocation, never teacher rankings.',
+
+    // Field Schedule Days & Placeholders (EN)
+    todayFri: 'Today (Fri)',
+    monday: 'Monday',
+    tuesday: 'Tuesday',
+    wednesday: 'Wednesday',
+    thursday: 'Thursday',
+    logVerificationPlaceholder: 'e.g. Observed 4-corner group rotation during morning visit...',
+
+    // Tutorial & Guide UI
+    tutorialInteractiveGuide: 'Practice Layer Interactive Guide',
+    whatIsThisPage: 'What is this page?',
+    keyFeaturesWorkflow: 'Key Features & Workflow',
+    proTipLabel: 'Pro Tip:',
+
+    // AI Transparency Stages
+    stage01Title: 'Teacher Evidence',
+    stage01Actor: 'Human (Teacher)',
+    stage01Desc: 'Teacher captures raw classroom tracker photo or records 60s voice note in Marathi/Hindi.',
+    stage01Safety: 'No child faces required. Audio purged post-transcription.',
+
+    stage02Title: 'Speech & OCR Extraction',
+    stage02Actor: 'AI Model (ASR / OCR)',
+    stage02Desc: 'Extracts student tallies into FLN tiers (Beginner, Letter, Word, Story) and transcribes spoken reflections.',
+    stage02Safety: 'Zero teacher ranking. Clinical linguistic parsing only.',
+
+    stage03Title: 'Practice Rubric Coding',
+    stage03Actor: 'AI Model (5-Point Protocol)',
+    stage03Desc: 'Evaluates evidence against neutral rubric (Observed / Partly observed / Not observed in submitted evidence).',
+    stage03Safety: 'Strictly non-evaluative. Every flag carries open verifiable citation.',
+
+    stage04Title: 'Coaching Suggestion',
+    stage04Actor: 'AI Instructional Coach',
+    stage04Desc: 'Generates exactly ONE immediate next step actionable tomorrow with targeted 10-minute activity pick.',
+    stage04Safety: 'Calibrated to SCERT foundational literacy pedagogical norms.',
+
+    stage05Title: 'Visit Priority Routing',
+    stage05Actor: 'Deterministic Rule Engine',
+    stage05Desc: 'Priority queue computed deterministically: (1) Repeated signal + (2) Days since visit >14d + (3) Teacher request.',
+    stage05Safety: 'No black-box scoring. 100% transparent audit trail.',
+
+    stage06Title: 'Mentor Visit & Demonstration',
+    stage06Actor: 'Human (CRP / Mentor)',
+    stage06Desc: 'Cluster Resource Person conducts physical classroom visit, models practice, and reviews teacher progress.',
+    stage06Safety: 'Empathetic coaching orientation. Collaborative problem-solving.',
+
+    stage07Title: 'Verification & State Learning',
+    stage07Actor: 'Human Verification + System Sync',
+    stage07Desc: 'Mentor verifies observed shift. Aggregated signals inform state training modules without identifying individuals.',
+    stage07Safety: 'Data used to allocate institutional support, never punitive.',
+
+    aiTransparencyAlignment: 'ISO 42001 & FLN Responsible AI Framework Aligned'
   },
 
   MR: {
@@ -823,7 +874,59 @@ export const TRANSLATIONS = {
     childFacePrivacy: 'विद्यार्थी चेहरा गोपनीयता:',
     childFacePrivacyDesc: 'चेहरा ओळख पूर्णपणे प्रतिबंधित आहे. फक्त अध्ययन साहित्य आणि ट्रॅकर्स मॅप केले जातात.',
     nonPunitiveSupportPolicy: 'केवळ सहकार्यात्मक धोरण:',
-    nonPunitiveSupportDesc: 'डेटा केवळ सीआरपी मार्गदर्शनासाठी वापरला जातो, शिक्षकांच्या क्रमवारीसाठी नाही.'
+    nonPunitiveSupportDesc: 'डेटा केवळ सीआरपी मार्गदर्शनासाठी वापरला जातो, शिक्षकांच्या क्रमवारीसाठी नाही.',
+
+    // Field Schedule Days & Placeholders (MR)
+    todayFri: 'आज (शुक्र)',
+    monday: 'सोमवार',
+    tuesday: 'मंगळवार',
+    wednesday: 'बुधवार',
+    thursday: 'गुरुवार',
+    logVerificationPlaceholder: 'उदा. सकाळच्या सत्रात ४-कोपरा गट फिरतीचे प्रात्यक्षिक पाहिले...',
+
+    // Tutorial & Guide UI (Marathi)
+    tutorialInteractiveGuide: 'प्रॅक्टिस लेअर परस्परसंवादी मार्गदर्शिका',
+    whatIsThisPage: 'हे पृष्ठ काय आहे?',
+    keyFeaturesWorkflow: 'प्रमुख वैशिष्ट्ये आणि कार्यप्रवाह',
+    proTipLabel: 'महत्त्वाची टीप:',
+
+    // AI Transparency Stages (Marathi)
+    stage01Title: 'शिक्षक पुरावा',
+    stage01Actor: 'मानव (शिक्षक)',
+    stage01Desc: 'शिक्षक वर्गातील स्तर नोंदणीचा मूळ फोटो किंवा ६० सेकंदांचा मराठी/हिंदी व्हॉइस संदेश नोंदवतात.',
+    stage01Safety: 'विद्यार्थ्यांच्या चेहऱ्यांची आवश्यकता नाही. मजकूर रूपांतरणानंतर ऑडिओ नष्ट केला जातो.',
+
+    stage02Title: 'आवाज व ओसीआर मजकूर काढणे',
+    stage02Actor: 'एआय मॉडेल (ASR / OCR)',
+    stage02Desc: 'विद्यार्थ्यांचे स्तर (प्रारंभिक, अक्षर, शब्द, परिच्छेद) आणि शिक्षकांचे अनुभव अचूक स्वरूपात काढले जातात.',
+    stage02Safety: 'शिक्षकांची कोणतीही क्रमवारी नाही. केवळ शैक्षणिक विश्लेषण.',
+
+    stage03Title: 'सराव रूब्रिक कोडिंग',
+    stage03Actor: 'एआय मॉडेल (५-सूत्रीय पद्धत)',
+    stage03Desc: 'तटस्थ निकषांनुसार पुराव्याचे विश्लेषण केले जाते (दिसून आले / अंशतः दिसून आले / दिसून आले नाही).',
+    stage03Safety: 'पूर्णपणे गैर-मूल्यांकनात्मक. प्रत्येक निष्कर्षामागे पडताळणीयोग्य संदर्भ.',
+
+    stage04Title: 'मार्गदर्शन शिफारस',
+    stage04Actor: 'एआय शैक्षणिक मार्गदर्शक',
+    stage04Desc: 'उद्या वर्गात राबवण्यासाठी एका वेळी एकच सोपे पुढील पाऊल आणि १० मिनिटांचा उपक्रम सुचवला जातो.',
+    stage04Safety: 'एससीईआरटी पायाभूत साक्षरता मानकांनुसार कॅलिब्रेट केलेले.',
+
+    stage05Title: 'शाळा भेट प्राधान्य क्रम',
+    stage05Actor: 'नियम-आधारित इंजिन',
+    stage05Desc: 'नियम-आधारित प्राधान्य क्रम: (१) सराव अडचण + (२) शेवटची भेट >१४ दिवस + (३) शिक्षकांची विनंती.',
+    stage05Safety: 'कोणतेही अस्पष्ट स्कोअरिंग नाही. १००% पारदर्शक पडताळणी.',
+
+    stage06Title: 'मेंटर भेट व प्रात्यक्षिक',
+    stage06Actor: 'मानव (सीआरपी / मेंटर)',
+    stage06Desc: 'केंद्र साधन व्यक्ती प्रत्यक्ष शाळेत जाऊन वर्गात प्रात्यक्षिक दाखवतात आणि शिक्षकांना मार्गदर्शन करतात.',
+    stage06Safety: 'सहानुभूतीपूर्वक मार्गदर्शन. सहयोगात्मक समस्या निवारण.',
+
+    stage07Title: 'पडताळणी आणि राज्यस्तरीय अध्ययन',
+    stage07Actor: 'मानवी पडताळणी + प्रणाली सिंक',
+    stage07Desc: 'मेंटर प्रत्यक्ष सुधारणा पडताळतात. एकत्रित डेटा कोणाचेही नाव न दाखवता राज्य प्रशिक्षण सुधारण्यासाठी वापरला जातो.',
+    stage07Safety: 'डेटा केवळ संस्थात्मक मदतीसाठी वापरला जातो, शिक्षकांच्या शिक्षेसाठी नाही.',
+
+    aiTransparencyAlignment: 'ISO 42001 आणि FLN जबाबदार एआय मानकांशी सुसंगत'
   },
 
   HI: {
@@ -1219,7 +1322,59 @@ export const TRANSLATIONS = {
     childFacePrivacy: 'छात्र चेहरा गोपनीयता:',
     childFacePrivacyDesc: 'चेहरा पहचान पूरी तरह प्रतिबंधित है। केवल सीखने की सामग्री को मैप किया जाता है।',
     nonPunitiveSupportPolicy: 'गैर-दंडात्मक समर्थन नीति:',
-    nonPunitiveSupportDesc: 'डेटा केवल सीआरपी कोचिंग के लिए उपयोग होता है, रैंकिंग के लिए नहीं।'
+    nonPunitiveSupportDesc: 'डेटा केवल सीआरपी कोचिंग के लिए उपयोग होता है, रैंकिंग के लिए नहीं।',
+
+    // Tutorial & Guide UI (Hindi)
+    tutorialInteractiveGuide: 'प्रैक्टिस लेयर इंटरएक्टिव गाइड',
+    whatIsThisPage: 'यह पृष्ठ क्या है?',
+    keyFeaturesWorkflow: 'मुख्य विशेषताएं और कार्यप्रवाह',
+    proTipLabel: 'महत्वपूर्ण सुझाव:',
+
+    // AI Transparency Stages (Hindi)
+    stage01Title: 'शिक्षक साक्ष्य',
+    stage01Actor: 'मानव (शिक्षक)',
+    stage01Desc: 'शिक्षक कक्षा ट्रैकर फोटो या ६० सेकंड का वॉयस संदेश रिकॉर्ड करते हैं।',
+    stage01Safety: 'छात्र चेहरों की आवश्यकता नहीं। प्रतिलेखन के बाद ऑडियो हटा दिया जाता है।',
+
+    stage02Title: 'ध्वनि और ओसीआर निष्कर्षण',
+    stage02Actor: 'एआई मॉडल (ASR / OCR)',
+    stage02Desc: 'छात्र स्तरों और मौखिक अनुभवों को डिजिटल रूप में निकाला जाता है।',
+    stage02Safety: 'शिक्षकों की कोई रैंकिंग नहीं। केवल शैक्षणिक विश्लेषण।',
+
+    stage03Title: 'अभ्यास रूब्रिक कोडिंग',
+    stage03Actor: 'एआई मॉडल (५-सूत्रीय प्रोटोकॉल)',
+    stage03Desc: 'तटस्थ रूब्रिक के अनुसार साक्ष्य का विश्लेषण किया जाता है।',
+    stage03Safety: 'पूरी तरह से गैर-मूल्यांकनकारी। पारदर्शी संदर्भ आधारित।',
+
+    stage04Title: 'कोचिंग सुझाव',
+    stage04Actor: 'एआई शिक्षण कोच',
+    stage04Desc: 'कल के लिए बिल्कुल एक ठोस अगला कदम और १० मिनट की गतिविधि सुझाई जाती है।',
+    stage04Safety: 'एससीईआरटी बुनियादी साक्षरता मानकों के अनुसार अनुकूलित।',
+
+    stage05Title: 'भ्रमण प्राथमिकता रूटिंग',
+    stage05Actor: 'नियम-आधारित इंजन',
+    stage05Desc: 'पारदर्शी प्राथमिकता: (१) अभ्यास संकेत + (२) अंतिम भ्रमण >१४ दिन + (३) शिक्षक अनुरोध।',
+    stage05Safety: 'कोई ब्लैक-बॉक्स स्कोरिंग नहीं। १००% पारदर्शी।',
+
+    stage06Title: 'मेंटर भ्रमण और प्रदर्शन',
+    stage06Actor: 'मानव (सीआरपी / मेंटर)',
+    stage06Desc: 'सीआरपी कक्षा भ्रमण कर तकनीक का प्रदर्शन करते हैं और सहयोग करते हैं।',
+    stage06Safety: 'सहानुभूतिपूर्ण कोचिंग दृष्टिकोण। सहयोगात्मक समस्या समाधान।',
+
+    stage07Title: 'सत्यापन और राज्य स्तरीय सीख',
+    stage07Actor: 'मानव सत्यापन + सिस्टम सिंक',
+    stage07Desc: 'मेंटर बदलाव का सत्यापन करते हैं। डेटा का उपयोग प्रशिक्षण सामग्री सुधारने के लिए किया जाता है।',
+    stage07Safety: 'डेटा केवल समर्थन के लिए उपयोग किया जाता है, दंडात्मक नहीं।',
+
+    aiTransparencyAlignment: 'ISO 42001 और FLN जिम्मेदार एआई फ्रेमवर्क के अनुरूप',
+
+    // Field Schedule Days & Placeholders (HI)
+    todayFri: 'आज (शुक्र)',
+    monday: 'सोमवार',
+    tuesday: 'मंगलवार',
+    wednesday: 'बुधवार',
+    thursday: 'गुरुवार',
+    logVerificationPlaceholder: 'उदा. सुबह के सत्र में ४-कोना समूह चक्र का अवलोकन किया...'
   }
 };
 

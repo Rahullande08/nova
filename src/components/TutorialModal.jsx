@@ -178,14 +178,14 @@ export function TutorialModal() {
                 </span>
               </div>
               <p className="font-label-sm text-[12px] text-on-surface-variant -mt-0.5">
-                Practice Layer Interactive Guide
+                {getTranslation('tutorialInteractiveGuide', language, 'Practice Layer Interactive Guide')}
               </p>
             </div>
           </div>
           <button
             onClick={() => setIsTutorialOpen(false)}
             className="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"
-            aria-label="Close tutorial"
+            aria-label={getTranslation('close', language, 'Close tutorial')}
           >
             <span className="material-symbols-outlined text-[20px]">close</span>
           </button>
@@ -196,7 +196,7 @@ export function TutorialModal() {
           {/* Summary Banner */}
           <div className="p-3.5 rounded-xl bg-surface-container-low border border-outline-variant/40">
             <p className="font-label-sm font-semibold text-on-surface text-xs mb-1">
-              What is this page?
+              {getTranslation('whatIsThisPage', language, 'What is this page?')}
             </p>
             <p className="font-body-sm text-on-surface-variant text-xs sm:text-sm leading-relaxed">
               {tutorial.summary}
@@ -206,7 +206,7 @@ export function TutorialModal() {
           {/* Steps List */}
           <div className="space-y-3">
             <p className="font-label-sm font-bold text-[11px] uppercase tracking-wider text-on-surface-variant">
-              Key Features & Workflow
+              {getTranslation('keyFeaturesWorkflow', language, 'Key Features & Workflow')}
             </p>
             <div className="space-y-2.5">
               {tutorial.steps.map((step, idx) => (
@@ -237,7 +237,9 @@ export function TutorialModal() {
                 lightbulb
               </span>
               <div>
-                <span className="font-label-sm font-bold text-secondary text-xs">Pro Tip: </span>
+                <span className="font-label-sm font-bold text-secondary text-xs">
+                  {getTranslation('proTipLabel', language, 'Pro Tip:')}{' '}
+                </span>
                 <span className="font-body-sm text-on-surface text-xs">
                   {tutorial.proTip}
                 </span>

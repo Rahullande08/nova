@@ -29,17 +29,23 @@ export function VisitPlanPage() {
 
       {/* Date Filter Bar */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
-        {['Today (Fri)', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'].map((date) => (
+        {[
+          { id: 'Today (Fri)', label: t('todayFri', 'Today (Fri)') },
+          { id: 'Monday', label: t('monday', 'Monday') },
+          { id: 'Tuesday', label: t('tuesday', 'Tuesday') },
+          { id: 'Wednesday', label: t('wednesday', 'Wednesday') },
+          { id: 'Thursday', label: t('thursday', 'Thursday') }
+        ].map((date) => (
           <button
-            key={date}
-            onClick={() => setSelectedDate(date)}
+            key={date.id}
+            onClick={() => setSelectedDate(date.id)}
             className={`px-3 py-1.5 rounded-full font-bold transition-all cursor-pointer ${
-              selectedDate === date
+              selectedDate === date.id
                 ? 'bg-primary text-on-primary shadow-xs'
                 : 'bg-surface-container-low text-on-surface hover:bg-surface-container'
             }`}
           >
-            {date}
+            {date.label}
           </button>
         ))}
       </div>

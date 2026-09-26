@@ -56,7 +56,10 @@ export function ActionDetailDrawer() {
                     : 'bg-error-container text-on-error-container'
                 }`}
               >
-                {selectedAction.status}
+                {selectedAction.status === 'Verified' ? t('verified', 'Verified') :
+                 selectedAction.status === 'Closed' ? t('closed', 'Closed') :
+                 selectedAction.status === 'In Progress' ? t('inProgress', 'In Progress') :
+                 selectedAction.status === 'Open' ? t('open', 'Open') : selectedAction.status}
               </span>
             </div>
             <p className="font-headline-sm text-sm font-bold text-on-surface">
@@ -106,17 +109,22 @@ export function ActionDetailDrawer() {
               {t('updateStatusWorkflow', 'Update Status Workflow')}
             </span>
             <div className="grid grid-cols-2 gap-2">
-              {['Open', 'In Progress', 'Verified', 'Closed'].map((status) => (
+              {[
+                { id: 'Open', label: t('open', 'Open') },
+                { id: 'In Progress', label: t('inProgress', 'In Progress') },
+                { id: 'Verified', label: t('verified', 'Verified') },
+                { id: 'Closed', label: t('closed', 'Closed') }
+              ].map((status) => (
                 <button
-                  key={status}
-                  onClick={() => handleStatusChange(status)}
-                  className={`py-2 px-3 rounded-lg text-xs font-bold transition-all ${
-                    selectedAction.status === status
+                  key={status.id}
+                  onClick={() => handleStatusChange(status.id)}
+                  className={`py-2 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    selectedAction.status === status.id
                       ? 'bg-primary text-on-primary shadow-sm ring-2 ring-secondary'
                       : 'bg-surface-container-low text-on-surface hover:bg-surface-container'
                   }`}
                 >
-                  {status}
+                  {status.label}
                 </button>
               ))}
             </div>
@@ -130,13 +138,13 @@ export function ActionDetailDrawer() {
             <textarea
               value={verificationNote}
               onChange={(e) => setVerificationNote(e.target.value)}
-              placeholder="e.g. Observed 4-corner group rotation during morning visit..."
+              placeholder={t('logVerificationPlaceholder', 'e.g. Observed 4-corner group rotation during morning visit...')}
               rows={3}
               className="w-full p-2.5 rounded-lg border border-outline-variant text-xs bg-surface focus:ring-2 focus:ring-secondary focus:outline-none"
             />
             <button
               type="submit"
-              className="w-full py-2 bg-secondary text-on-secondary rounded-lg font-bold text-xs shadow-sm hover:bg-secondary/90 transition-colors"
+              className="w-full py-2 bg-secondary text-on-secondary rounded-lg font-bold text-xs shadow-sm hover:bg-secondary/90 transition-colors cursor-pointer"
             >
               {t('addMentorNoteBtn', 'Add Mentor Note')}
             </button>
@@ -147,9 +155,9 @@ export function ActionDetailDrawer() {
         <div className="p-4 border-t border-surface-container bg-surface-container-low/40 flex justify-end">
           <button
             onClick={() => setSelectedAction(null)}
-            className="px-4 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold"
+            className="px-4 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold cursor-pointer"
           >
-            {t('done', 'Done')}
+            {t('close', 'Close')}
           </button>
         </div>
       </div>

@@ -9,59 +9,59 @@ export function AITransparencyModal() {
   const pipelineStages = [
     {
       step: '01',
-      title: 'Teacher Evidence',
-      actor: 'Human (Teacher)',
+      title: t('stage01Title', 'Teacher Evidence'),
+      actor: t('stage01Actor', 'Human (Teacher)'),
       actorType: 'human',
-      desc: 'Teacher captures raw classroom tracker photo or records 60s voice note in Marathi/Hindi.',
-      safetyRule: 'No child faces required. Audio purged post-transcription.'
+      desc: t('stage01Desc', 'Teacher captures raw classroom tracker photo or records 60s voice note in Marathi/Hindi.'),
+      safetyRule: t('stage01Safety', 'No child faces required. Audio purged post-transcription.')
     },
     {
       step: '02',
-      title: 'Speech & OCR Extraction',
-      actor: 'AI Model (ASR / OCR)',
+      title: t('stage02Title', 'Speech & OCR Extraction'),
+      actor: t('stage02Actor', 'AI Model (ASR / OCR)'),
       actorType: 'ai',
-      desc: 'Extracts student tallies into FLN tiers (Beginner, Letter, Word, Story) and transcribes spoken reflections.',
-      safetyRule: 'Zero teacher ranking. Clinical linguistic parsing only.'
+      desc: t('stage02Desc', 'Extracts student tallies into FLN tiers (Beginner, Letter, Word, Story) and transcribes spoken reflections.'),
+      safetyRule: t('stage02Safety', 'Zero teacher ranking. Clinical linguistic parsing only.')
     },
     {
       step: '03',
-      title: 'Practice Rubric Coding',
-      actor: 'AI Model (5-Point Protocol)',
+      title: t('stage03Title', 'Practice Rubric Coding'),
+      actor: t('stage03Actor', 'AI Model (5-Point Protocol)'),
       actorType: 'ai',
-      desc: 'Evaluates evidence against neutral rubric (Observed / Partly observed / Not observed in submitted evidence).',
-      safetyRule: 'Strictly non-evaluative. Every flag carries open verifiable citation.'
+      desc: t('stage03Desc', 'Evaluates evidence against neutral rubric (Observed / Partly observed / Not observed in submitted evidence).'),
+      safetyRule: t('stage03Safety', 'Strictly non-evaluative. Every flag carries open verifiable citation.')
     },
     {
       step: '04',
-      title: 'Coaching Suggestion',
-      actor: 'AI Instructional Coach',
+      title: t('stage04Title', 'Coaching Suggestion'),
+      actor: t('stage04Actor', 'AI Instructional Coach'),
       actorType: 'ai',
-      desc: 'Generates exactly ONE immediate next step actionable tomorrow with targeted 10-minute activity pick.',
-      safetyRule: 'Calibrated to SCERT foundational literacy pedagogical norms.'
+      desc: t('stage04Desc', 'Generates exactly ONE immediate next step actionable tomorrow with targeted 10-minute activity pick.'),
+      safetyRule: t('stage04Safety', 'Calibrated to SCERT foundational literacy pedagogical norms.')
     },
     {
       step: '05',
-      title: 'Visit Priority Routing',
-      actor: 'Deterministic Rule Engine',
+      title: t('stage05Title', 'Visit Priority Routing'),
+      actor: t('stage05Actor', 'Deterministic Rule Engine'),
       actorType: 'rule',
-      desc: 'Priority queue computed deterministically: (1) Repeated signal + (2) Days since visit >14d + (3) Teacher request.',
-      safetyRule: 'No black-box scoring. 100% transparent audit trail.'
+      desc: t('stage05Desc', 'Priority queue computed deterministically: (1) Repeated signal + (2) Days since visit >14d + (3) Teacher request.'),
+      safetyRule: t('stage05Safety', 'No black-box scoring. 100% transparent audit trail.')
     },
     {
       step: '06',
-      title: 'Mentor Visit & Demonstration',
-      actor: 'Human (CRP / Mentor)',
+      title: t('stage06Title', 'Mentor Visit & Demonstration'),
+      actor: t('stage06Actor', 'Human (CRP / Mentor)'),
       actorType: 'human',
-      desc: 'Cluster Resource Person conducts physical classroom visit, models practice, and reviews teacher progress.',
-      safetyRule: 'Empathetic coaching orientation. Collaborative problem-solving.'
+      desc: t('stage06Desc', 'Cluster Resource Person conducts physical classroom visit, models practice, and reviews teacher progress.'),
+      safetyRule: t('stage06Safety', 'Empathetic coaching orientation. Collaborative problem-solving.')
     },
     {
       step: '07',
-      title: 'Verification & State Learning',
-      actor: 'Human Verification + System Sync',
+      title: t('stage07Title', 'Verification & State Learning'),
+      actor: t('stage07Actor', 'Human Verification + System Sync'),
       actorType: 'hybrid',
-      desc: 'Mentor verifies observed shift. Aggregated signals inform state training modules without identifying individuals.',
-      safetyRule: 'Data used to allocate institutional support, never punitive.'
+      desc: t('stage07Desc', 'Mentor verifies observed shift. Aggregated signals inform state training modules without identifying individuals.'),
+      safetyRule: t('stage07Safety', 'Data used to allocate institutional support, never punitive.')
     }
   ];
 
@@ -172,7 +172,7 @@ export function AITransparencyModal() {
         {/* Footer */}
         <div className="p-4 border-t border-surface-container bg-surface-container-low/40 flex items-center justify-between">
           <span className="font-label-sm text-[11px] text-on-surface-variant">
-            ISO 42001 & FLN Responsible AI Framework Aligned
+            {t('aiTransparencyAlignment', 'ISO 42001 & FLN Responsible AI Framework Aligned')}
           </span>
           <button
             onClick={() => setIsTransparencyModalOpen(false)}
