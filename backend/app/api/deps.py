@@ -17,7 +17,7 @@ def get_current_user(
     db: Session = Depends(get_db)
 ) -> User:
     if not authorization:
-        # Default active demo/dev user
+        # Default active demo user in development
         user = db.query(User).first()
         if not user:
             raise HTTPException(
@@ -29,24 +29,25 @@ def get_current_user(
     token = authorization.replace("Bearer ", "").strip()
     payload = verify_token(token)
     if not payload:
-        # If token was provided but invalid/expired, return default or 401
-        user = db.query(User).first()
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid or expired authentication token"
-            )
-        return user
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired authentication token"
+        )
         
     user = db.query(User).filter(User.id == payload.get("sub")).first()
-    return user or db.query(User).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authenticated user account not found"
+        )
+    return user
 
 def require_role(allowed_roles: List[str]):
     def role_checker(current_user: User = Depends(get_current_user)) -> User:
         if current_user.role not in allowed_roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"Access forbidden: requires one of {allowed_roles}"
+                detail=f"Access forbidden: action requires one of {allowed_roles} roles"
             )
         return current_user
     return role_checker

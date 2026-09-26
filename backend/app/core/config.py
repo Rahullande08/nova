@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Union
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
 
-    # Environment & Host
+    # Environment & Host ("development", "staging", "production")
     ENVIRONMENT: str = "development"
     DEBUG: bool = True
 
@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     ]
 
     # Security / Auth
-    SECRET_KEY: str = "practice_layer_super_secret_dev_key_2026_change_in_production"
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "practice_layer_super_secret_dev_key_2026_change_in_production")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
 
     # Uploads Storage
@@ -53,6 +53,11 @@ class Settings(BaseSettings):
         case_sensitive = True
 
 settings = Settings()
+
+# Validate secret key in production
+if settings.ENVIRONMENT == "production":
+    if "dev_key" in settings.SECRET_KEY or len(settings.SECRET_KEY) < 32:
+        raise ValueError("CRITICAL: In production mode, SECRET_KEY must be a secure environment variable with at least 32 characters.")
 
 # Ensure uploads directory exists
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)

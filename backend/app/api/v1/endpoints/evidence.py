@@ -29,7 +29,6 @@ async def transcribe_audio_endpoint(
 
     if audio_file:
         if audio_file.content_type and audio_file.content_type not in settings.ALLOWED_AUDIO_TYPES:
-            # Check extension as well
             ext = os.path.splitext(audio_file.filename or "")[1].lower()
             if ext not in [".webm", ".wav", ".mp3", ".ogg", ".m4a"]:
                 raise HTTPException(
@@ -45,8 +44,8 @@ async def transcribe_audio_endpoint(
             )
 
         mime_type = audio_file.content_type or "audio/webm"
-        file_ext = os.path.splitext(audio_file.filename or "")[1] or ".webm"
-        file_name = f"audio_{uuid.uuid4().hex[:12]}{file_ext}"
+        file_ext = os.path.splitext(audio_file.filename or "")[1].lower() or ".webm"
+        file_name = f"audio_{uuid.uuid4().hex[:16]}{file_ext}"
         file_path = os.path.join(settings.UPLOAD_DIR, file_name)
         with open(file_path, "wb") as f:
             f.write(audio_bytes)
@@ -65,14 +64,18 @@ async def upload_evidence(
     audio_file: Optional[UploadFile] = File(None),
     language: str = Form("mr"),
     transcript: Optional[str] = Form(None),
-    teacher_name: str = Form("Sunita Rao"),
-    school_name: str = Form("ZP Primary School Wadgaon"),
+    teacher_name: Optional[str] = Form(None),
+    school_name: Optional[str] = Form(None),
     grade: str = Form("Grade 3"),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
-    Accepts real multipart evidence (tracker image and/or audio recording) and validates file boundaries.
+    Accepts real multipart evidence (tracker image and/or audio recording) and associates user scope.
     """
+    effective_teacher = teacher_name or current_user.name or "Sunita Rao"
+    effective_school = school_name or current_user.school_name or "ZP Primary School Wadgaon"
+
     image_url = None
     img_bytes = None
     if tracker_photo:
@@ -83,8 +86,10 @@ async def upload_evidence(
                 detail=f"Image file exceeds maximum allowed size of {settings.MAX_UPLOAD_SIZE_MB}MB."
             )
 
-        ext = os.path.splitext(tracker_photo.filename or "")[1] or ".jpg"
-        img_name = f"tracker_{uuid.uuid4().hex[:12]}{ext}"
+        ext = os.path.splitext(tracker_photo.filename or "")[1].lower() or ".jpg"
+        if ext not in [".jpg", ".jpeg", ".png", ".webp"]:
+            ext = ".jpg"
+        img_name = f"tracker_{uuid.uuid4().hex[:16]}{ext}"
         img_path = os.path.join(settings.UPLOAD_DIR, img_name)
         with open(img_path, "wb") as f:
             f.write(img_bytes)
@@ -100,8 +105,10 @@ async def upload_evidence(
                 detail=f"Audio file exceeds maximum allowed size of {settings.MAX_UPLOAD_SIZE_MB}MB."
             )
 
-        ext = os.path.splitext(audio_file.filename or "")[1] or ".webm"
-        aud_name = f"voice_{uuid.uuid4().hex[:12]}{ext}"
+        ext = os.path.splitext(audio_file.filename or "")[1].lower() or ".webm"
+        if ext not in [".webm", ".wav", ".mp3", ".ogg", ".m4a"]:
+            ext = ".webm"
+        aud_name = f"voice_{uuid.uuid4().hex[:16]}{ext}"
         aud_path = os.path.join(settings.UPLOAD_DIR, aud_name)
         with open(aud_path, "wb") as f:
             f.write(aud_bytes)
@@ -120,8 +127,10 @@ async def upload_evidence(
     evidence_id = f"ev-{int(time.time() * 1000)}"
     new_evidence = Evidence(
         id=evidence_id,
-        teacher_name=teacher_name,
-        school_name=school_name,
+        teacher_id=current_user.id,
+        teacher_name=effective_teacher,
+        school_id=current_user.school_id,
+        school_name=effective_school,
         grade=grade,
         tracker_image=image_url,
         audio_url=audio_url,
@@ -135,6 +144,8 @@ async def upload_evidence(
 
     return {
         "evidenceId": evidence_id,
+        "teacherName": effective_teacher,
+        "schoolName": effective_school,
         "trackerImage": image_url,
         "audioUrl": audio_url,
         "transcript": final_transcript,
@@ -149,10 +160,11 @@ async def analyze_practice_endpoint(
     transcript: Optional[str] = Form(None),
     language: str = Form("mr"),
     tracker_image_url: Optional[str] = Form(None),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
-    Full AI Practice Rubric analysis pipeline with safe boundary checks.
+    Full AI Practice Rubric analysis pipeline with user scope and safe boundary checks.
     """
     img_bytes = None
     if tracker_photo:
@@ -192,8 +204,10 @@ async def analyze_practice_endpoint(
     ev_id = f"ev-{int(time.time() * 1000)}"
     evidence_entry = Evidence(
         id=ev_id,
-        teacher_name="Sunita Rao",
-        school_name="ZP Primary School Wadgaon",
+        teacher_id=current_user.id,
+        teacher_name=current_user.name or "Sunita Rao",
+        school_id=current_user.school_id,
+        school_name=current_user.school_name or "ZP Primary School Wadgaon",
         tracker_image=tracker_image_url,
         transcript=final_transcript,
         language=language,
@@ -228,8 +242,14 @@ async def analyze_practice_endpoint(
     return analysis_data
 
 @router.get("", response_model=List[Dict[str, Any]])
-def list_evidence(db: Session = Depends(get_db)):
-    evidences = db.query(Evidence).order_by(Evidence.created_at.desc()).limit(20).all()
+def list_evidence(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    query = db.query(Evidence)
+    if current_user.role == "teacher":
+        query = query.filter((Evidence.teacher_id == current_user.id) | (Evidence.teacher_id == None))
+    evidences = query.order_by(Evidence.created_at.desc()).limit(20).all()
     return [
         {
             "id": ev.id,

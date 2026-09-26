@@ -2,8 +2,8 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
-from backend.app.api.deps import get_db
-from backend.app.models.entities import Action
+from backend.app.api.deps import get_db, get_current_user
+from backend.app.models.entities import Action, User
 from backend.app.schemas.schemas import ActionCreate, ActionStatusUpdate, ActionResponse
 
 router = APIRouter()
@@ -12,6 +12,7 @@ router = APIRouter()
 def get_actions(
     status: Optional[str] = Query(None),
     search: Optional[str] = Query(None),
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     query = db.query(Action)
@@ -25,7 +26,7 @@ def get_actions(
             (Action.school.ilike(s_term))
         )
     actions = query.order_by(Action.created_at.desc()).all()
-    
+
     return [
         {
             "id": a.id,
@@ -47,15 +48,22 @@ def get_actions(
     ]
 
 @router.post("", response_model=Dict[str, Any], status_code=status.HTTP_201_CREATED)
-def create_action(action_in: ActionCreate, db: Session = Depends(get_db)):
+def create_action(
+    action_in: ActionCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     action_id = f"act-{int(datetime.utcnow().timestamp() * 1000)}"
+    owner_name = action_in.owner if action_in.owner else f"{current_user.name} ({current_user.role.title()})"
+    school_name = action_in.school if action_in.school else (current_user.school_name or "ZP Primary School Wadgaon")
+
     new_action = Action(
         id=action_id,
         action=action_in.action,
-        owner=action_in.owner,
-        target_teacher=action_in.target_teacher or action_in.owner,
-        school=action_in.school,
-        school_id=action_in.school_id,
+        owner=owner_name,
+        target_teacher=action_in.target_teacher or owner_name,
+        school=school_name,
+        school_id=action_in.school_id or current_user.school_id,
         created_date=datetime.utcnow().strftime("%Y-%m-%d"),
         due_date=action_in.due_date or datetime.utcnow().strftime("%Y-%m-%d"),
         status="Open",
@@ -66,7 +74,7 @@ def create_action(action_in: ActionCreate, db: Session = Depends(get_db)):
     db.add(new_action)
     db.commit()
     db.refresh(new_action)
-    
+
     return {
         "id": new_action.id,
         "action": new_action.action,
@@ -86,20 +94,21 @@ def create_action(action_in: ActionCreate, db: Session = Depends(get_db)):
 def update_action(
     action_id: str,
     update_data: ActionStatusUpdate,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     action = db.query(Action).filter(Action.id == action_id).first()
     if not action:
         raise HTTPException(status_code=404, detail="Action not found")
-        
+
     action.status = update_data.status
     if update_data.verification_note is not None:
         action.verification_note = update_data.verification_note
     action.last_updated = datetime.utcnow().isoformat()
-    
+
     db.commit()
     db.refresh(action)
-    
+
     return {
         "id": action.id,
         "action": action.action,
@@ -118,10 +127,22 @@ def update_action(
     }
 
 @router.delete("/{action_id}")
-def delete_action(action_id: str, db: Session = Depends(get_db)):
+def delete_action(
+    action_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     action = db.query(Action).filter(Action.id == action_id).first()
     if not action:
         raise HTTPException(status_code=404, detail="Action not found")
+
+    # Only creator/owner, mentors, leads, or admins can delete actions
+    if current_user.role not in ["mentor", "lead", "admin"] and (current_user.name not in action.owner and action.target_teacher != current_user.name):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have permission to delete this action item."
+        )
+
     db.delete(action)
     db.commit()
     return {"success": True, "message": "Action deleted"}

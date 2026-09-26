@@ -13,6 +13,11 @@ dist-ssr
 *.local
 .vite
 
+# Archives
+*.zip
+*.tar.gz
+*.rar
+
 # Python & Virtual Environments
 __pycache__/
 *.py[cod]
