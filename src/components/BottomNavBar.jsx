@@ -2,13 +2,13 @@ import React from 'react';
 import { useApp } from '../context/AppContext';
 
 export function BottomNavBar() {
-  const { currentRoute, setCurrentRoute, setIsNavDrawerOpen } = useApp();
+  const { currentRoute, setCurrentRoute, setIsNavDrawerOpen, t } = useApp();
 
   const navTabs = [
-    { id: 'overview-dashboard', label: 'Overview', icon: 'dashboard' },
-    { id: 'capture-evidence', label: 'Capture', icon: 'add', isCenterAction: true },
-    { id: 'ai-coach-chat', label: 'AI Coach', icon: 'psychology' },
-    { id: 'crp-mentor-dashboard', label: 'CRP/Schools', icon: 'corporate_fare' }
+    { id: 'overview-dashboard', label: t('overviewTab', 'Overview'), icon: 'dashboard' },
+    { id: 'capture-evidence', label: t('captureTab', 'Capture'), icon: 'add', isCenterAction: true },
+    { id: 'ai-coach-chat', label: t('aiCoachTab', 'AI Coach'), icon: 'psychology' },
+    { id: 'crp-mentor-dashboard', label: t('crpSchoolsTab', 'CRP/Schools'), icon: 'corporate_fare' }
   ];
 
   return (
@@ -24,13 +24,13 @@ export function BottomNavBar() {
                 onClick={() => setCurrentRoute(tab.id)}
                 className="flex flex-col items-center justify-center min-w-[56px] h-14 -mt-4 relative group"
                 type="button"
-                aria-label="Capture Evidence"
+                aria-label={tab.label}
               >
                 <div className="w-12 h-12 rounded-full bg-secondary text-on-secondary flex items-center justify-center shadow-lg active:scale-95 group-hover:scale-105 transition-all">
                   <span className="material-symbols-outlined text-[26px]">add</span>
                 </div>
                 <span className="font-label-sm text-[11px] mt-0.5 text-on-surface font-semibold">
-                  Capture
+                  {tab.label}
                 </span>
               </button>
             );
@@ -66,7 +66,7 @@ export function BottomNavBar() {
           type="button"
         >
           <span className="material-symbols-outlined text-[22px]">menu</span>
-          <span className="font-label-sm text-[11px]">More</span>
+          <span className="font-label-sm text-[11px]">{t('moreTab', 'More')}</span>
         </button>
       </div>
     </nav>

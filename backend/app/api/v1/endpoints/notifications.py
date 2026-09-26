@@ -35,10 +35,19 @@ def mark_read(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    notif = db.query(Notification).filter(Notification.id == notif_id).first()
-    if notif:
+    query = db.query(Notification).filter(Notification.id == notif_id)
+    if current_user.role != "admin":
+        query = query.filter((Notification.user_id == current_user.id) | (Notification.user_id == None))
+    notif = query.first()
+    if not notif:
+        raise HTTPException(status_code=404, detail="Notification not found")
+        
+    try:
         notif.unread = False
         db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Failed to update notification")
     return {"success": True, "id": notif_id, "unread": False}
 
 @router.post("/mark-all-read")
@@ -49,6 +58,11 @@ def mark_all_read(
     query = db.query(Notification)
     if current_user.role != "admin":
         query = query.filter((Notification.user_id == current_user.id) | (Notification.user_id == None))
-    query.update({"unread": False})
-    db.commit()
+    try:
+        query.update({"unread": False})
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Failed to update notifications")
     return {"success": True, "message": "All notifications marked read"}
+

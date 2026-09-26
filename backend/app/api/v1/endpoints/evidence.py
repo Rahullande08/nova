@@ -124,6 +124,7 @@ async def upload_evidence(
         )
         final_transcript = trans_res.get("transcript")
 
+    # Atomic DB persistence
     evidence_id = f"ev-{int(time.time() * 1000)}"
     new_evidence = Evidence(
         id=evidence_id,
@@ -138,9 +139,16 @@ async def upload_evidence(
         language=language,
         processing_status="completed"
     )
-    db.add(new_evidence)
-    db.commit()
-    db.refresh(new_evidence)
+    try:
+        db.add(new_evidence)
+        db.commit()
+        db.refresh(new_evidence)
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to save evidence record to database."
+        )
 
     return {
         "evidenceId": evidence_id,
@@ -200,44 +208,51 @@ async def analyze_practice_endpoint(
         language=language
     )
 
-    # Persist in DB
+    # Atomic Multi-Step Transaction
     ev_id = f"ev-{int(time.time() * 1000)}"
-    evidence_entry = Evidence(
-        id=ev_id,
-        teacher_id=current_user.id,
-        teacher_name=current_user.name or "Sunita Rao",
-        school_id=current_user.school_id,
-        school_name=current_user.school_name or "ZP Primary School Wadgaon",
-        tracker_image=tracker_image_url,
-        transcript=final_transcript,
-        language=language,
-        processing_status="analyzed"
-    )
-    db.add(evidence_entry)
+    try:
+        evidence_entry = Evidence(
+            id=ev_id,
+            teacher_id=current_user.id,
+            teacher_name=current_user.name or "Sunita Rao",
+            school_id=current_user.school_id,
+            school_name=current_user.school_name or "ZP Primary School Wadgaon",
+            tracker_image=tracker_image_url,
+            transcript=final_transcript,
+            language=language,
+            processing_status="analyzed"
+        )
+        db.add(evidence_entry)
 
-    analysis_entry = PracticeAnalysis(
-        id=analysis_data["analysisId"],
-        evidence_id=ev_id,
-        overall_confidence=analysis_data["overallConfidence"],
-        processing_time_sec=analysis_data["processingTimeSec"],
-        rubric=analysis_data["rubric"]
-    )
-    db.add(analysis_entry)
+        analysis_entry = PracticeAnalysis(
+            id=analysis_data["analysisId"],
+            evidence_id=ev_id,
+            overall_confidence=analysis_data["overallConfidence"],
+            processing_time_sec=analysis_data["processingTimeSec"],
+            rubric=analysis_data["rubric"]
+        )
+        db.add(analysis_entry)
 
-    coach_info = analysis_data["coachingRecommendation"]
-    coaching_entry = Coaching(
-        id=f"coach-{int(time.time() * 1000)}",
-        analysis_id=analysis_data["analysisId"],
-        one_next_step=coach_info["oneNextStep"],
-        why_this=coach_info["whyThis"],
-        recommended_activity=coach_info.get("recommendedActivity"),
-        marathi_audio_script=coach_info.get("marathiAudioScript"),
-        hindi_audio_script=coach_info.get("hindiAudioScript"),
-        language=language
-    )
-    db.add(coaching_entry)
+        coach_info = analysis_data["coachingRecommendation"]
+        coaching_entry = Coaching(
+            id=f"coach-{int(time.time() * 1000)}",
+            analysis_id=analysis_data["analysisId"],
+            one_next_step=coach_info["oneNextStep"],
+            why_this=coach_info["whyThis"],
+            recommended_activity=coach_info.get("recommendedActivity"),
+            marathi_audio_script=coach_info.get("marathiAudioScript"),
+            hindi_audio_script=coach_info.get("hindiAudioScript"),
+            language=language
+        )
+        db.add(coaching_entry)
 
-    db.commit()
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to persist multi-step analysis transaction."
+        )
 
     return analysis_data
 
@@ -246,10 +261,11 @@ def list_evidence(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    query = db.query(Evidence)
+    query = db.query(Evidence).filter(Evidence.is_archived == False)
+    # Teacher isolation: Teachers only see their own evidence
     if current_user.role == "teacher":
         query = query.filter((Evidence.teacher_id == current_user.id) | (Evidence.teacher_id == None))
-    evidences = query.order_by(Evidence.created_at.desc()).limit(20).all()
+    evidences = query.order_by(Evidence.created_at.desc()).limit(50).all()
     return [
         {
             "id": ev.id,
@@ -265,3 +281,39 @@ def list_evidence(
         }
         for ev in evidences
     ]
+
+@router.get("/{evidence_id}", response_model=Dict[str, Any])
+def get_single_evidence(
+    evidence_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Retrieves evidence by ID with strict server-side authorization check.
+    """
+    ev = db.query(Evidence).filter(Evidence.id == evidence_id, Evidence.is_archived == False).first()
+    if not ev:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Evidence record not found")
+
+    # Authorization verification: Teacher cannot view other teachers' private evidence
+    if current_user.role == "teacher" and ev.teacher_id and ev.teacher_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access forbidden: you do not have permission to view this evidence record."
+        )
+
+    return {
+        "id": ev.id,
+        "teacherId": ev.teacher_id,
+        "teacherName": ev.teacher_name,
+        "schoolId": ev.school_id,
+        "schoolName": ev.school_name,
+        "grade": ev.grade,
+        "trackerImage": ev.tracker_image,
+        "audioUrl": ev.audio_url,
+        "transcript": ev.transcript,
+        "language": ev.language,
+        "status": ev.processing_status,
+        "createdAt": ev.created_at.isoformat() if ev.created_at else None
+    }
+

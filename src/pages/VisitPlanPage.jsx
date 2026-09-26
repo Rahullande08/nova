@@ -14,14 +14,14 @@ export function VisitPlanPage() {
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed w-fit mb-1">
             <span className="material-symbols-outlined text-[14px]">calendar_today</span>
             <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
-              Field Routing Schedule
+              {t('fieldRoutingSchedule', 'Field Routing Schedule')}
             </span>
           </div>
           <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
             {t('visitPlan', 'Cluster Mentor Visit Plan')}
           </h1>
           <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
-            Deterministic daily visit prioritization based on classroom signals and SLA intervals.
+            {t('visitPlanSubtitle', 'Deterministic daily visit prioritization based on classroom signals and SLA intervals.')}
           </p>
         </div>
         <TutorialButton pageKey="visit-plan" variant="outline" className="shrink-0" />
@@ -33,7 +33,7 @@ export function VisitPlanPage() {
           <button
             key={date}
             onClick={() => setSelectedDate(date)}
-            className={`px-3 py-1.5 rounded-full font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-full font-bold transition-all cursor-pointer ${
               selectedDate === date
                 ? 'bg-primary text-on-primary shadow-xs'
                 : 'bg-surface-container-low text-on-surface hover:bg-surface-container'
@@ -72,12 +72,12 @@ export function VisitPlanPage() {
                 </span>
               </div>
               <p className="font-body-sm text-xs text-on-surface-variant">
-                Pedagogical Objective: <strong>{school.suggestedDemo}</strong>
+                {t('pedagogicalObjective', 'Pedagogical Objective:')} <strong>{school.suggestedDemo}</strong>
               </p>
               <div className="flex items-center gap-2 text-[11px] text-on-surface-variant pt-0.5">
                 <span className="material-symbols-outlined text-[14px] text-secondary">schedule</span>
-                <span>Last visit: {school.daysSinceVisit} days ago</span>
-                <span>• {school.teachersCount} Teachers</span>
+                <span>{t('lastVisitDaysAgo', { count: school.daysSinceVisit }, `Last visit: ${school.daysSinceVisit} days ago`)}</span>
+                <span>{t('teachersCountLabel', { count: school.teachersCount }, `• ${school.teachersCount} Teachers`)}</span>
               </div>
             </div>
 
@@ -87,19 +87,19 @@ export function VisitPlanPage() {
                   setSelectedSchoolId(school.id);
                   setCurrentRoute('mentor-visit-workflow');
                 }}
-                className="px-3 py-1.5 bg-secondary text-on-secondary text-xs font-bold rounded-lg hover:bg-secondary/90 shadow-xs flex items-center gap-1"
+                className="px-3 py-1.5 bg-secondary text-on-secondary text-xs font-bold rounded-lg hover:bg-secondary/90 shadow-xs flex items-center gap-1 cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[16px]">play_arrow</span>
-                <span>Start Visit</span>
+                <span>{t('startVisit', 'Start Visit')}</span>
               </button>
               <button
                 onClick={() => {
                   setSelectedSchoolId(school.id);
                   setCurrentRoute('school-evidence-feed');
                 }}
-                className="px-3 py-1.5 bg-surface-container text-on-surface text-xs font-semibold rounded-lg hover:bg-surface-container-high"
+                className="px-3 py-1.5 bg-surface-container text-on-surface text-xs font-semibold rounded-lg hover:bg-surface-container-high cursor-pointer"
               >
-                Evidence Feed
+                {t('evidenceFeed', 'Evidence Feed')}
               </button>
             </div>
           </div>

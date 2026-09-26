@@ -2,7 +2,7 @@ import React from 'react';
 import { useApp } from '../context/AppContext';
 
 export function AITransparencyModal() {
-  const { isTransparencyModalOpen, setIsTransparencyModalOpen } = useApp();
+  const { isTransparencyModalOpen, setIsTransparencyModalOpen, t } = useApp();
 
   if (!isTransparencyModalOpen) return null;
 
@@ -76,10 +76,10 @@ export function AITransparencyModal() {
             </div>
             <div>
               <h2 className="font-headline-sm text-base md:text-lg text-on-surface font-bold">
-                AI Transparency & Governance Architecture
+                {t('transparencyTitle', 'AI Transparency & Governance Architecture')}
               </h2>
               <p className="font-body-sm text-xs text-on-surface-variant">
-                Explicit separation of AI diagnostic synthesis vs. Human deterministic decisions
+                {t('transparencySubtitle', 'Explicit separation of AI diagnostic synthesis vs. Human deterministic decisions')}
               </p>
             </div>
           </div>
@@ -98,19 +98,19 @@ export function AITransparencyModal() {
             <div className="p-3 rounded-xl bg-surface-container-low border border-outline-variant/30 flex flex-col gap-1">
               <div className="flex items-center gap-1.5 text-secondary font-bold">
                 <span className="material-symbols-outlined text-[16px]">psychology</span>
-                <span>AI Automated Scope</span>
+                <span>{t('aiScopeTitle', 'AI Automated Scope')}</span>
               </div>
               <p className="text-on-surface-variant">
-                Speech transcription, OCR tallying, 5-point neutral rubric coding, single next-step suggestion.
+                {t('aiScopeDesc', 'Speech transcription, OCR tallying, 5-point neutral rubric coding, single next-step suggestion.')}
               </p>
             </div>
             <div className="p-3 rounded-xl bg-tertiary-fixed/30 border border-on-tertiary-container/20 flex flex-col gap-1">
               <div className="flex items-center gap-1.5 text-on-tertiary-container font-bold">
                 <span className="material-symbols-outlined text-[16px]">verified_user</span>
-                <span>Deterministic / Human Scope</span>
+                <span>{t('humanScopeTitle', 'Deterministic / Human Scope')}</span>
               </div>
               <p className="text-on-surface-variant">
-                Visit prioritization (rule-based SLA), classroom demonstration, final verification, policy decisions.
+                {t('humanScopeDesc', 'Visit prioritization (rule-based SLA), classroom demonstration, final verification, policy decisions.')}
               </p>
             </div>
           </div>
@@ -118,7 +118,7 @@ export function AITransparencyModal() {
           {/* Step by Step Interactive Pipeline */}
           <div className="space-y-3">
             <h3 className="font-label-sm text-xs uppercase tracking-wider font-bold text-on-surface-variant">
-              The 7-Stage Diagnostic Pipeline
+              {t('diagnosticPipelineTitle', 'The 7-Stage Diagnostic Pipeline')}
             </h3>
 
             <div className="space-y-2.5">
@@ -178,7 +178,7 @@ export function AITransparencyModal() {
             onClick={() => setIsTransparencyModalOpen(false)}
             className="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-xs font-semibold hover:opacity-90 transition-opacity"
           >
-            Acknowledge & Close
+            {t('closeAcknowledge', 'Acknowledge & Close')}
           </button>
         </div>
       </div>

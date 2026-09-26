@@ -29,10 +29,12 @@ export function AIAnalysisCoachPage() {
       setIsPlayingAudio(false);
     } else {
       setIsPlayingAudio(true);
-      showToast('Playing teacher audio clip...');
+      showToast(t('playingTeacherAudioToast', 'Playing teacher audio clip...'));
       const langCode = language === 'HI' ? 'hi-IN' : language === 'MR' ? 'mr-IN' : 'en-US';
       await audioService.speak(
-        'आज मी वर्गात वाचन गट केले होते, पण शब्द स्तरावरील मुलांना जास्तीचा वेळ लागला.',
+        language === 'MR'
+          ? 'आज मी वर्गात वाचन गट केले होते, पण शब्द स्तरावरील मुलांना जास्तीचा वेळ लागला.'
+          : '...grouped 14 children by word level and 8 by letter level. Spent 12 minutes on reading cards.',
         langCode
       );
       setIsPlayingAudio(false);
@@ -45,7 +47,7 @@ export function AIAnalysisCoachPage() {
       setIsPlayingCoachVoice(false);
     } else {
       setIsPlayingCoachVoice(true);
-      showToast(`Playing AI Coach voice guidance (${language})...`);
+      showToast(t('playingCoachVoiceToast', { lang: language }, `Playing AI Coach voice guidance (${language})...`));
       const langCode = language === 'HI' ? 'hi-IN' : language === 'MR' ? 'mr-IN' : 'en-US';
       const speechPrompt = language === 'HI'
         ? 'कल कक्षा में समूह बनाने के बाद, प्रत्येक समूह को उनकी स्तरानुसार एक गतिविधि दें और तीन मिनट में जाँचें कि सभी बच्चे सही अभ्यास कर रहे हैं।'
@@ -60,7 +62,7 @@ export function AIAnalysisCoachPage() {
 
   const handleSendToPlan = () => {
     setIsAddedToPlan(true);
-    showToast('Added to Tomorrow’s Schedule ✓ (Synced with Mentor Ledger)');
+    showToast(t('addedToScheduleToast', 'Added to Tomorrow’s Schedule ✓ (Synced with Mentor Ledger)'));
     setTimeout(() => {
       setIsAddedToPlan(false);
     }, 3000);
@@ -85,15 +87,15 @@ export function AIAnalysisCoachPage() {
             </h1>
             <p className="font-label-sm text-xs text-on-surface-variant flex items-center gap-1">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
-              Completed in 12s
+              {t('completedInTwelveSeconds', 'Completed in 12s')}
             </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <TutorialButton pageKey="ai-coach-chat" variant="outline" className="hidden sm:inline-flex" />
           <div className="text-right shrink-0 bg-surface-container-low px-2.5 py-1 rounded-lg border border-outline-variant/20">
-            <p className="font-label-sm text-xs text-secondary font-bold">87% Confidence</p>
-            <p className="font-label-sm text-[10px] text-on-surface-variant">Human verifiable</p>
+            <p className="font-label-sm text-xs text-secondary font-bold">{t('confidenceRate', '87% Confidence')}</p>
+            <p className="font-label-sm text-[10px] text-on-surface-variant">{t('humanVerifiable', 'Human verifiable')}</p>
           </div>
         </div>
       </div>
@@ -106,11 +108,11 @@ export function AIAnalysisCoachPage() {
               assignment_turned_in
             </span>
             <h2 className="font-headline-sm text-sm md:text-base text-on-surface font-bold">
-              Submitted Practice Packet
+              {t('submittedPacket', 'Submitted Practice Packet')}
             </h2>
           </div>
           <span className="font-label-sm text-xs px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant">
-            Today, 11:42 AM
+            {t('todayTime', 'Today, 11:42 AM')}
           </span>
         </div>
 
@@ -123,7 +125,7 @@ export function AIAnalysisCoachPage() {
             </div>
             <div className="relative px-1.5 py-0.5 rounded bg-inverse-surface/90 text-inverse-on-surface font-label-sm text-[10px] flex items-center gap-1 w-fit">
               <span className="material-symbols-outlined text-[12px]">photo_camera</span>
-              <span>Tracker</span>
+              <span>{t('trackerVisual', 'Tracker')}</span>
             </div>
           </div>
 
@@ -134,7 +136,7 @@ export function AIAnalysisCoachPage() {
             </div>
             <div className="relative px-1.5 py-0.5 rounded bg-inverse-surface/90 text-inverse-on-surface font-label-sm text-[10px] flex items-center gap-1 w-fit">
               <span className="material-symbols-outlined text-[12px]">group</span>
-              <span>Clusters</span>
+              <span>{t('clustersVisual', 'Clusters')}</span>
             </div>
           </div>
 
@@ -142,7 +144,7 @@ export function AIAnalysisCoachPage() {
           <div className="col-span-1 rounded-lg bg-surface-container-low p-2.5 flex flex-col justify-between border border-outline-variant/20">
             <div>
               <span className="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider block font-bold">
-                Duration
+                {t('duration', 'Duration')}
               </span>
               <span className="font-headline-sm text-sm md:text-base font-bold text-on-surface font-numeric">
                 32 mins
@@ -161,22 +163,24 @@ export function AIAnalysisCoachPage() {
             <div className="flex items-center gap-1.5">
               <span className="material-symbols-outlined text-secondary text-[16px]">record_voice_over</span>
               <span className="font-label-sm text-xs font-bold text-on-surface">
-                Voice Reflection Excerpt (Marathi / Dialect)
+                {t('voiceReflectionExcerpt', 'Voice Reflection Excerpt (Marathi / Dialect)')}
               </span>
             </div>
             <button
               onClick={handleVoiceExcerptPlayback}
               type="button"
-              className="px-2.5 py-1 rounded bg-surface-container-highest text-secondary text-xs font-bold hover:bg-surface-container flex items-center gap-1 transition-colors"
+              className="px-2.5 py-1 rounded bg-surface-container-highest text-secondary text-xs font-bold hover:bg-surface-container flex items-center gap-1 transition-colors cursor-pointer"
             >
               <span className="material-symbols-outlined text-[14px]">
                 {isPlayingAudio ? 'stop' : 'play_arrow'}
               </span>
-              <span>{isPlayingAudio ? 'Stop' : 'Listen Excerpt'}</span>
+              <span>{isPlayingAudio ? t('stop', 'Stop') : t('listenExcerpt', 'Listen Excerpt')}</span>
             </button>
           </div>
           <p className="font-body-sm text-xs text-on-surface italic leading-relaxed">
-            “आज मी वाचन गट केले होते, पण शब्द स्तरावरील मुलांना जास्तीचा वेळ लागला. मात्रा ओळखताना काही मुले अडखळत होती...”
+            {language === 'MR'
+              ? '“आज मी वाचन गट केले होते, पण शब्द स्तरावरील मुलांना जास्तीचा वेळ लागला. मात्रा ओळखताना काही मुले अडखळत होती...”'
+              : '“...grouped 14 children by word level and 8 by letter level. Spent 12 minutes on reading cards, but ran out of time to verify all 4 beginner learners.”'}
           </p>
         </div>
       </div>
@@ -195,21 +199,21 @@ export function AIAnalysisCoachPage() {
           <button
             onClick={handleCoachVoicePlayback}
             type="button"
-            className="px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-xs font-bold flex items-center gap-1 hover:opacity-90 transition-opacity"
+            className="px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-xs font-bold flex items-center gap-1 hover:opacity-90 transition-opacity cursor-pointer"
           >
             <span className="material-symbols-outlined text-[14px]">
               {isPlayingCoachVoice ? 'stop' : 'volume_up'}
             </span>
-            <span>{isPlayingCoachVoice ? 'Stop Audio' : t('listenToCoaching', 'Listen Coaching')}</span>
+            <span>{isPlayingCoachVoice ? t('stopAudio', 'Stop Audio') : t('listenToCoaching', 'Listen Coaching')}</span>
           </button>
         </div>
 
         <div className="space-y-1">
           <h2 className="font-headline-sm text-base md:text-lg text-on-surface font-bold">
-            Spend 15 mins with Word Group on Flashcard Speed Drills
+            {t('spendFifteenMinutes', 'Spend 15 mins with Word Group on Flashcard Speed Drills')}
           </h2>
           <p className="font-body-sm text-xs md:text-sm text-on-surface-variant leading-relaxed">
-            Observation signals show that 12 children in your Word group are taking &gt;4 seconds per matra. Running a 15-minute 2-letter rapid blend drill before paragraph reading will bridge this gap.
+            {t('coachRecommendationExplanation', 'Observation signals show that 12 children in your Word group are taking >4 seconds per matra. Running a 15-minute 2-letter rapid blend drill before paragraph reading will bridge this gap.')}
           </p>
         </div>
 
@@ -217,22 +221,22 @@ export function AIAnalysisCoachPage() {
         <div className="flex flex-col sm:flex-row items-center gap-2 pt-1">
           <button
             onClick={handleSendToPlan}
-            className="w-full sm:flex-1 h-10 rounded-lg bg-secondary text-on-secondary font-label-md text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm hover:bg-secondary/90 active:scale-98 transition-all"
+            className="w-full sm:flex-1 h-10 rounded-lg bg-secondary text-on-secondary font-label-md text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm hover:bg-secondary/90 active:scale-98 transition-all cursor-pointer"
             type="button"
           >
             <span className="material-symbols-outlined text-[16px]">
               {isAddedToPlan ? 'check' : 'add_task'}
             </span>
-            <span>{isAddedToPlan ? 'Added to Tomorrow’s Schedule' : 'Add to Tomorrow’s Plan'}</span>
+            <span>{isAddedToPlan ? t('addedToSchedule', 'Added to Tomorrow’s Schedule') : t('addToTomorrowPlan', 'Add to Tomorrow’s Plan')}</span>
           </button>
 
           <button
             onClick={handleViewActivityGuide}
-            className="w-full sm:w-auto px-4 h-10 rounded-lg bg-surface-container text-on-surface font-label-md text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-surface-container-high transition-colors border border-outline-variant/30"
+            className="w-full sm:w-auto px-4 h-10 rounded-lg bg-surface-container text-on-surface font-label-md text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-surface-container-high transition-colors border border-outline-variant/30 cursor-pointer"
             type="button"
           >
             <span className="material-symbols-outlined text-[16px]">menu_book</span>
-            <span>View Activity Guide</span>
+            <span>{t('viewActivityGuide', 'View Activity Guide')}</span>
           </button>
         </div>
       </section>
@@ -244,7 +248,7 @@ export function AIAnalysisCoachPage() {
             {t('practiceRadar', 'Practice Rubric Assessment (5 Dimensions)')}
           </h2>
           <span className="font-label-sm text-xs text-on-surface-variant font-medium">
-            Clinical Diagnostic
+            {t('clinicalDiagnostic', 'Clinical Diagnostic')}
           </span>
         </div>
 
@@ -270,7 +274,7 @@ export function AIAnalysisCoachPage() {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="font-label-sm text-xs font-bold px-2 py-0.5 rounded bg-surface-container text-on-surface">
-                      Level {item.level} / {item.maxLevel}
+                      {t('levelOfMax', { level: item.level, max: item.maxLevel }, `Level ${item.level} / ${item.maxLevel}`)}
                     </span>
                     <span className="material-symbols-outlined text-[18px] text-on-surface-variant">
                       {isExpanded ? 'expand_less' : 'expand_more'}
@@ -281,11 +285,11 @@ export function AIAnalysisCoachPage() {
                 {isExpanded && (
                   <div className="pt-2 border-t border-surface-container space-y-2 text-xs animate-in fade-in">
                     <div className="p-2 rounded bg-surface-container-lowest text-on-surface-variant leading-relaxed">
-                      <span className="font-bold text-on-surface block mb-0.5">Observed Signal:</span>
+                      <span className="font-bold text-on-surface block mb-0.5">{t('observedSignal', 'Observed Signal:')}</span>
                       {item.signalObserved}
                     </div>
                     <div className="p-2 rounded bg-secondary/10 text-on-surface">
-                      <span className="font-bold text-secondary block mb-0.5">Target Action:</span>
+                      <span className="font-bold text-secondary block mb-0.5">{t('targetAction', 'Target Action:')}</span>
                       {item.targetNext}
                     </div>
                   </div>
@@ -303,7 +307,7 @@ export function AIAnalysisCoachPage() {
             {t('recommendedActivity', 'Recommended Pedagogical Activity')}
           </span>
           <span className="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-bold">
-            15 mins • Zero Cost
+            {t('fifteenMinsZeroCost', '15 mins • Zero Cost')}
           </span>
         </div>
 
@@ -316,22 +320,22 @@ export function AIAnalysisCoachPage() {
               Akshar-Matra Grid Challenge (अक्षर-मात्रा ग्रिड)
             </h3>
             <p className="font-body-sm text-xs text-on-surface-variant leading-normal">
-              Students pair up to tap and blend consonants with vowel matras in a 3x3 chalk grid drawn on the floor.
+              {t('gridChallengeDesc', 'Students pair up to tap and blend consonants with vowel matras in a 3x3 chalk grid drawn on the floor.')}
             </p>
             <div className="flex items-center gap-2 pt-1 text-[11px] text-on-surface-variant font-medium">
-              <span>Target: Word Level</span>
+              <span>{t('targetWordLevel', 'Target: Word Level')}</span>
               <span>•</span>
-              <span>Subject: Marathi Language</span>
+              <span>{t('subjectLanguage', 'Subject: Marathi Language')}</span>
             </div>
           </div>
         </div>
 
         <button
           onClick={() => setCurrentRoute('activity-library')}
-          className="w-full py-2.5 rounded-lg border border-outline-variant text-xs font-bold text-on-surface hover:bg-surface-container flex items-center justify-center gap-1.5 transition-colors"
+          className="w-full py-2.5 rounded-lg border border-outline-variant text-xs font-bold text-on-surface hover:bg-surface-container flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
           type="button"
         >
-          <span>Explore All 24 TaRL Activities in Library</span>
+          <span>{t('exploreLibrary', 'Explore All 24 TaRL Activities in Library')}</span>
           <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
         </button>
       </section>

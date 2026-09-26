@@ -109,14 +109,14 @@ export function MentorVisitWorkflowPage() {
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed w-fit mb-1">
             <span className="material-symbols-outlined text-[14px]">bolt</span>
             <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
-              Active Classroom Observation Flow
+              {t('activeObservationFlow', 'Active Classroom Observation Flow')}
             </span>
           </div>
           <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
-            School Visit: {school.name}
+            {t('schoolVisitTitle', { name: school?.name || '' }, `School Visit: ${school?.name || ''}`)}
           </h1>
           <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
-            Follow the structured 4-step observation, demonstration & coaching loop.
+            {t('structured4StepDesc', 'Follow the structured 4-step observation, demonstration & coaching loop.')}
           </p>
         </div>
         <TutorialButton pageKey="mentor-visit-workflow" variant="outline" className="shrink-0" />
@@ -125,10 +125,10 @@ export function MentorVisitWorkflowPage() {
       {/* Stepper indicator */}
       <div className="grid grid-cols-4 gap-2 text-center text-xs">
         {[
-          { step: 1, label: 'Review Evidence' },
-          { step: 2, label: 'Record Visit' },
-          { step: 3, label: 'AI Review & WhatsApp' },
-          { step: 4, label: 'Action Created' }
+          { step: 1, label: t('stepReviewEvidence', 'Review Evidence') },
+          { step: 2, label: t('stepRecordVisit', 'Record Visit') },
+          { step: 3, label: t('stepAIReviewWhatsApp', 'AI Review & WhatsApp') },
+          { step: 4, label: t('stepActionCreated', 'Action Created') }
         ].map((s) => (
           <div
             key={s.step}
@@ -140,7 +140,7 @@ export function MentorVisitWorkflowPage() {
                 : 'bg-surface-container-low text-on-surface-variant border-outline-variant/20'
             }`}
           >
-            <span className="text-[10px] uppercase">Step 0{s.step}</span>
+            <span className="text-[10px] uppercase">{t('stepNum', { num: `0${s.step}` }, `Step 0${s.step}`)}</span>
             <span className="truncate">{s.label}</span>
           </div>
         ))}
@@ -151,23 +151,23 @@ export function MentorVisitWorkflowPage() {
         <div className="bg-surface-container-lowest p-4 md:p-5 rounded-xl shadow-sm border border-outline-variant/20 space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="font-headline-sm text-base font-bold text-on-surface">
-              Step 1: Review Prior Teacher Evidence
+              {t('step1ReviewPrior', 'Step 1: Review Prior Teacher Evidence')}
             </h2>
             <span className="font-label-sm text-xs text-error font-bold">
-              Flagged Pedagogical Friction
+              {t('flaggedFriction', 'Flagged Pedagogical Friction')}
             </span>
           </div>
 
           <div className="p-3.5 rounded-xl bg-surface-container-low space-y-2 border border-outline-variant/20">
             <p className="font-label-sm text-xs font-bold text-on-surface">
-              Flagged Signal: "{school.flaggedSignal}"
+              {t('flaggedSignalLabel', 'Flagged Signal:')} "{school?.flaggedSignal || ''}"
             </p>
             <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
-              Teacher reported difficulty managing beginner learners while running word-level activities.
+              {t('teacherReportedDifficulty', 'Teacher reported difficulty managing beginner learners while running word-level activities.')}
             </p>
             <div className="p-2.5 rounded-lg bg-surface-container-lowest border border-secondary/30 text-xs">
-              <span className="font-bold text-secondary block">Suggested Demonstration in Class:</span>
-              <span className="text-on-surface font-semibold">{school.suggestedDemo}</span>
+              <span className="font-bold text-secondary block">{t('suggestedDemoInClass', 'Suggested Demonstration in Class:')}</span>
+              <span className="text-on-surface font-semibold">{school?.suggestedDemo || ''}</span>
             </div>
           </div>
 
@@ -175,7 +175,7 @@ export function MentorVisitWorkflowPage() {
             onClick={() => setCurrentStep(2)}
             className="w-full py-3 bg-secondary text-on-secondary rounded-lg font-bold text-xs shadow-sm hover:bg-secondary/90 flex items-center justify-center gap-1 cursor-pointer"
           >
-            <span>Proceed to Classroom Demonstration & Record</span>
+            <span>{t('proceedToDemo', 'Proceed to Classroom Demonstration & Record')}</span>
             <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
           </button>
         </div>
@@ -186,15 +186,15 @@ export function MentorVisitWorkflowPage() {
         <div className="bg-surface-container-lowest p-4 md:p-5 rounded-xl shadow-sm border border-outline-variant/20 space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="font-headline-sm text-base font-bold text-on-surface">
-              Step 2: Record Classroom Demonstration Observation
+              {t('step2RecordObs', 'Step 2: Record Classroom Demonstration Observation')}
             </h2>
             <span className="font-label-sm text-xs text-secondary font-bold">
-              CRP Voice Memo
+              {t('crpVoiceMemo', 'CRP Voice Memo')}
             </span>
           </div>
 
           <p className="font-body-sm text-xs text-on-surface-variant">
-            Speak what you demonstrated in class, how the teacher responded, and any immediate next step agreed upon.
+            {t('speakWhatDemonstrated', 'Speak what you demonstrated in class, how the teacher responded, and any immediate next step agreed upon.')}
           </p>
 
           {micError && (
@@ -215,7 +215,7 @@ export function MentorVisitWorkflowPage() {
               </span>
             </button>
             <span className="font-label-sm text-xs font-bold text-on-surface">
-              {isRecording ? 'Recording Live Observation... Tap to Stop' : 'Tap to Record Voice Observation'}
+              {isRecording ? t('recordingLiveObs', 'Recording Live Observation... Tap to Stop') : t('tapToRecordObs', 'Tap to Record Voice Observation')}
             </span>
 
             {recordedAudioUrl && (
@@ -227,14 +227,14 @@ export function MentorVisitWorkflowPage() {
                 <span className="material-symbols-outlined text-[16px]">
                   {isPlayingAudio ? 'stop' : 'play_arrow'}
                 </span>
-                <span>{isPlayingAudio ? 'Stop Playback' : 'Play Observation Audio'}</span>
+                <span>{isPlayingAudio ? t('stopPlayback', 'Stop Playback') : t('playObservationAudio', 'Play Observation Audio')}</span>
               </button>
             )}
           </div>
 
           <div className="space-y-1">
             <label className="font-label-sm text-xs font-bold text-on-surface-variant block">
-              Or Edit / Type Observation Notes Directly:
+              {t('orEditTypeNotes', 'Or Edit / Type Observation Notes Directly:')}
             </label>
             <textarea
               value={mentorObservationText}
@@ -249,7 +249,7 @@ export function MentorVisitWorkflowPage() {
               onClick={() => setCurrentStep(1)}
               className="px-3 py-2 text-xs font-bold text-on-surface-variant hover:bg-surface-container rounded-lg cursor-pointer"
             >
-              ← Back
+              ← {t('back', 'Back')}
             </button>
             <button
               onClick={handleProcessObservation}
@@ -257,7 +257,7 @@ export function MentorVisitWorkflowPage() {
               className="px-5 py-2.5 bg-primary text-on-primary rounded-lg text-xs font-bold shadow-sm hover:opacity-90 flex items-center gap-1.5 cursor-pointer"
             >
               {isStructuring && <span className="material-symbols-outlined text-[16px] animate-spin">progress_activity</span>}
-              <span>Structure Observation with AI →</span>
+              <span>{t('structureObsWithAI', 'Structure Observation with AI')} →</span>
             </button>
           </div>
         </div>
@@ -268,16 +268,16 @@ export function MentorVisitWorkflowPage() {
         <div className="bg-surface-container-lowest p-4 md:p-5 rounded-xl shadow-sm border border-outline-variant/20 space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="font-headline-sm text-base font-bold text-on-surface">
-              Step 3: Review Structured Feedback & WhatsApp Note
+              {t('step3ReviewStructured', 'Step 3: Review Structured Feedback & WhatsApp Note')}
             </h2>
             <span className="font-label-sm text-xs text-on-tertiary-container bg-tertiary-fixed/30 px-2 py-0.5 rounded-full font-bold">
-              AI Structured
+              {t('aiStructured', 'AI Structured')}
             </span>
           </div>
 
           <div className="p-3.5 bg-surface-container-low rounded-xl space-y-2 border border-outline-variant/20">
             <span className="font-label-sm text-xs font-bold text-secondary uppercase tracking-wider block">
-              Structured Observation Summary
+              {t('structuredObsSummary', 'Structured Observation Summary')}
             </span>
             <p className="font-body-sm text-xs text-on-surface leading-relaxed">
               {mentorObservationText}
@@ -288,9 +288,9 @@ export function MentorVisitWorkflowPage() {
             <div className="flex items-center justify-between">
               <label className="font-label-sm text-xs font-bold text-on-surface flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-green-600 text-[18px]">chat</span>
-                <span>Pre-Drafted WhatsApp Message to Teacher (Sunita Rao)</span>
+                <span>{t('preDraftedWhatsAppMsg', 'Pre-Drafted WhatsApp Message to Teacher (Sunita Rao)')}</span>
               </label>
-              <span className="text-[10px] text-on-surface-variant">Editable before sending</span>
+              <span className="text-[10px] text-on-surface-variant">{t('editableBeforeSending', 'Editable before sending')}</span>
             </div>
             <textarea
               value={whatsappNote}
@@ -305,14 +305,14 @@ export function MentorVisitWorkflowPage() {
               onClick={() => setCurrentStep(2)}
               className="px-3 py-2 text-xs font-bold text-on-surface-variant hover:bg-surface-container rounded-lg cursor-pointer"
             >
-              ← Back
+              ← {t('back', 'Back')}
             </button>
             <button
               onClick={handleDispatchFeedbackAndAction}
               className="px-5 py-2.5 bg-secondary text-on-secondary rounded-lg text-xs font-bold shadow-sm hover:bg-secondary/90 flex items-center gap-1.5 cursor-pointer"
             >
               <span className="material-symbols-outlined text-[16px]">send</span>
-              <span>Send WhatsApp & Log Action</span>
+              <span>{t('sendWhatsAppAndLog', 'Send WhatsApp & Log Action')}</span>
             </button>
           </div>
         </div>
@@ -327,10 +327,10 @@ export function MentorVisitWorkflowPage() {
 
           <div>
             <h2 className="font-headline-sm text-lg font-bold text-on-surface">
-              Visit Observation Successfully Completed!
+              {t('visitCompletedSuccess', 'Visit Observation Successfully Completed!')}
             </h2>
             <p className="font-body-sm text-xs text-on-surface-variant max-w-md mx-auto mt-1">
-              Coaching feedback has been delivered to Teacher Sunita Rao. An actionable commitment is now tracked on the Cluster Action Ledger.
+              {t('coachingDeliveredDesc', 'Coaching feedback has been delivered to Teacher Sunita Rao. An actionable commitment is now tracked on the Cluster Action Ledger.')}
             </p>
           </div>
 
@@ -339,13 +339,13 @@ export function MentorVisitWorkflowPage() {
               onClick={() => setCurrentRoute('action-ledger')}
               className="px-4 py-2 bg-primary text-on-primary rounded-lg text-xs font-bold hover:opacity-90 cursor-pointer"
             >
-              View Action Ledger
+              {t('viewActionLedger', 'View Action Ledger')}
             </button>
             <button
               onClick={() => setCurrentRoute('crp-mentor-dashboard')}
               className="px-4 py-2 bg-surface-container text-on-surface rounded-lg text-xs font-bold hover:bg-surface-container-high cursor-pointer"
             >
-              Back to Dashboard
+              {t('backToDashboard', 'Back to Dashboard')}
             </button>
           </div>
         </div>

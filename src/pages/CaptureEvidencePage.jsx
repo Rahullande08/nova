@@ -30,7 +30,9 @@ export function CaptureEvidencePage() {
 
   const [liveTranscript, setLiveTranscript] = useState(
     activeEvidence.transcript ||
-      '“आज मी वाचन गट केले होते, पण शब्द स्तरावरील मुलांना जास्तीचा वेळ लागला. मात्रा ओळखताना काही मुले अडखळत होती...”'
+      (language === 'MR'
+        ? '“आज मी वाचन गट केले होते, पण शब्द स्तरावरील मुलांना जास्तीचा वेळ लागला. मात्रा ओळखताना काही मुले अडखळत होती...”'
+        : '“...grouped 14 children by word level and 8 by letter level. Spent 12 minutes on reading cards, but ran out of time to verify all 4 beginner learners.”')
   );
 
   const fileInputRef = useRef(null);
@@ -76,9 +78,9 @@ export function CaptureEvidencePage() {
     if (result && !result.success) {
       setIsRecording(false);
       setMicPermissionError(
-        result.error || 'Microphone permission is required to record your observation. Please allow microphone access in your browser and try again.'
+        result.error || t('micPermissionErrorText', 'Microphone permission is required to record your observation. Please allow microphone access in your browser and try again.')
       );
-      showToast('Microphone error. Please check permissions.', 4000);
+      showToast(t('micErrorToast', 'Microphone error. Please check permissions.'), 4000);
     }
   };
 
@@ -95,7 +97,7 @@ export function CaptureEvidencePage() {
         language: selectedLanguage,
         transcript: liveTranscript
       }));
-      showToast('Voice note recorded & transcribed successfully!');
+      showToast(t('voiceNoteRecordedToast', 'Voice note recorded & transcribed successfully!'));
     } else {
       const fallbackUrl = 'simulated-audio-note';
       setRecordedAudioUrl(fallbackUrl);
@@ -105,7 +107,7 @@ export function CaptureEvidencePage() {
         language: selectedLanguage,
         transcript: liveTranscript
       }));
-      showToast('Voice note reflection logged!');
+      showToast(t('voiceNoteLoggedToast', 'Voice note reflection logged!'));
     }
   };
 
@@ -150,7 +152,7 @@ export function CaptureEvidencePage() {
     setRecordedAudioBlob(null);
     setRecordingSeconds(0);
     setActiveEvidence((prev) => ({ ...prev, audioUrl: null, audioBlob: null }));
-    showToast('Recorded voice note deleted.');
+    showToast(t('voiceNoteDeletedToast', 'Recorded voice note deleted.'));
   };
 
   const handleLanguageChange = (lang) => {
@@ -184,7 +186,7 @@ export function CaptureEvidencePage() {
       trackerFile: captured.file,
       trackerBlob: captured.blob
     }));
-    showToast('Real camera frame captured & attached successfully!');
+    showToast(t('photoCapturedSuccessToast', 'Real camera frame captured & attached successfully!'));
   };
 
   const handleRetakePhoto = () => {
@@ -210,7 +212,7 @@ export function CaptureEvidencePage() {
         trackerFile: file,
         trackerBlob: file
       }));
-      showToast(`Attached ${file.name} (OCR Ready)`);
+      showToast(t('attachedFileToast', { name: file.name }, `Attached ${file.name} (OCR Ready)`));
     }
   };
 
@@ -220,7 +222,7 @@ export function CaptureEvidencePage() {
     setUploadedFile(null);
     setCapturedPhotoDetails(null);
     setActiveEvidence((prev) => ({ ...prev, trackerPhoto: sampleUrl, trackerFile: null }));
-    showToast('Attached sample TaRL level tally tracker sheet (OCR Ready)');
+    showToast(t('sampleTrackerAttachedToast', 'Attached sample TaRL level tally tracker sheet (OCR Ready)'));
   };
 
   const handleRemoveImage = () => {
@@ -231,7 +233,7 @@ export function CaptureEvidencePage() {
     setUploadedFile(null);
     setCapturedPhotoDetails(null);
     setActiveEvidence((prev) => ({ ...prev, trackerPhoto: null, trackerFile: null, trackerBlob: null }));
-    showToast('Removed attached image.');
+    showToast(t('removedImageToast', 'Removed attached image.'));
   };
 
   const handleAnalyze = async () => {
@@ -256,12 +258,12 @@ export function CaptureEvidencePage() {
         transcript: liveTranscript
       }));
 
-      showToast('Practice analysis completed in 12s!');
+      showToast(t('analysisCompletedToast', 'Practice analysis completed in 12s!'));
       setCurrentRoute('ai-coach-chat');
     } catch (err) {
       console.error(err);
-      setAnalysisError('AI Analysis failed. Please try again.');
-      showToast('Diagnostic failed. Click retry.');
+      setAnalysisError(t('analysisFailedError', 'AI Analysis failed. Please try again.'));
+      showToast(t('diagnosticFailedToast', 'Diagnostic failed. Click retry.'));
     } finally {
       setIsAnalyzing(false);
     }
@@ -281,7 +283,7 @@ export function CaptureEvidencePage() {
           <div className="flex items-center gap-1.5 text-secondary mb-1">
             <span className="material-symbols-outlined text-[18px]">verified_user</span>
             <span className="font-label-sm text-xs uppercase tracking-wider font-bold">
-              Teacher Diagnostic Companion
+              {t('teacherDiagnosticCompanion', 'Teacher Diagnostic Companion')}
             </span>
           </div>
           <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
@@ -299,10 +301,10 @@ export function CaptureEvidencePage() {
         <div className="flex items-center justify-between mb-2.5">
           <span className="font-label-md text-xs text-on-surface font-bold flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
-            Rapid Capture Pipeline
+            {t('rapidCapturePipeline', 'Rapid Capture Pipeline')}
           </span>
           <span className="font-label-sm text-[10px] text-on-surface-variant bg-surface-container-highest px-2 py-0.5 rounded-full font-semibold">
-            Est. time: &lt; 60s
+            {t('estTimeSixty', 'Est. time: < 60s')}
           </span>
         </div>
         <div className="grid grid-cols-3 gap-2 text-center">
@@ -312,7 +314,7 @@ export function CaptureEvidencePage() {
             }`}>
               1
             </div>
-            <span className="font-label-sm text-xs text-on-surface font-semibold">Tracker Photo</span>
+            <span className="font-label-sm text-xs text-on-surface font-semibold">{t('trackerPhotoTab', 'Tracker Photo')}</span>
           </div>
           <div className="flex flex-col items-center gap-1">
             <div className={`w-7 h-7 rounded-full font-label-sm text-xs flex items-center justify-center font-bold shadow-sm ${
@@ -320,13 +322,13 @@ export function CaptureEvidencePage() {
             }`}>
               2
             </div>
-            <span className="font-label-sm text-xs text-secondary font-bold">Voice Note</span>
+            <span className="font-label-sm text-xs text-secondary font-bold">{t('voiceNoteTab', 'Voice Note')}</span>
           </div>
           <div className="flex flex-col items-center gap-1">
             <div className="w-7 h-7 rounded-full bg-surface-container-highest text-on-surface-variant font-label-sm text-xs flex items-center justify-center font-bold">
               3
             </div>
-            <span className="font-label-sm text-xs text-on-surface-variant font-medium">Next Step</span>
+            <span className="font-label-sm text-xs text-on-surface-variant font-medium">{t('nextStepTab', 'Next Step')}</span>
           </div>
         </div>
       </section>
@@ -337,16 +339,16 @@ export function CaptureEvidencePage() {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="px-2 py-0.5 rounded-full font-label-sm text-[10px] bg-surface-container text-on-surface font-bold">
-                Step 1
+                {t('stepNum1', 'Step 1')}
               </span>
               {uploadedImage ? (
                 <span className="font-label-sm text-[10px] text-on-tertiary-container bg-tertiary-fixed/30 px-2 py-0.5 rounded-full font-bold flex items-center gap-1">
                   <span className="material-symbols-outlined text-[12px]">check_circle</span>
-                  Attached & OCR Ready
+                  {t('attachedOcrReady', 'Attached & OCR Ready')}
                 </span>
               ) : (
                 <span className="font-label-sm text-[10px] text-on-surface-variant bg-surface-container px-2 py-0.5 rounded-full font-bold">
-                  Live Camera / Upload Photo
+                  {t('liveCameraUploadPhoto', 'Live Camera / Upload Photo')}
                 </span>
               )}
             </div>
@@ -355,7 +357,7 @@ export function CaptureEvidencePage() {
             </h2>
           </div>
           <button
-            onClick={() => showToast('Capture your student grouping register or blackboard using device camera')}
+            onClick={() => showToast(t('groupTrackerHelpToast', 'Capture your student grouping register or blackboard using device camera'))}
             className="text-on-surface-variant hover:text-on-surface p-1"
             title="Help on group tracker"
             type="button"
@@ -364,7 +366,7 @@ export function CaptureEvidencePage() {
           </button>
         </div>
         <p className="font-body-sm text-xs text-on-surface-variant">
-          Point camera at the student level tracker or blackboard used during today’s TaRL / FLN session.
+          {t('pointCameraHelp', 'Point camera at the student level tracker or blackboard used during today’s TaRL / FLN session.')}
         </p>
 
         {/* Live Camera Viewfinder (when camera active) */}
@@ -393,7 +395,7 @@ export function CaptureEvidencePage() {
                     {uploadedFile ? uploadedFile.name : 'tarl_session_track_grade3.jpg'}
                   </p>
                   <p className="font-code-sm text-[10px] text-on-surface-variant">
-                    {capturedPhotoDetails ? `${capturedPhotoDetails.sizeKb} KB • ${capturedPhotoDetails.timestamp}` : 'Attached & Validated • 11:28 AM'}
+                    {capturedPhotoDetails ? `${capturedPhotoDetails.sizeKb} KB • ${capturedPhotoDetails.timestamp}` : t('attachedValidated', 'Attached & Validated • 11:28 AM')}
                   </p>
                 </div>
               </div>
@@ -401,14 +403,14 @@ export function CaptureEvidencePage() {
                 <button
                   type="button"
                   onClick={handleRetakePhoto}
-                  className="px-2.5 py-1 text-xs font-bold text-secondary bg-surface-container rounded-lg hover:bg-surface-container-high transition-colors"
+                  className="px-2.5 py-1 text-xs font-bold text-secondary bg-surface-container rounded-lg hover:bg-surface-container-high transition-colors cursor-pointer"
                 >
-                  Retake Photo
+                  {t('retakePhoto', 'Retake Photo')}
                 </button>
                 <button
                   type="button"
                   onClick={handleRemoveImage}
-                  className="px-2.5 py-1 text-xs font-bold text-error hover:bg-surface-container rounded-lg transition-colors"
+                  className="px-2.5 py-1 text-xs font-bold text-error hover:bg-surface-container rounded-lg transition-colors cursor-pointer"
                 >
                   {t('removePhoto', 'Delete')}
                 </button>
@@ -418,15 +420,15 @@ export function CaptureEvidencePage() {
             {/* TaRL Level Matrix Graphic Sheet */}
             <div className="bg-surface-container-lowest rounded-lg p-2.5 shadow-xs space-y-1.5 border border-outline-variant/15">
               <div className="flex items-center justify-between text-on-surface font-label-sm text-[11px] font-bold pb-1 border-b border-surface-container">
-                <span>TaRL Level</span>
-                <span>Students</span>
-                <span>Shift</span>
+                <span>{t('tarlLevel', 'TaRL Level')}</span>
+                <span>{t('students', 'Students')}</span>
+                <span>{t('shift', 'Shift')}</span>
               </div>
 
               <div className="flex items-center justify-between py-1 px-2 rounded bg-surface-container-low text-xs">
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-error"></span>
-                  <span className="font-medium text-on-surface">Beginner (आरंभी)</span>
+                  <span className="font-medium text-on-surface">{t('beginnerTier', 'Beginner (आरंभी)')}</span>
                 </div>
                 <span className="font-code-sm font-bold text-on-surface">IIII (4)</span>
                 <span className="font-label-sm text-on-tertiary-container font-bold">-2</span>
@@ -435,7 +437,7 @@ export function CaptureEvidencePage() {
               <div className="flex items-center justify-between py-1 px-2 rounded bg-surface-container-low text-xs">
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-secondary"></span>
-                  <span className="font-medium text-on-surface">Letter (अक्षर)</span>
+                  <span className="font-medium text-on-surface">{t('letterTier', 'Letter (अक्षर)')}</span>
                 </div>
                 <span className="font-code-sm font-bold text-on-surface">IIII IIII (9)</span>
                 <span className="font-label-sm text-on-surface-variant font-medium">--</span>
@@ -444,7 +446,7 @@ export function CaptureEvidencePage() {
               <div className="flex items-center justify-between py-1 px-2 rounded bg-surface-container-highest text-xs border border-secondary/20">
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-secondary-container"></span>
-                  <span className="font-bold text-on-surface">Word (शब्द) [Focus]</span>
+                  <span className="font-bold text-on-surface">{t('wordTier', 'Word (शब्द) [Focus]')}</span>
                 </div>
                 <span className="font-code-sm font-bold text-secondary">IIII IIII II (12)</span>
                 <span className="font-label-sm text-on-tertiary-container font-bold">+3</span>
@@ -453,7 +455,7 @@ export function CaptureEvidencePage() {
               <div className="flex items-center justify-between py-1 px-2 rounded bg-surface-container-low text-xs">
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-on-tertiary-container"></span>
-                  <span className="font-medium text-on-surface">Paragraph (परिच्छेद)</span>
+                  <span className="font-medium text-on-surface">{t('paragraphTier', 'Paragraph (परिच्छेद)')}</span>
                 </div>
                 <span className="font-code-sm font-bold text-on-surface">IIII I (6)</span>
                 <span className="font-label-sm text-on-tertiary-container font-bold">+1</span>
@@ -463,14 +465,14 @@ export function CaptureEvidencePage() {
             <div className="flex items-center justify-between text-on-surface-variant text-xs pt-1">
               <span className="font-label-sm text-[11px] flex items-center gap-1">
                 <span className="material-symbols-outlined text-[14px] text-on-tertiary-container">done_all</span>
-                31 total student tallies mapped via OCR
+                {t('totalTalliesMapped', '31 total student tallies mapped via OCR')}
               </span>
               <button
                 onClick={handleUseSampleTracker}
-                className="font-label-sm text-[11px] text-secondary font-bold hover:underline"
+                className="font-label-sm text-[11px] text-secondary font-bold hover:underline cursor-pointer"
                 type="button"
               >
-                Reload Sample
+                {t('reloadSample', 'Reload Sample')}
               </button>
             </div>
           </div>
@@ -478,8 +480,8 @@ export function CaptureEvidencePage() {
           /* Empty State */
           <div className="p-6 rounded-xl border-2 border-dashed border-outline-variant/40 text-center space-y-2 bg-surface-container-low/40">
             <span className="material-symbols-outlined text-4xl text-on-surface-variant">photo_camera</span>
-            <p className="text-xs font-bold text-on-surface">No tracker photo attached yet</p>
-            <p className="text-[11px] text-on-surface-variant">Open camera to capture blackboard tallies or upload a photo from your device</p>
+            <p className="text-xs font-bold text-on-surface">{t('noPhotoAttached', 'No tracker photo attached yet')}</p>
+            <p className="text-[11px] text-on-surface-variant">{t('openCameraHelp', 'Open camera to capture blackboard tallies or upload a photo from your device')}</p>
             <button
               onClick={handleUseSampleTracker}
               type="button"
@@ -508,7 +510,7 @@ export function CaptureEvidencePage() {
               type="button"
             >
               <span className="material-symbols-outlined text-[18px]">photo_camera</span>
-              <span>Use Camera</span>
+              <span>{t('useCamera', 'Use Camera')}</span>
             </button>
             <button
               onClick={() => fileInputRef.current?.click()}
@@ -528,10 +530,10 @@ export function CaptureEvidencePage() {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="px-2 py-0.5 rounded-full font-label-sm text-[10px] bg-secondary-container text-on-secondary-container font-bold">
-                Step 2
+                {t('stepNum2', 'Step 2')}
               </span>
               <span className="font-label-sm text-xs text-secondary font-semibold">
-                Voice Diagnostic
+                {t('voiceDiagnostic', 'Voice Diagnostic')}
               </span>
             </div>
             <h2 className="font-headline-sm text-sm md:text-base text-on-surface font-bold">
@@ -548,7 +550,7 @@ export function CaptureEvidencePage() {
           <div className="p-3 bg-error-container/20 rounded-xl border border-error/30 text-xs text-on-surface flex items-start gap-2.5">
             <span className="material-symbols-outlined text-error text-[20px] shrink-0 mt-0.5">error</span>
             <div>
-              <p className="font-bold text-error">Microphone Access Required</p>
+              <p className="font-bold text-error">{t('micAccessRequired', 'Microphone Access Required')}</p>
               <p className="text-on-surface-variant mt-0.5">{micPermissionError}</p>
             </div>
           </div>
@@ -567,7 +569,7 @@ export function CaptureEvidencePage() {
               <button
                 key={lang.id}
                 onClick={() => handleLanguageChange(lang.id)}
-                className={`px-3 py-1.5 rounded-full font-label-sm text-xs flex items-center gap-1 flex-shrink-0 transition-all ${
+                className={`px-3 py-1.5 rounded-full font-label-sm text-xs flex items-center gap-1 flex-shrink-0 transition-all cursor-pointer ${
                   isSelected
                     ? 'bg-secondary text-on-secondary font-bold shadow-sm'
                     : 'bg-surface-container-low text-on-surface font-medium hover:bg-surface-container'
@@ -595,7 +597,7 @@ export function CaptureEvidencePage() {
                   isRecording ? 'bg-error animate-ping' : 'bg-secondary'
                 }`}
               ></span>
-              {isRecording ? t('recording', 'Recording in progress') : recordedAudioUrl ? 'Voice Note Captured' : 'Tap mic to start recording'}
+              {isRecording ? t('recording', 'Recording in progress') : recordedAudioUrl ? t('voiceCaptured', 'Voice Note Captured') : t('tapMicStart', 'Tap mic to start recording')}
             </span>
             <span className="font-code-sm text-xs font-bold text-on-surface bg-surface-container px-2 py-0.5 rounded font-numeric">
               {formatTime(recordingSeconds || 42)} / 01:00
@@ -652,7 +654,7 @@ export function CaptureEvidencePage() {
                 <span className="material-symbols-outlined text-[16px] text-secondary">
                   {isPlayingAudio ? 'stop' : 'play_arrow'}
                 </span>
-                <span>{isPlayingAudio ? t('pauseVoice', 'Stop Playback') : t('playVoice', 'Play Voice Note')}</span>
+                <span>{isPlayingAudio ? t('stopPlayback', 'Stop Playback') : t('playVoice', 'Play Voice Note')}</span>
               </button>
               <div className="flex items-center gap-1">
                 <button
@@ -660,14 +662,14 @@ export function CaptureEvidencePage() {
                   onClick={handleDeleteAudio}
                   className="px-2 py-1 text-xs text-error hover:bg-surface-container rounded font-bold cursor-pointer"
                 >
-                  {t('deleteRecording', 'Delete')}
+                  {t('delete', 'Delete')}
                 </button>
                 <button
                   type="button"
                   onClick={handleStartRecording}
                   className="px-2.5 py-1 text-xs text-secondary bg-surface-container rounded font-bold hover:bg-surface-container-high cursor-pointer"
                 >
-                  Re-record
+                  {t('reRecord', 'Re-record')}
                 </button>
               </div>
             </div>
@@ -678,14 +680,14 @@ export function CaptureEvidencePage() {
             <div className="flex items-center justify-between text-on-surface-variant font-label-sm text-xs">
               <div className="flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-[14px]">translate</span>
-                <span className="font-semibold">Transcribed Voice Evidence ({selectedLanguage.toUpperCase()})</span>
+                <span className="font-semibold">{t('transcribedVoiceEvidence', 'Transcribed Voice Evidence')} ({selectedLanguage.toUpperCase()})</span>
               </div>
               <button
                 type="button"
-                onClick={() => setLiveTranscript('“आज मी वाचन गट केले होते, शब्द स्तरावरील मुलांचा सराव चांगला झाला.”')}
+                onClick={() => setLiveTranscript(language === 'MR' ? '“आज मी वाचन गट केले होते, शब्द स्तरावरील मुलांचा सराव चांगला झाला.”' : '“...grouped 14 children by word level and 8 by letter level. Spent 12 minutes on reading cards.”')}
                 className="text-[10px] text-secondary font-bold hover:underline cursor-pointer"
               >
-                Reset
+                {t('reset', 'Reset')}
               </button>
             </div>
             <textarea
@@ -703,10 +705,10 @@ export function CaptureEvidencePage() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="px-2 py-0.5 rounded-full font-label-sm text-[10px] bg-surface-container text-on-surface font-bold">
-              Step 3
+              {t('stepNum3', 'Step 3')}
             </span>
             <h2 className="font-headline-sm text-sm md:text-base text-on-surface font-bold">
-              Review & Trust Guardrails
+              {t('step3Trust', 'Review & Trust Guardrails')}
             </h2>
           </div>
           <span className="material-symbols-outlined text-secondary text-[20px]">lock</span>
@@ -718,7 +720,7 @@ export function CaptureEvidencePage() {
               face_retouching_off
             </span>
             <p className="font-body-sm text-xs text-on-surface">
-              Child faces are not required or stored.
+              {t('privacyChildFaces', 'Child faces are not required or stored.')}
             </p>
           </div>
           <div className="flex items-start gap-2.5">
@@ -726,7 +728,7 @@ export function CaptureEvidencePage() {
               delete_forever
             </span>
             <p className="font-body-sm text-xs text-on-surface">
-              Audio is purged immediately after clinical diagnostic transcription.
+              {t('privacyAudioPurged', 'Audio is purged immediately after clinical diagnostic transcription.')}
             </p>
           </div>
           <div className="flex items-start gap-2.5">
@@ -734,7 +736,7 @@ export function CaptureEvidencePage() {
               volunteer_activism
             </span>
             <p className="font-body-sm text-xs text-on-surface font-medium">
-              Used solely to provide instructional coaching support — never for administrative evaluation.
+              {t('privacyCoachingOnly', 'Used solely to provide instructional coaching support — never for administrative evaluation.')}
             </p>
           </div>
         </div>
@@ -742,7 +744,7 @@ export function CaptureEvidencePage() {
         {analysisError && (
           <div className="p-3 rounded-lg bg-error-container text-on-error-container text-xs font-bold flex items-center justify-between">
             <span>{analysisError}</span>
-            <button onClick={handleAnalyze} className="underline cursor-pointer">Retry</button>
+            <button onClick={handleAnalyze} className="underline cursor-pointer">{t('retry', 'Retry')}</button>
           </div>
         )}
 
@@ -758,7 +760,7 @@ export function CaptureEvidencePage() {
               <span className="material-symbols-outlined text-[20px] animate-spin">
                 progress_activity
               </span>
-              <span>Analyzing Practice with 5-Point Rubric...</span>
+              <span>{t('analyzingPractice', 'Analyzing Practice with 5-Point Rubric...')}</span>
             </>
           ) : (
             <>

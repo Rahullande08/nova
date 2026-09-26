@@ -16,13 +16,13 @@ export function AppSidebar() {
 
   const navGroups = [
     {
-      title: 'Overview',
+      title: t('navGroupOverview', 'Overview'),
       items: [
         { id: 'overview-dashboard', label: t('overviewDashboard', 'Dashboard'), icon: 'dashboard' }
       ]
     },
     {
-      title: 'Teacher Practice',
+      title: t('navGroupTeacherPractice', 'Teacher Practice'),
       items: [
         { id: 'capture-evidence', label: t('captureEvidence', 'Capture Evidence'), icon: 'center_focus_strong' },
         { id: 'ai-coach-chat', label: t('aiCoachChat', 'AI Coach & Rubric'), icon: 'psychology' },
@@ -31,7 +31,7 @@ export function AppSidebar() {
       ]
     },
     {
-      title: 'Mentor / CRP',
+      title: t('navGroupMentor', 'Mentor / CRP'),
       items: [
         { id: 'crp-mentor-dashboard', label: t('crpMentorDashboard', 'Mentor Dashboard'), icon: 'supervisor_account' },
         { id: 'visit-plan', label: t('visitPlan', 'Visit Plan'), icon: 'calendar_today' },
@@ -40,7 +40,7 @@ export function AppSidebar() {
       ]
     },
     {
-      title: 'Program Management',
+      title: t('navGroupProgramManagement', 'Program Management'),
       items: [
         { id: 'action-ledger', label: t('actionLedger', 'Action Ledger'), icon: 'assignment' },
         { id: 'training-to-practice', label: t('trainingToPractice', 'Training → Practice'), icon: 'model_training' },
@@ -48,7 +48,7 @@ export function AppSidebar() {
       ]
     },
     {
-      title: 'System',
+      title: t('navGroupSystem', 'System'),
       items: [
         { id: 'system-notifications', label: t('systemNotifications', 'Notifications'), icon: 'notifications_none' },
         { id: 'system-settings', label: t('systemSettings', 'Settings'), icon: 'settings' }
@@ -142,7 +142,7 @@ export function AppSidebar() {
             className="w-full flex items-center gap-2 px-2.5 h-9 rounded-lg text-secondary hover:bg-secondary/10 text-left border border-secondary/30 text-xs font-semibold"
           >
             <span className="material-symbols-outlined text-[18px]">explore</span>
-            <span>Guided App Tour</span>
+            <span>{t('guidedAppTour', 'Guided App Tour')}</span>
           </button>
 
           <button
@@ -153,7 +153,7 @@ export function AppSidebar() {
             className="w-full flex items-center gap-2 px-2.5 h-9 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface text-left border border-outline-variant/30 text-xs font-medium"
           >
             <span className="material-symbols-outlined text-[18px] text-secondary">policy</span>
-            <span>AI Trust Architecture</span>
+            <span>{t('aiTrustArchitecture', 'AI Trust Architecture')}</span>
           </button>
         </div>
       </div>

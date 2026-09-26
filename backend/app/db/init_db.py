@@ -357,6 +357,8 @@ SEED_NOTIFICATIONS = [
     }
 ]
 
+from sqlalchemy import text, inspect
+
 def init_db(db: Session = None, force_reset: bool = False):
     Base.metadata.create_all(bind=engine)
     
@@ -366,6 +368,20 @@ def init_db(db: Session = None, force_reset: bool = False):
         close_session = True
         
     try:
+        # Non-destructive schema column check & auto-migration for existing SQLite database
+        try:
+            inspector = inspect(engine)
+            with engine.connect() as conn:
+                for table_name in ["evidence", "actions", "observations"]:
+                    if table_name in inspector.get_table_names():
+                        cols = [c["name"] for c in inspector.get_columns(table_name)]
+                        if "is_archived" not in cols:
+                            conn.execute(text(f"ALTER TABLE {table_name} ADD COLUMN is_archived BOOLEAN DEFAULT 0 NOT NULL"))
+                            conn.commit()
+        except Exception as e:
+            print(f"[InitDB] Safe migration column check notice: {e}")
+
+
         if force_reset:
             db.query(Action).delete()
             db.query(School).delete()
@@ -374,6 +390,7 @@ def init_db(db: Session = None, force_reset: bool = False):
             db.query(Notification).delete()
             db.query(User).delete()
             db.commit()
+
 
         # Seed Users
         if db.query(User).count() == 0:

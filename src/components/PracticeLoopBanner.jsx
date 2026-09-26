@@ -2,49 +2,49 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 
 export function PracticeLoopBanner() {
-  const { setCurrentRoute } = useApp();
+  const { setCurrentRoute, t } = useApp();
   const [activeStage, setActiveStage] = useState(0);
 
   const stages = [
     {
       num: '01',
-      title: 'CAPTURE',
-      sub: 'Teacher evidence',
+      title: t('loopStage1Title', 'CAPTURE'),
+      sub: t('loopStage1Sub', 'Teacher evidence'),
       icon: 'photo_camera',
       route: 'capture-evidence'
     },
     {
       num: '02',
-      title: 'UNDERSTAND',
-      sub: 'AI practice coding',
+      title: t('loopStage2Title', 'UNDERSTAND'),
+      sub: t('loopStage2Sub', 'AI practice coding'),
       icon: 'psychology',
       route: 'ai-coach-chat'
     },
     {
       num: '03',
-      title: 'COACH',
-      sub: '1 concrete step',
+      title: t('loopStage3Title', 'COACH'),
+      sub: t('loopStage3Sub', '1 concrete step'),
       icon: 'lightbulb',
       route: 'ai-coach-chat'
     },
     {
       num: '04',
-      title: 'ROUTE',
-      sub: 'CRP targeted visit',
+      title: t('loopStage4Title', 'ROUTE'),
+      sub: t('loopStage4Sub', 'CRP targeted visit'),
       icon: 'share_location',
       route: 'crp-mentor-dashboard'
     },
     {
       num: '05',
-      title: 'VERIFY',
-      sub: 'Observed change',
+      title: t('loopStage5Title', 'VERIFY'),
+      sub: t('loopStage5Sub', 'Observed change'),
       icon: 'verified',
       route: 'action-ledger'
     },
     {
       num: '06',
-      title: 'LEARN',
-      sub: 'Training refinement',
+      title: t('loopStage6Title', 'LEARN'),
+      sub: t('loopStage6Sub', 'Training refinement'),
       icon: 'school',
       route: 'training-to-practice'
     }
@@ -55,14 +55,16 @@ export function PracticeLoopBanner() {
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <span className="material-symbols-outlined text-[20px] text-secondary">autorenew</span>
-          <h2 className="font-headline-sm text-sm md:text-base text-on-surface font-bold">The Practice Loop</h2>
+          <h2 className="font-headline-sm text-sm md:text-base text-on-surface font-bold">
+            {t('practiceLoopTitle', 'The Practice Loop')}
+          </h2>
         </div>
         <span className="font-label-sm text-xs text-secondary font-semibold bg-secondary/10 px-2.5 py-0.5 rounded-full">
-          Continuous Instructional Cycle
+          {t('continuousCycle', 'Continuous Instructional Cycle')}
         </span>
       </div>
       <p className="font-body-sm text-xs md:text-sm text-on-surface-variant mb-4">
-        Real-time instructional calibration from classroom evidence to state policy refinement.
+        {t('practiceLoopDesc', 'Real-time instructional calibration from classroom evidence to state policy refinement.')}
       </p>
 
       {/* Stepper horizontal chain */}

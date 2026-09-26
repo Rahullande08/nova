@@ -209,7 +209,7 @@ export function AppHeader() {
                     className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-left text-xs text-secondary font-medium hover:bg-secondary/10"
                   >
                     <span className="material-symbols-outlined text-[16px]">explore</span>
-                    <span>Start Guided Tour</span>
+                    <span>{t('startGuidedTour', 'Start Guided Tour')}</span>
                   </button>
                   <button
                     onClick={() => {

@@ -29,7 +29,7 @@ export function NotificationsPage() {
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed w-fit mb-1">
             <span className="material-symbols-outlined text-[14px]">notifications</span>
             <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
-              Real-time Alerts
+              {t('realTimeAlerts', 'Real-time Alerts')}
             </span>
           </div>
           <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
@@ -54,13 +54,17 @@ export function NotificationsPage() {
           <button
             key={tab}
             onClick={() => setFilter(tab)}
-            className={`px-3 py-1.5 rounded-full font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-full font-bold transition-all cursor-pointer ${
               filter === tab
                 ? 'bg-primary text-on-primary shadow-xs'
                 : 'bg-surface-container-low text-on-surface hover:bg-surface-container'
             }`}
           >
-            {tab}
+            {tab === 'All' ? t('all', 'All') :
+             tab === 'Evidence' ? t('navEvidence', 'Evidence') :
+             tab === 'Coaching' ? t('navCoaching', 'Coaching') :
+             tab === 'Mentor' ? t('navMentor', 'Mentor') :
+             tab === 'Action' ? t('actionLedger', 'Action') : tab}
           </button>
         ))}
       </div>
@@ -112,6 +116,13 @@ export function NotificationsPage() {
             )}
           </div>
         ))}
+
+        {filtered.length === 0 && (
+          <div className="p-8 text-center text-on-surface-variant space-y-1">
+            <span className="material-symbols-outlined text-4xl">notifications_off</span>
+            <p className="font-bold text-xs">{t('noNotifications', 'No notifications to display')}</p>
+          </div>
+        )}
       </div>
     </div>
   );

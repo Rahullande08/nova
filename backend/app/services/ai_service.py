@@ -36,6 +36,12 @@ class AIService:
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{self.model}:generateContent?key={self.api_key}"
         b64_img = base64.b64encode(image_bytes).decode("utf-8")
 
+        lang_directive = (
+            "Respond ENTIRELY in Marathi. Do not mix English unless a technical term has no practical Marathi equivalent."
+            if language == "mr"
+            else "Respond ENTIRELY in English."
+        )
+
         system_instruction = (
             "You are the Practice Layer AI Diagnostic Engine for Foundational Literacy and Numeracy (FLN). "
             "Evaluate submitted classroom evidence (tracker photo + teacher reflection) against the 5-point non-judgmental practice rubric:\n"
@@ -44,24 +50,25 @@ class AIService:
             "3. Teacher checked understanding (Formative checks/exit tickets)\n"
             "4. Children practiced actively (Peer routines, reading aloud)\n"
             "5. Teacher adjusted instruction (Paced changes based on student readiness)\n\n"
+            f"CRITICAL LANGUAGE INSTRUCTION: {lang_directive}\n\n"
             "Return a strictly valid JSON object matching this schema:\n"
             "{\n"
             '  "overallConfidence": 0.88,\n'
             '  "rubric": [\n'
             '    {\n'
             '      "id": 1,\n'
-            '      "title": "1. Grouped children by learning level",\n'
+            '      "title": "Rubric item title in requested language",\n'
             '      "status": "Observed" | "Partly observed" | "Not observed in submitted evidence",\n'
             '      "statusType": "observed" | "partly_observed" | "not_observed",\n'
-            '      "evidence": "Brief descriptive factual observation",\n'
-            '      "tag": "Short 3-4 word tag",\n'
+            '      "evidence": "Brief descriptive factual observation in requested language",\n'
+            '      "tag": "Short 3-4 word tag in requested language",\n'
             '      "confidence": "92% Confidence"\n'
-            "    },\n"
+            '    },\n'
             "    ... (5 items total)\n"
             "  ],\n"
             '  "coachingRecommendation": {\n'
-            '    "oneNextStep": "Specific single next step",\n'
-            '    "whyThis": "Why this single action unlocks learning",\n'
+            '    "oneNextStep": "Specific single next step in requested language",\n'
+            '    "whyThis": "Why this single action unlocks learning in requested language",\n'
             '    "recommendedActivity": {\n'
             '      "id": "act-1",\n'
             '      "name": "Activity Name",\n'
@@ -70,14 +77,14 @@ class AIService:
             '      "targetLevel": "Beginner Group",\n'
             '      "materials": "Materials required",\n'
             '      "summary": "Step-by-step summary"\n'
-            "    },\n"
+            '    },\n'
             '    "marathiAudioScript": "मराठीतील ऑडिओ स्क्रिप्ट",\n'
             '    "hindiAudioScript": "हिंदी में ऑडियो स्क्रिप्ट"\n'
-            "  }\n"
+            '  }\n'
             "}"
         )
 
-        user_prompt = f"Language: {language}\nTeacher Voice Reflection Transcript: {transcript_text or 'No transcript provided'}\nPlease analyze the attached classroom tracker sheet."
+        user_prompt = f"Target Language: {language}\nTeacher Voice Reflection Transcript: {transcript_text or 'No transcript provided'}\nPlease analyze the attached classroom tracker sheet."
 
         payload = {
             "contents": [
@@ -126,10 +133,11 @@ class AIService:
     ) -> Dict[str, Any]:
         """
         Analyzes evidence against the 5-point practice rubric and produces a focused coaching recommendation.
-        Tries real Gemini vision processing first; if unavailable, uses high-fidelity domain fallback.
+        Tries real Gemini vision processing first; if unavailable, uses high-fidelity domain fallback in requested language.
         """
         analysis_id = f"diag-{int(time.time() * 1000)}"
         start_time = time.time()
+        norm_lang = (language or "mr").lower()
 
         # Check if live Gemini API is configured and image data is available
         live_result = None
@@ -152,7 +160,7 @@ class AIService:
                     image_bytes=img_bytes,
                     mime_type=mime,
                     transcript_text=transcript_text or "",
-                    language=language
+                    language=norm_lang
                 )
 
         if live_result and "rubric" in live_result and "coachingRecommendation" in live_result:
@@ -166,69 +174,132 @@ class AIService:
             }
 
         # Safe high-fidelity domain fallback assessment
-        rubric = [
-            {
-                "id": 1,
-                "title": "1. Grouped children by learning level",
-                "status": "Observed",
-                "statusType": "observed",
-                "evidence": "Tracker shows 3 distinct level clusters verified with student roll marks.",
-                "tag": "Cluster accuracy confirmed",
-                "confidence": "94% Confidence"
-            },
-            {
-                "id": 2,
-                "title": "2. Activity matched to learner level",
-                "status": "Observed",
-                "statusType": "observed",
-                "evidence": "Word-level flashcards used as recorded in transcript and visual materials.",
-                "tag": "Targeted print materials",
-                "confidence": "89% Confidence"
-            },
-            {
-                "id": 3,
-                "title": "3. Teacher checked understanding",
-                "status": "Partly observed",
-                "statusType": "partly_observed",
-                "evidence": "Teacher noted checking 3 students, but no adjustment or check was described for beginner group.",
-                "tag": "Formative sampling incomplete",
-                "confidence": "82% Confidence"
-            },
-            {
-                "id": 4,
-                "title": "4. Children practiced actively",
-                "status": "Observed",
-                "statusType": "observed",
-                "evidence": "Peer reading routine implemented during 15-minute block with vocal repetition.",
-                "tag": "High vocal engagement",
-                "confidence": "91% Confidence"
-            },
-            {
-                "id": 5,
-                "title": "5. Teacher adjusted instruction",
-                "status": "Not observed in submitted evidence",
-                "statusType": "not_observed",
-                "evidence": "Time constraint prevented regrouping or paced shift for struggling learners in beginner tier.",
-                "tag": "Evidence absent in voice log",
-                "confidence": "78% Confidence"
+        if norm_lang == "mr":
+            rubric = [
+                {
+                    "id": 1,
+                    "title": "१. अध्ययन स्तरानुसार मुलांचे गट केले",
+                    "status": "निरीक्षित (Observed)",
+                    "statusType": "observed",
+                    "evidence": "ट्रॅकर शीटमध्ये विद्यार्थ्यांचे ३ स्पष्ट स्तर गट नोंदवले आहेत.",
+                    "tag": "गट अचूकता पडताळली",
+                    "confidence": "९४% अचूकता"
+                },
+                {
+                    "id": 2,
+                    "title": "२. स्तरानुसार शैक्षणिक साहित्य/कृती निवडली",
+                    "status": "निरीक्षित (Observed)",
+                    "statusType": "observed",
+                    "evidence": "शब्द स्तरासाठी वाचन कार्डांचा वापर केला गेला.",
+                    "tag": "उद्दिष्टानुसार साहित्य",
+                    "confidence": "८९% अचूकता"
+                },
+                {
+                    "id": 3,
+                    "title": "३. शिक्षकांनी समजुतीची पडताळणी केली",
+                    "status": "अंशतः निरीक्षित (Partly observed)",
+                    "statusType": "partly_observed",
+                    "evidence": "शिक्षकांनी ३ विद्यार्थ्यांची तपासणी केली, परंतु आरंभी गटासाठी पडताळणी बाकी राहिली.",
+                    "tag": "नमुना तपासणी अपूर्ण",
+                    "confidence": "८२% अचूकता"
+                },
+                {
+                    "id": 4,
+                    "title": "४. विद्यार्थ्यांनी प्रत्यक्ष सराव केला",
+                    "status": "निरीक्षित (Observed)",
+                    "statusType": "observed",
+                    "evidence": "१५ मिनिटांच्या सत्रात जोडीने वाचनाचा सराव मोठ्या आवाजात केला.",
+                    "tag": "सक्रिय सहभाग",
+                    "confidence": "९१% अचूकता"
+                },
+                {
+                    "id": 5,
+                    "title": "५. गरजेनुसार अध्यापनात बदल केला",
+                    "status": "नोंदीत आढळले नाही (Not observed)",
+                    "statusType": "not_observed",
+                    "evidence": "वेळेअभावी आरंभी गटातील मुलांसाठी अध्यापनात तातडीने बदल करता आला नाही.",
+                    "tag": "नोंद उपलब्ध नाही",
+                    "confidence": "७८% अचूकता"
+                }
+            ]
+            coaching = {
+                "oneNextStep": "गट तयार केल्यानंतर, प्रत्येक गटाला त्यांच्या स्तरानुसार एक कृती द्या आणि तीन मिनिटांत प्रत्येक मूल योग्य काम करत आहे का ते तपासा.",
+                "whyThis": "आजच्या नोंदीवरून स्तरनिहाय गट झाल्याचे दिसते, परंतु प्रत्यक्ष कृतीदरम्यान त्वरित बदल कमी दिसले. ३ मिनिटांची जलद तपासणी आपल्याला वेळेवर निर्णय घेण्यास मदत करते.",
+                "recommendedActivity": {
+                    "id": "act-1",
+                    "name": "संख्या रेषा आव्हान (Number Line Challenge)",
+                    "duration": "१० मिनिटे",
+                    "grade": "इयत्ता ३-५",
+                    "targetLevel": "आरंभी गट",
+                    "materials": "खडू + संख्या कार्डे",
+                    "summary": "जमिनीवर शिडी आखा. विद्यार्थी कार्डे क्रमाने मांडत असताना मोठ्याने उच्चार करतील. यामुळे ३ मिनिटांत मुलांची प्रगती तपासता येईल."
+                },
+                "marathiAudioScript": "उद्या वर्गात गट केल्यानंतर, प्रत्येक गटाला त्यांच्या स्तरानुसार एक कृती द्या आणि तीन मिनिटांत प्रत्येक मूल योग्य काम करत आहे का ते तपासा.",
+                "hindiAudioScript": "कल कक्षा में समूह बनाने के बाद, प्रत्येक समूह को उनके स्तर के अनुसार एक गतिविधि दें और तीन मिनट में जांचें कि क्या वे सही तरीके से समझ रहे हैं।"
             }
-        ]
-
-        coaching = {
-            "oneNextStep": "After grouping learners, give each group one task matched to its current level and spend 3 minutes checking whether the task is working.",
-            "whyThis": "Today’s evidence suggests that level-based grouping was happening, but adaptation during the activity was less visible. A quick 3-minute pulse check gives you confidence to adjust on the fly.",
-            "recommendedActivity": {
-                "id": "act-1",
-                "name": "Number Line Challenge (संख्या रेषा आव्हान)",
-                "duration": "10 min",
-                "grade": "Grade 3–5",
-                "targetLevel": "Beginner Group",
-                "materials": "Chalk + number cards",
-                "summary": "Draw a tactile floor ladder. Students place cards sequentially while speaking aloud to let you quickly assess grouping mastery in under 3 minutes."
-            },
-            "marathiAudioScript": "उद्या वर्गात गट केल्यानंतर, प्रत्येक गटाला त्यांच्या स्तरानुसार एक कृती द्या आणि तीन मिनिटांत प्रत्येक मूल योग्य काम करत आहे का ते तपासा.",
-            "hindiAudioScript": "कल कक्षा में समूह बनाने के बाद, प्रत्येक समूह को उनके स्तर के अनुसार एक गतिविधि दें और तीन मिनट में जांचें कि क्या वे सही तरीके से समझ रहे हैं।"
-        }
+        else:
+            rubric = [
+                {
+                    "id": 1,
+                    "title": "1. Grouped children by learning level",
+                    "status": "Observed",
+                    "statusType": "observed",
+                    "evidence": "Tracker shows 3 distinct level clusters verified with student roll marks.",
+                    "tag": "Cluster accuracy confirmed",
+                    "confidence": "94% Confidence"
+                },
+                {
+                    "id": 2,
+                    "title": "2. Activity matched to learner level",
+                    "status": "Observed",
+                    "statusType": "observed",
+                    "evidence": "Word-level flashcards used as recorded in transcript and visual materials.",
+                    "tag": "Targeted print materials",
+                    "confidence": "89% Confidence"
+                },
+                {
+                    "id": 3,
+                    "title": "3. Teacher checked understanding",
+                    "status": "Partly observed",
+                    "statusType": "partly_observed",
+                    "evidence": "Teacher noted checking 3 students, but no adjustment or check was described for beginner group.",
+                    "tag": "Formative sampling incomplete",
+                    "confidence": "82% Confidence"
+                },
+                {
+                    "id": 4,
+                    "title": "4. Children practiced actively",
+                    "status": "Observed",
+                    "statusType": "observed",
+                    "evidence": "Peer reading routine implemented during 15-minute block with vocal repetition.",
+                    "tag": "High vocal engagement",
+                    "confidence": "91% Confidence"
+                },
+                {
+                    "id": 5,
+                    "title": "5. Teacher adjusted instruction",
+                    "status": "Not observed in submitted evidence",
+                    "statusType": "not_observed",
+                    "evidence": "Time constraint prevented regrouping or paced shift for struggling learners in beginner tier.",
+                    "tag": "Evidence absent in voice log",
+                    "confidence": "78% Confidence"
+                }
+            ]
+            coaching = {
+                "oneNextStep": "After grouping learners, give each group one task matched to its current level and spend 3 minutes checking whether the task is working.",
+                "whyThis": "Today’s evidence suggests that level-based grouping was happening, but adaptation during the activity was less visible. A quick 3-minute pulse check gives you confidence to adjust on the fly.",
+                "recommendedActivity": {
+                    "id": "act-1",
+                    "name": "Number Line Challenge",
+                    "duration": "10 min",
+                    "grade": "Grade 3–5",
+                    "targetLevel": "Beginner Group",
+                    "materials": "Chalk + number cards",
+                    "summary": "Draw a tactile floor ladder. Students place cards sequentially while speaking aloud to let you quickly assess grouping mastery in under 3 minutes."
+                },
+                "marathiAudioScript": "उद्या वर्गात गट केल्यानंतर, प्रत्येक गटाला त्यांच्या स्तरानुसार एक कृती द्या आणि तीन मिनिटांत प्रत्येक मूल योग्य काम करत आहे का ते तपासा.",
+                "hindiAudioScript": "कल कक्षा में समूह बनाने के बाद, प्रत्येक समूह को उनके स्तर के अनुसार एक गतिविधि दें और तीन मिनट में जांचें कि क्या वे सही तरीके से समझ रहे हैं।"
+            }
 
         return {
             "analysisId": analysis_id,
@@ -242,13 +313,25 @@ class AIService:
     def structure_mentor_observation(
         self,
         mentor_voice_note: str,
-        school_id: str = "sch-1"
+        school_id: str = "sch-1",
+        language: str = "mr"
     ) -> Dict[str, Any]:
         """
         Structures mentor CRP voice note into structured observation rubric and WhatsApp draft.
         """
         note_text = mentor_voice_note.strip() if mentor_voice_note else "Demonstrated 4-corner level grouping with 22 Grade 3 students. Teacher Sunita practiced peer flashcard checks for 8 minutes. Noticed significant improvement in beginner student engagement."
 
+        if language == "mr":
+            return {
+                "structuredNote": note_text,
+                "suggestedAction": "पुढील ३ दिवस सकाळी १० मिनिटे ४-कोपरा शब्द वर्गीकरण कृती राबवावी.",
+                "rubricFeedback": {
+                    "groupingObserved": True,
+                    "checkedUnderstanding": True,
+                    "demonstrationCompleted": True
+                },
+                "whatsappDraft": "नमस्ते सुनीता मॅडम, आजच्या वर्गातील गट पद्धती उत्तम झाली. उद्यापासून सकाळी १० मिनिटे संख्या रेषा व शब्द वर्गीकरण सुरू ठेवा. काही अडचण आल्यास सांगा."
+            }
         return {
             "structuredNote": note_text,
             "suggestedAction": "Deploy 4-corner word sorting activity for 3 consecutive mornings.",
@@ -257,7 +340,8 @@ class AIService:
                 "checkedUnderstanding": True,
                 "demonstrationCompleted": True
             },
-            "whatsappDraft": "नमस्ते सुनीता मॅडम, आजच्या वर्गातील गट पद्धती उत्तम झाली. उद्यापासून सकाळी १० मिनिटे संख्या रेषा व शब्द वर्गीकरण सुरू ठेवा. काही अडचण आल्यास सांगा."
+            "whatsappDraft": "Hello Sunita Ma'am, the level-based grouping today went very well. Starting tomorrow, please continue with the 10-minute number line and word sorting routine. Let me know if you need any support."
         }
 
 ai_service = AIService()
+

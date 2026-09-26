@@ -140,6 +140,8 @@ class AudioTranscriptionResponse(BaseModel):
 class MentorObservationRequest(BaseModel):
     mentorVoiceNote: str
     schoolId: Optional[str] = "sch-1"
+    language: Optional[str] = "mr"
+
 
 class MentorObservationResponse(BaseModel):
     structuredNote: str

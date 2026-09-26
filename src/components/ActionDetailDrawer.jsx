@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 
 export function ActionDetailDrawer() {
-  const { selectedAction, setSelectedAction, updateActionStatus, showToast } = useApp();
+  const { selectedAction, setSelectedAction, updateActionStatus, showToast, t } = useApp();
   const [verificationNote, setVerificationNote] = useState('');
 
   if (!selectedAction) return null;
@@ -15,7 +15,7 @@ export function ActionDetailDrawer() {
   const handleAddVerification = (e) => {
     e.preventDefault();
     if (!verificationNote.trim()) return;
-    showToast('Mentor verification logged to Action Ledger!');
+    showToast(t('mentorNoteAddedToast', 'Mentor verification logged to Action Ledger!'));
     setVerificationNote('');
   };
 
@@ -28,10 +28,10 @@ export function ActionDetailDrawer() {
         <div className="p-4 border-b border-surface-container flex items-start justify-between bg-surface-container-low/50">
           <div>
             <span className="font-label-sm text-[10px] uppercase font-bold text-on-surface-variant block">
-              Action Item #{selectedAction.id}
+              {t('actionItem', 'Action Item')} #{selectedAction.id}
             </span>
             <h2 className="font-headline-sm text-base font-bold text-on-surface mt-0.5">
-              Action Detail & Verification
+              {t('actionDetailTitle', 'Action Detail & Verification')}
             </h2>
           </div>
           <button
@@ -46,7 +46,7 @@ export function ActionDetailDrawer() {
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           <div className="p-3 bg-surface-container-low rounded-xl border border-outline-variant/30 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="font-label-sm text-xs font-bold text-on-surface-variant">Status</span>
+              <span className="font-label-sm text-xs font-bold text-on-surface-variant">{t('status', 'Status')}</span>
               <span
                 className={`px-2.5 py-0.5 rounded-full font-label-sm text-xs font-bold ${
                   selectedAction.status === 'Verified' || selectedAction.status === 'Closed'
@@ -67,19 +67,19 @@ export function ActionDetailDrawer() {
           {/* Metadata Grid */}
           <div className="grid grid-cols-2 gap-2 text-xs">
             <div className="p-2.5 rounded-lg bg-surface-container-low">
-              <span className="text-on-surface-variant block text-[10px] uppercase">School</span>
+              <span className="text-on-surface-variant block text-[10px] uppercase">{t('school', 'School')}</span>
               <span className="font-semibold text-on-surface">{selectedAction.school}</span>
             </div>
             <div className="p-2.5 rounded-lg bg-surface-container-low">
-              <span className="text-on-surface-variant block text-[10px] uppercase">Assigned To</span>
+              <span className="text-on-surface-variant block text-[10px] uppercase">{t('assignedTo', 'Assigned To')}</span>
               <span className="font-semibold text-on-surface">{selectedAction.targetTeacher}</span>
             </div>
             <div className="p-2.5 rounded-lg bg-surface-container-low">
-              <span className="text-on-surface-variant block text-[10px] uppercase">Created Date</span>
+              <span className="text-on-surface-variant block text-[10px] uppercase">{t('createdDate', 'Created Date')}</span>
               <span className="font-semibold text-on-surface">{selectedAction.createdDate}</span>
             </div>
             <div className="p-2.5 rounded-lg bg-surface-container-low">
-              <span className="text-on-surface-variant block text-[10px] uppercase">Due Date</span>
+              <span className="text-on-surface-variant block text-[10px] uppercase">{t('dueDate', 'Due Date')}</span>
               <span className="font-semibold text-error">{selectedAction.dueDate}</span>
             </div>
           </div>
@@ -88,7 +88,7 @@ export function ActionDetailDrawer() {
           <div className="space-y-1.5 p-3 rounded-xl bg-surface-container-low border border-outline-variant/30">
             <div className="flex items-center gap-1.5 text-secondary font-bold text-xs">
               <span className="material-symbols-outlined text-[16px]">attachment</span>
-              <span>Evidence Required for Verification</span>
+              <span>{t('evidenceRequired', 'Evidence Required for Verification')}</span>
             </div>
             <p className="font-body-sm text-xs text-on-surface">
               {selectedAction.evidenceRequired}
@@ -103,7 +103,7 @@ export function ActionDetailDrawer() {
           {/* Change Status Buttons */}
           <div className="space-y-2">
             <span className="font-label-sm text-xs font-bold text-on-surface-variant uppercase">
-              Update Status Workflow
+              {t('updateStatusWorkflow', 'Update Status Workflow')}
             </span>
             <div className="grid grid-cols-2 gap-2">
               {['Open', 'In Progress', 'Verified', 'Closed'].map((status) => (
@@ -125,7 +125,7 @@ export function ActionDetailDrawer() {
           {/* Add Mentor Verification Note */}
           <form onSubmit={handleAddVerification} className="space-y-2 pt-2 border-t border-surface-container">
             <label className="font-label-sm text-xs font-bold text-on-surface-variant block">
-              Log Verification Note / Field Finding
+              {t('logVerificationNote', 'Log Verification Note / Field Finding')}
             </label>
             <textarea
               value={verificationNote}
@@ -138,7 +138,7 @@ export function ActionDetailDrawer() {
               type="submit"
               className="w-full py-2 bg-secondary text-on-secondary rounded-lg font-bold text-xs shadow-sm hover:bg-secondary/90 transition-colors"
             >
-              Add Mentor Note
+              {t('addMentorNoteBtn', 'Add Mentor Note')}
             </button>
           </form>
         </div>
@@ -149,7 +149,7 @@ export function ActionDetailDrawer() {
             onClick={() => setSelectedAction(null)}
             className="px-4 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold"
           >
-            Done
+            {t('done', 'Done')}
           </button>
         </div>
       </div>

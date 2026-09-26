@@ -23,7 +23,7 @@ export function ActivityLibraryPage() {
 
   const handleUseActivity = (e, act) => {
     e.stopPropagation();
-    showToast(`"${act.name}" scheduled for tomorrow’s FLN block!`);
+    showToast(t('activityScheduledToast', { name: act.name }, `"${act.name}" scheduled for tomorrow’s FLN block!`));
   };
 
   return (
@@ -34,14 +34,14 @@ export function ActivityLibraryPage() {
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed/50 text-on-secondary-fixed w-fit mb-1">
             <span className="material-symbols-outlined text-[14px]">menu_book</span>
             <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
-              Pedagogical Bank
+              {t('pedagogicalBank', 'Pedagogical Bank')}
             </span>
           </div>
           <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
             {t('activityLibrary', 'Foundational Activity Library')}
           </h1>
           <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
-            TaRL and FLN certified 10-15 minute modular classroom activities.
+            {t('activityLibrarySubtitle', 'TaRL and FLN certified 10-15 minute modular classroom activities.')}
           </p>
         </div>
         <TutorialButton pageKey="activity-library" variant="outline" className="shrink-0" />
@@ -57,7 +57,7 @@ export function ActivityLibraryPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search activities, keywords (e.g. number line, word sort, exit check)..."
+            placeholder={t('searchActivitiesPlaceholder', 'Search activities, keywords (e.g. number line, word sort, exit check)...')}
             className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface border border-outline-variant/40 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-secondary"
           />
         </div>
@@ -65,36 +65,45 @@ export function ActivityLibraryPage() {
         {/* Filter Chips */}
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <span className="font-label-sm text-on-surface-variant font-bold uppercase text-[10px]">
-            Subject:
+            {t('subjectColon', 'Subject:')}
           </span>
-          {['All', 'Literacy', 'Numeracy'].map((sub) => (
+          {[
+            { id: 'All', label: t('all', 'All') },
+            { id: 'Literacy', label: t('literacy', 'Literacy') },
+            { id: 'Numeracy', label: t('numeracy', 'Numeracy') }
+          ].map((sub) => (
             <button
-              key={sub}
-              onClick={() => setSelectedSubject(sub)}
-              className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
-                selectedSubject === sub
+              key={sub.id}
+              onClick={() => setSelectedSubject(sub.id)}
+              className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                selectedSubject === sub.id
                   ? 'bg-secondary text-on-secondary shadow-xs'
                   : 'bg-surface-container text-on-surface hover:bg-surface-container-high'
               }`}
             >
-              {sub}
+              {sub.label}
             </button>
           ))}
 
           <span className="font-label-sm text-on-surface-variant font-bold uppercase text-[10px] ml-2">
-            Level:
+            {t('levelColon', 'Level:')}
           </span>
-          {['All', 'Beginner', 'Letter', 'Word'].map((lvl) => (
+          {[
+            { id: 'All', label: t('all', 'All') },
+            { id: 'Beginner', label: t('beginner', 'Beginner') },
+            { id: 'Letter', label: t('letter', 'Letter') },
+            { id: 'Word', label: t('word', 'Word') }
+          ].map((lvl) => (
             <button
-              key={lvl}
-              onClick={() => setSelectedLevel(lvl)}
-              className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
-                selectedLevel === lvl
+              key={lvl.id}
+              onClick={() => setSelectedLevel(lvl.id)}
+              className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                selectedLevel === lvl.id
                   ? 'bg-secondary text-on-secondary shadow-xs'
                   : 'bg-surface-container text-on-surface hover:bg-surface-container-high'
               }`}
             >
-              {lvl}
+              {lvl.label}
             </button>
           ))}
         </div>
@@ -151,16 +160,16 @@ export function ActivityLibraryPage() {
             <div className="pt-2 border-t border-surface-container flex items-center justify-between gap-2">
               <button
                 onClick={() => setSelectedActivity(activity)}
-                className="text-xs font-bold text-secondary hover:underline"
+                className="text-xs font-bold text-secondary hover:underline cursor-pointer"
               >
-                View Facilitation Steps
+                {t('viewFacilitationSteps', 'View Facilitation Steps')}
               </button>
               <button
                 onClick={(e) => handleUseActivity(e, activity)}
-                className="px-3 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-bold hover:opacity-90 active:scale-95 transition-all flex items-center gap-1 shadow-xs"
+                className="px-3 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-bold hover:opacity-90 active:scale-95 transition-all flex items-center gap-1 shadow-xs cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[14px]">bookmark_add</span>
-                <span>Use in Next Session</span>
+                <span>{t('useInNextSession', 'Use in Next Session')}</span>
               </button>
             </div>
           </div>
@@ -172,10 +181,10 @@ export function ActivityLibraryPage() {
               search_off
             </span>
             <p className="font-headline-sm text-sm font-bold text-on-surface">
-              No matching activities found
+              {t('noActivitiesFound', 'No matching activities found')}
             </p>
             <p className="font-body-sm text-xs text-on-surface-variant mt-1">
-              Try adjusting your search query or removing level filters.
+              {t('adjustSearchFilter', 'Try adjusting your search query or removing level filters.')}
             </p>
           </div>
         )}

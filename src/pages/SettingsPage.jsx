@@ -25,14 +25,14 @@ export function SettingsPage() {
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed w-fit mb-1">
             <span className="material-symbols-outlined text-[14px]">settings</span>
             <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
-              Configuration & Trust Policy
+              {t('configTrustPolicy', 'Configuration & Trust Policy')}
             </span>
           </div>
           <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
             {t('systemSettings', 'Platform Settings')}
           </h1>
           <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
-            User roles, language preferences, data reset, and institutional privacy guardrails.
+            {t('platformSettingsDesc', 'User roles, language preferences, data reset, and institutional privacy guardrails.')}
           </p>
         </div>
         <TutorialButton pageKey="system-settings" variant="outline" className="shrink-0" />
@@ -41,7 +41,7 @@ export function SettingsPage() {
       {/* Profile & Role Section */}
       <div className="p-4 md:p-5 bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 space-y-4">
         <h2 className="font-headline-sm text-sm md:text-base font-bold text-on-surface">
-          User Identity & Operating Persona
+          {t('userIdentityPersona', 'User Identity & Operating Persona')}
         </h2>
 
         <div className="flex items-center gap-3 p-3 bg-surface-container-low rounded-xl">
@@ -57,7 +57,7 @@ export function SettingsPage() {
 
         <div className="space-y-2">
           <label className="font-label-sm text-xs font-bold text-on-surface-variant uppercase block">
-            Switch Operating Persona
+            {t('switchOperatingPersona', 'Switch Operating Persona')}
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
             {Object.values(APP_ROLES).map((role) => (
@@ -65,9 +65,9 @@ export function SettingsPage() {
                 key={role.id}
                 onClick={() => {
                   setCurrentRole(role);
-                  showToast(`Switched persona to ${role.name} (${role.roleLabel})`);
+                  showToast(t('switchedPersonaToast', { name: role.name, role: role.roleLabel }, `Switched persona to ${role.name} (${role.roleLabel})`));
                 }}
-                className={`p-3 rounded-xl text-left border transition-all ${
+                className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${
                   currentRole.id === role.id
                     ? 'bg-secondary text-on-secondary border-secondary font-bold shadow-sm'
                     : 'bg-surface-container-low text-on-surface border-outline-variant/20 hover:bg-surface-container'
@@ -87,21 +87,21 @@ export function SettingsPage() {
       {/* Language Preference */}
       <div className="p-4 md:p-5 bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 space-y-3">
         <h2 className="font-headline-sm text-sm md:text-base font-bold text-on-surface">
-          Diagnostic & Voice Language
+          {t('diagnosticVoiceLanguage', 'Diagnostic & Voice Language')}
         </h2>
         <div className="grid grid-cols-3 gap-2 text-xs">
           {[
-            { id: 'MR', label: 'मराठी (Marathi)', desc: 'Primary statecraft norm' },
-            { id: 'HI', label: 'हिंदी (Hindi)', desc: 'FLN Hindi national norm' },
-            { id: 'EN', label: 'English', desc: 'Administrative review' }
+            { id: 'MR', label: 'मराठी (Marathi)', desc: t('marathiDesc', 'Primary statecraft norm') },
+            { id: 'HI', label: 'हिंदी (Hindi)', desc: t('hindiDesc', 'FLN Hindi national norm') },
+            { id: 'EN', label: 'English', desc: t('englishDesc', 'Administrative review') }
           ].map((l) => (
             <button
               key={l.id}
               onClick={() => {
                 setLanguage(l.id);
-                showToast(`Language set to ${l.label}`);
+                showToast(t('languageSetToast', { label: l.label }, `Language set to ${l.label}`));
               }}
-              className={`p-3 rounded-xl text-left border transition-all ${
+              className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${
                 language === l.id
                   ? 'bg-secondary text-on-secondary border-secondary font-bold shadow-sm'
                   : 'bg-surface-container-low text-on-surface border-outline-variant/20 hover:bg-surface-container'
@@ -119,10 +119,10 @@ export function SettingsPage() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="font-headline-sm text-sm md:text-base font-bold text-on-surface">
-              Environment & State Management
+              {t('envStateManagement', 'Environment & State Management')}
             </h2>
             <p className="font-body-sm text-xs text-on-surface-variant">
-              Reset stored local classroom actions, visits, and evidence packets to initial baseline.
+              {t('resetStoredLocalDesc', 'Reset stored local classroom actions, visits, and evidence packets to initial baseline.')}
             </p>
           </div>
         </div>
@@ -130,15 +130,15 @@ export function SettingsPage() {
         <div className="pt-2 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-on-tertiary-container"></span>
-            <span className="text-xs text-on-surface font-semibold">Local Storage Persistent Mode</span>
+            <span className="text-xs text-on-surface font-semibold">{t('localStorageMode', 'Local Storage Persistent Mode')}</span>
           </div>
           <button
             onClick={resetAllData}
             type="button"
-            className="px-3.5 py-1.5 bg-surface-container text-xs font-bold text-error rounded-lg hover:bg-surface-container-high border border-outline-variant/30 flex items-center gap-1.5"
+            className="px-3.5 py-1.5 bg-surface-container text-xs font-bold text-error rounded-lg hover:bg-surface-container-high border border-outline-variant/30 flex items-center gap-1.5 cursor-pointer"
           >
             <span className="material-symbols-outlined text-[16px]">restart_alt</span>
-            <span>Reset Demo State</span>
+            <span>{t('resetDemoState', 'Reset Demo State')}</span>
           </button>
         </div>
       </div>
@@ -147,14 +147,14 @@ export function SettingsPage() {
       <div className="p-4 md:p-5 bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="font-headline-sm text-sm md:text-base font-bold text-on-surface">
-            Institutional Trust & AI Transparency
+            {t('institutionalTrustAITransparency', 'Institutional Trust & AI Transparency')}
           </h2>
           <button
             onClick={() => setIsTransparencyModalOpen(true)}
-            className="text-xs font-bold text-secondary hover:underline flex items-center gap-1"
+            className="text-xs font-bold text-secondary hover:underline flex items-center gap-1 cursor-pointer"
           >
             <span className="material-symbols-outlined text-[16px]">policy</span>
-            <span>View Architecture</span>
+            <span>{t('viewArchitecture', 'View Architecture')}</span>
           </button>
         </div>
 
@@ -162,9 +162,9 @@ export function SettingsPage() {
           <div className="p-3 bg-surface-container-low rounded-lg flex items-start gap-2.5">
             <span className="material-symbols-outlined text-secondary text-[18px]">delete_forever</span>
             <div>
-              <strong className="text-on-surface block">Audio Purge Protocol:</strong>
+              <strong className="text-on-surface block">{t('audioPurgeProtocol', 'Audio Purge Protocol:')}</strong>
               <span className="text-on-surface-variant">
-                Voice notes are deleted immediately after clinical transcription is verified.
+                {t('audioPurgeDesc', 'Voice notes are deleted immediately after clinical transcription is verified.')}
               </span>
             </div>
           </div>
@@ -172,9 +172,9 @@ export function SettingsPage() {
           <div className="p-3 bg-surface-container-low rounded-lg flex items-start gap-2.5">
             <span className="material-symbols-outlined text-secondary text-[18px]">face_retouching_off</span>
             <div>
-              <strong className="text-on-surface block">Child Face Privacy:</strong>
+              <strong className="text-on-surface block">{t('childFacePrivacy', 'Child Face Privacy:')}</strong>
               <span className="text-on-surface-variant">
-                Facial recognition is strictly prohibited. Only learning artifacts and trackers are mapped.
+                {t('childFacePrivacyDesc', 'Facial recognition is strictly prohibited. Only learning artifacts and trackers are mapped.')}
               </span>
             </div>
           </div>
@@ -182,9 +182,9 @@ export function SettingsPage() {
           <div className="p-3 bg-surface-container-low rounded-lg flex items-start gap-2.5">
             <span className="material-symbols-outlined text-on-tertiary-container text-[18px]">volunteer_activism</span>
             <div>
-              <strong className="text-on-surface block">Non-Punitive Support Policy:</strong>
+              <strong className="text-on-surface block">{t('nonPunitiveSupportPolicy', 'Non-Punitive Support Policy:')}</strong>
               <span className="text-on-surface-variant">
-                Data is exclusively used for targeted CRP coaching allocation, never teacher rankings.
+                {t('nonPunitiveSupportDesc', 'Data is exclusively used for targeted CRP coaching allocation, never teacher rankings.')}
               </span>
             </div>
           </div>

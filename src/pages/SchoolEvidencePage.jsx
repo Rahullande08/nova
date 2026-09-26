@@ -4,7 +4,7 @@ import { audioService } from '../services/audioService';
 import { TutorialButton } from '../components/TutorialButton';
 
 export function SchoolEvidencePage() {
-  const { schools, selectedSchoolId, setSelectedSchoolId, setCurrentRoute, showToast, t } = useApp();
+  const { schools, selectedSchoolId, setSelectedSchoolId, setCurrentRoute, showToast, t, language } = useApp();
   const [activeTab, setActiveTab] = useState('evidence'); // 'evidence' | 'cohort' | 'actions'
   const [playingClipId, setPlayingClipId] = useState(null);
 
@@ -16,9 +16,12 @@ export function SchoolEvidencePage() {
       setPlayingClipId(null);
     } else {
       setPlayingClipId(clipId);
+      const langCode = language === 'MR' ? 'mr-IN' : 'en-US';
       await audioService.speak(
-        'आज वर्गात शब्द स्तरावरील मुलांचा सराव चांगला झाला.',
-        'mr-IN'
+        language === 'MR'
+          ? 'आज वर्गात शब्द स्तरावरील मुलांचा सराव चांगला झाला.'
+          : 'Today in class the word level students practiced well.',
+        langCode
       );
       setPlayingClipId(null);
     }
@@ -40,7 +43,7 @@ export function SchoolEvidencePage() {
                     : 'bg-tertiary-fixed text-on-tertiary-fixed'
                 }`}
               >
-                {school.priority} PRIORITY
+                {school.priority === 'HIGH' ? t('highPriority', 'HIGH PRIORITY') : school.priority === 'MEDIUM' ? t('mediumPriority', 'MEDIUM PRIORITY') : t('onTrack', 'ON TRACK')}
               </span>
               <span className="font-label-sm text-xs text-on-surface-variant">
                 Block {school.block}
@@ -50,7 +53,7 @@ export function SchoolEvidencePage() {
               {school.name}
             </h1>
             <p className="font-body-sm text-xs text-on-surface-variant">
-              {school.teachersCount} FLN Teachers • {school.studentsCount} Students Enrolled • Last Visit {school.daysSinceVisit}d ago
+              {school.teachersCount} {t('flnTeachers', 'FLN Teachers')} • {school.studentsCount} {t('studentsEnrolled', 'Students Enrolled')} • {t('lastVisitDaysAgo', { count: school.daysSinceVisit }, `Last Visit ${school.daysSinceVisit}d ago`)}
             </p>
           </div>
 
@@ -58,7 +61,7 @@ export function SchoolEvidencePage() {
             <select
               value={school.id}
               onChange={(e) => setSelectedSchoolId(e.target.value)}
-              className="p-2 rounded-lg bg-surface-container-low border border-outline-variant text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-secondary"
+              className="p-2 rounded-lg bg-surface-container-low border border-outline-variant text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-secondary cursor-pointer"
             >
               {schools.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -72,7 +75,7 @@ export function SchoolEvidencePage() {
               className="px-3 py-2 bg-secondary text-on-secondary rounded-lg text-xs font-bold shadow-sm hover:bg-secondary/90 flex items-center gap-1 shrink-0 cursor-pointer"
             >
               <span className="material-symbols-outlined text-[16px]">navigation</span>
-              <span>Conduct Visit</span>
+              <span>{t('conductVisit', 'Conduct Visit')}</span>
             </button>
           </div>
         </div>
@@ -80,14 +83,14 @@ export function SchoolEvidencePage() {
         {/* School Tabs */}
         <div className="flex items-center gap-2 border-b border-surface-container pt-2">
           {[
-            { id: 'evidence', label: 'Teacher Evidence Feed', icon: 'photo_camera' },
-            { id: 'cohort', label: 'Student Cohort Levels', icon: 'bar_chart' },
-            { id: 'actions', label: 'Open Actions & SLA', icon: 'checklist' }
+            { id: 'evidence', label: t('teacherEvidenceFeed', 'Teacher Evidence Feed'), icon: 'photo_camera' },
+            { id: 'cohort', label: t('studentCohortLevels', 'Student Cohort Levels'), icon: 'bar_chart' },
+            { id: 'actions', label: t('openActionsSla', 'Open Actions & SLA'), icon: 'checklist' }
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`pb-2 px-2 text-xs font-bold flex items-center gap-1.5 transition-all border-b-2 ${
+              className={`pb-2 px-2 text-xs font-bold flex items-center gap-1.5 transition-all border-b-2 cursor-pointer ${
                 activeTab === tab.id
                   ? 'border-secondary text-secondary'
                   : 'border-transparent text-on-surface-variant hover:text-on-surface'
@@ -105,10 +108,10 @@ export function SchoolEvidencePage() {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="font-headline-sm text-sm font-bold text-on-surface">
-              Recent Classroom Observations
+              {t('recentClassroomObservations', 'Recent Classroom Observations')}
             </h2>
             <span className="font-label-sm text-xs text-on-surface-variant">
-              Live Field Audio & Tracker Uploads
+              {t('liveFieldAudioUploads', 'Live Field Audio & Tracker Uploads')}
             </span>
           </div>
 
@@ -143,26 +146,26 @@ export function SchoolEvidencePage() {
                       campaign
                     </span>
                     <span className="font-medium text-on-surface">
-                      Pedagogical Signal: <strong>{ev.signal}</strong>
+                      {t('pedagogicalSignalColon', 'Pedagogical Signal:')} <strong>{ev.signal}</strong>
                     </span>
                   </div>
                   <button
                     onClick={() => handlePlayClip(ev.id)}
-                    className="flex items-center gap-1 px-2.5 py-1 bg-surface-container-lowest rounded shadow-xs font-bold text-secondary hover:bg-surface-container"
+                    className="flex items-center gap-1 px-2.5 py-1 bg-surface-container-lowest rounded shadow-xs font-bold text-secondary hover:bg-surface-container cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-[16px]">
                       {playingClipId === ev.id ? 'pause' : 'play_arrow'}
                     </span>
-                    <span>{playingClipId === ev.id ? 'Pause' : 'Audio (1:48)'}</span>
+                    <span>{playingClipId === ev.id ? t('pause', 'Pause') : t('audioOneFortyEight', 'Audio (1:48)')}</span>
                   </button>
                 </div>
 
                 <div className="flex justify-end gap-2 pt-1 border-t border-surface-container">
                   <button
                     onClick={() => setCurrentRoute('ai-coach-chat')}
-                    className="text-xs font-bold text-secondary hover:underline"
+                    className="text-xs font-bold text-secondary hover:underline cursor-pointer"
                   >
-                    Inspect 5-Point Rubric & AI Coaching →
+                    {t('inspectRubricCoach', 'Inspect 5-Point Rubric & AI Coaching →')}
                   </button>
                 </div>
               </div>
@@ -176,24 +179,24 @@ export function SchoolEvidencePage() {
         <div className="bg-surface-container-lowest p-4 md:p-5 rounded-xl shadow-sm border border-outline-variant/20 space-y-4">
           <div>
             <h2 className="font-headline-sm text-sm md:text-base font-bold text-on-surface">
-              TaRL Learning Level Breakdown
+              {t('tarlLevelBreakdown', 'TaRL Learning Level Breakdown')}
             </h2>
             <p className="font-body-sm text-xs text-on-surface-variant">
-              Distribution of {school.studentsCount} assessed foundational learners.
+              {t('distributionOfLearners', { count: school.studentsCount }, `Distribution of ${school.studentsCount} assessed foundational learners.`)}
             </p>
           </div>
 
           <div className="space-y-3">
             {[
-              { level: 'Beginner (आरंभी)', count: school.levelsDistribution.beginner, color: 'bg-error', target: '20%' },
-              { level: 'Letter (अक्षर)', count: school.levelsDistribution.letter, color: 'bg-surface-container-highest', target: '25%' },
-              { level: 'Word (शब्द)', count: school.levelsDistribution.word, color: 'bg-secondary-fixed', target: '35%' },
-              { level: 'Story / Paragraph (परिच्छेद)', count: school.levelsDistribution.story, color: 'bg-secondary', target: '20%' }
+              { level: t('beginnerTier', 'Beginner (आरंभी)'), count: school.levelsDistribution.beginner, color: 'bg-error', target: '20%' },
+              { level: t('letterTier', 'Letter (अक्षर)'), count: school.levelsDistribution.letter, color: 'bg-surface-container-highest', target: '25%' },
+              { level: t('wordTier', 'Word (शब्द)'), count: school.levelsDistribution.word, color: 'bg-secondary-fixed', target: '35%' },
+              { level: t('paragraphTier', 'Story / Paragraph (परिच्छेद)'), count: school.levelsDistribution.story, color: 'bg-secondary', target: '20%' }
             ].map((row) => (
               <div key={row.level} className="space-y-1">
                 <div className="flex items-center justify-between text-xs font-bold">
                   <span className="text-on-surface">{row.level}</span>
-                  <span className="text-secondary font-numeric">{row.count} students ({Math.round((row.count / (school.studentsCount || 100)) * 100)}%)</span>
+                  <span className="text-secondary font-numeric">{row.count} {t('studentsCountWord', 'students')} ({Math.round((row.count / (school.studentsCount || 100)) * 100)}%)</span>
                 </div>
                 <div className="w-full bg-surface-container h-2.5 rounded-full overflow-hidden">
                   <div
@@ -212,30 +215,30 @@ export function SchoolEvidencePage() {
         <div className="bg-surface-container-lowest p-4 md:p-5 rounded-xl shadow-sm border border-outline-variant/20 space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="font-headline-sm text-sm font-bold text-on-surface">
-              Active Institutional Commitments
+              {t('activeInstitutionalCommitments', 'Active Institutional Commitments')}
             </h2>
             <button
               onClick={() => setCurrentRoute('action-ledger')}
-              className="text-xs text-secondary font-bold hover:underline"
+              className="text-xs text-secondary font-bold hover:underline cursor-pointer"
             >
-              Open Full Ledger →
+              {t('openFullLedger', 'Open Full Ledger →')}
             </button>
           </div>
 
           <div className="p-3 bg-surface-container-low rounded-lg border border-outline-variant/20 flex items-start justify-between">
             <div>
               <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-error-container text-on-error-container">
-                HIGH SLA
+                {t('highSla', 'HIGH SLA')}
               </span>
               <p className="font-headline-sm text-xs font-bold text-on-surface mt-1">
-                Demonstrate 4-corner level grouping during morning FLN block
+                {t('demoFourCornerActionText', 'Demonstrate 4-corner level grouping during morning FLN block')}
               </p>
               <p className="font-body-sm text-[11px] text-on-surface-variant">
-                Assigned to Anand Patil (CRP) • Target: Sunita Rao • Due in 3 days
+                {t('assignedToAnand', 'Assigned to Anand Patil (CRP) • Target: Sunita Rao • Due in 3 days')}
               </p>
             </div>
             <span className="px-2 py-1 bg-surface-container-highest rounded text-xs font-bold text-secondary">
-              Open
+              {t('open', 'Open')}
             </span>
           </div>
         </div>

@@ -2,12 +2,12 @@ import React from 'react';
 import { useApp } from '../context/AppContext';
 
 export function ActivityDetailModal() {
-  const { selectedActivity, setSelectedActivity, showToast } = useApp();
+  const { selectedActivity, setSelectedActivity, showToast, t } = useApp();
 
   if (!selectedActivity) return null;
 
   const handleAddToSchedule = () => {
-    showToast(`"${selectedActivity.name}" added to tomorrow's classroom plan!`);
+    showToast(t('activityScheduledToast', { name: selectedActivity.name }));
     setSelectedActivity(null);
   };
 
@@ -47,7 +47,7 @@ export function ActivityDetailModal() {
           <div className="grid grid-cols-2 gap-2 text-xs bg-surface-container-low p-3 rounded-xl border border-outline-variant/30">
             <div>
               <span className="font-label-sm text-on-surface-variant block uppercase text-[10px]">
-                Recommended Duration
+                {t('recommendedDuration', 'Recommended Duration')}
               </span>
               <span className="font-headline-sm font-bold text-on-surface">
                 {selectedActivity.duration}
@@ -55,7 +55,7 @@ export function ActivityDetailModal() {
             </div>
             <div>
               <span className="font-label-sm text-on-surface-variant block uppercase text-[10px]">
-                Target Grades
+                {t('targetGrades', 'Target Grades')}
               </span>
               <span className="font-headline-sm font-bold text-on-surface">
                 {selectedActivity.grade}
@@ -63,7 +63,7 @@ export function ActivityDetailModal() {
             </div>
             <div className="col-span-2 pt-1 border-t border-surface-container">
               <span className="font-label-sm text-on-surface-variant block uppercase text-[10px]">
-                Materials Needed
+                {t('materialsNeeded', 'Materials Needed')}
               </span>
               <span className="font-body-sm font-medium text-on-surface">
                 {selectedActivity.materials}
@@ -74,7 +74,7 @@ export function ActivityDetailModal() {
           {/* Step-by-Step Facilitation Guide */}
           <div className="space-y-2">
             <h3 className="font-headline-sm text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-              Classroom Facilitation Steps
+              {t('facilitationSteps', 'Classroom Facilitation Steps')}
             </h3>
             <div className="space-y-2">
               {selectedActivity.steps?.map((step, index) => (
@@ -95,14 +95,14 @@ export function ActivityDetailModal() {
             onClick={() => setSelectedActivity(null)}
             className="px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container text-xs font-semibold transition-colors"
           >
-            Close
+            {t('close', 'Close')}
           </button>
           <button
             onClick={handleAddToSchedule}
             className="px-4 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold flex items-center gap-1.5 shadow-sm hover:opacity-90 active:scale-95 transition-all"
           >
             <span className="material-symbols-outlined text-[16px]">bookmark_add</span>
-            <span>Use in Next Session</span>
+            <span>{t('useInNextSession', 'Use in Next Session')}</span>
           </button>
         </div>
       </div>

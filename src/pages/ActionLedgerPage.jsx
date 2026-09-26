@@ -51,14 +51,14 @@ export function ActionLedgerPage() {
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed w-fit mb-1">
             <span className="material-symbols-outlined text-[14px]">assignment</span>
             <span className="font-label-sm text-xs font-bold uppercase tracking-wider">
-              Accountability Matrix
+              {t('accountabilityMatrix', 'Accountability Matrix')}
             </span>
           </div>
           <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold">
             {t('actionLedger', 'Action Ledger')}
           </h1>
           <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
-            Track pedagogical commitments, field verifications, and SLA progress.
+            {t('actionLedgerDesc', 'Track pedagogical commitments, field verifications, and SLA progress.')}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -67,10 +67,10 @@ export function ActionLedgerPage() {
 
         <button
           onClick={() => setIsCreateModalOpen(true)}
-          className="px-4 py-2 rounded-lg bg-primary text-on-primary font-bold text-xs flex items-center gap-1.5 shadow-sm hover:opacity-90 self-start sm:self-auto"
+          className="px-4 py-2 rounded-lg bg-primary text-on-primary font-bold text-xs flex items-center gap-1.5 shadow-sm hover:opacity-90 self-start sm:self-auto cursor-pointer"
         >
           <span className="material-symbols-outlined text-[18px]">add</span>
-          <span>Create Action</span>
+          <span>{t('createAction', 'Create Action')}</span>
         </button>
       </div>
 
@@ -85,7 +85,7 @@ export function ActionLedgerPage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search action items, teachers, schools..."
+              placeholder={t('searchActionItemsPlaceholder', 'Search action items, teachers, schools...')}
               className="w-full pl-10 pr-4 py-2 rounded-lg bg-surface border border-outline-variant/40 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-secondary"
             />
           </div>
@@ -95,13 +95,17 @@ export function ActionLedgerPage() {
               <button
                 key={status}
                 onClick={() => setStatusFilter(status)}
-                className={`px-3 py-1.5 rounded-full font-bold transition-all shrink-0 ${
+                className={`px-3 py-1.5 rounded-full font-bold transition-all shrink-0 cursor-pointer ${
                   statusFilter === status
                     ? 'bg-secondary text-on-secondary shadow-xs'
                     : 'bg-surface-container-low text-on-surface hover:bg-surface-container'
                 }`}
               >
-                {status}
+                {status === 'All' ? t('all', 'All') :
+                 status === 'Open' ? t('open', 'Open') :
+                 status === 'In Progress' ? t('inProgress', 'In Progress') :
+                 status === 'Verified' ? t('verified', 'Verified') :
+                 status === 'Closed' ? t('closed', 'Closed') : status}
               </button>
             ))}
           </div>
@@ -114,11 +118,11 @@ export function ActionLedgerPage() {
           <table className="w-full text-left border-collapse text-xs md:text-sm">
             <thead>
               <tr className="bg-surface-container-low border-b border-surface-container font-headline-sm text-xs text-on-surface-variant uppercase tracking-wider">
-                <th className="py-3 px-4">Action Item</th>
-                <th className="py-3 px-4">Owner / School</th>
-                <th className="py-3 px-4">Due Date</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4 text-right">Details</th>
+                <th className="py-3 px-4">{t('actionItemTh', 'Action Item')}</th>
+                <th className="py-3 px-4">{t('ownerSchoolTh', 'Owner / School')}</th>
+                <th className="py-3 px-4">{t('dueDateTh', 'Due Date')}</th>
+                <th className="py-3 px-4">{t('statusTh', 'Status')}</th>
+                <th className="py-3 px-4 text-right">{t('detailsTh', 'Details')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-surface-container">
@@ -136,7 +140,7 @@ export function ActionLedgerPage() {
                     <td className="py-3.5 px-4 font-semibold text-on-surface max-w-xs md:max-w-md">
                       <div className="truncate">{action.action}</div>
                       <div className="text-[11px] font-normal text-on-surface-variant truncate">
-                        Evidence: {action.evidenceRequired}
+                        {t('evidenceRequiredLabel', 'Evidence:')} {action.evidenceRequired}
                       </div>
                     </td>
                     <td className="py-3.5 px-4 text-on-surface">
@@ -165,7 +169,10 @@ export function ActionLedgerPage() {
                               : 'bg-error'
                           }`}
                         ></span>
-                        {action.status}
+                        {action.status === 'Verified' ? t('verified', 'Verified') :
+                         action.status === 'Closed' ? t('closed', 'Closed') :
+                         action.status === 'In Progress' ? t('inProgress', 'In Progress') :
+                         action.status === 'Open' ? t('open', 'Open') : action.status}
                       </span>
                     </td>
                     <td className="py-3.5 px-4 text-right">
@@ -182,7 +189,7 @@ export function ActionLedgerPage() {
           {filteredActions.length === 0 && (
             <div className="p-8 text-center text-on-surface-variant space-y-1">
               <span className="material-symbols-outlined text-4xl">task</span>
-              <p className="font-bold text-xs">No matching action items</p>
+              <p className="font-bold text-xs">{t('noMatchingActionItems', 'No matching action items')}</p>
             </div>
           )}
         </div>
@@ -194,11 +201,11 @@ export function ActionLedgerPage() {
           <div className="bg-surface-container-lowest rounded-2xl max-w-md w-full p-5 border border-outline-variant/30 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-surface-container pb-2">
               <h2 className="font-headline-sm text-base font-bold text-on-surface">
-                Create Action Commitment
+                {t('createActionCommitment', 'Create Action Commitment')}
               </h2>
               <button
                 onClick={() => setIsCreateModalOpen(false)}
-                className="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container"
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container cursor-pointer"
               >
                 <span className="material-symbols-outlined">close</span>
               </button>
@@ -207,14 +214,14 @@ export function ActionLedgerPage() {
             <form onSubmit={handleCreateSubmit} className="space-y-3 text-xs">
               <div>
                 <label className="font-bold block text-on-surface-variant mb-1">
-                  Action Item Title
+                  {t('actionItemTitleLabel', 'Action Item Title')}
                 </label>
                 <input
                   type="text"
                   required
                   value={newActionTitle}
                   onChange={(e) => setNewActionTitle(e.target.value)}
-                  placeholder="e.g. Conduct daily 4-corner word sorting in Grade 3"
+                  placeholder={t('actionItemPlaceholder', 'e.g. Conduct daily 4-corner word sorting in Grade 3')}
                   className="w-full p-2.5 rounded-lg border border-outline-variant text-xs bg-surface focus:ring-2 focus:ring-secondary focus:outline-none"
                 />
               </div>
@@ -222,7 +229,7 @@ export function ActionLedgerPage() {
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="font-bold block text-on-surface-variant mb-1">
-                    Assigned Owner
+                    {t('assignedOwnerLabel', 'Assigned Owner')}
                   </label>
                   <input
                     type="text"
@@ -233,7 +240,7 @@ export function ActionLedgerPage() {
                 </div>
                 <div>
                   <label className="font-bold block text-on-surface-variant mb-1">
-                    Target School
+                    {t('targetSchoolLabel', 'Target School')}
                   </label>
                   <input
                     type="text"
@@ -246,7 +253,7 @@ export function ActionLedgerPage() {
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="font-bold block text-on-surface-variant mb-1">Due Date</label>
+                  <label className="font-bold block text-on-surface-variant mb-1">{t('dueDateLabel', 'Due Date')}</label>
                   <input
                     type="date"
                     value={newActionDueDate}
@@ -255,15 +262,15 @@ export function ActionLedgerPage() {
                   />
                 </div>
                 <div>
-                  <label className="font-bold block text-on-surface-variant mb-1">Priority</label>
+                  <label className="font-bold block text-on-surface-variant mb-1">{t('priorityLabel', 'Priority')}</label>
                   <select
                     value={newActionPriority}
                     onChange={(e) => setNewActionPriority(e.target.value)}
                     className="w-full p-2 rounded-lg border border-outline-variant text-xs bg-surface"
                   >
-                    <option value="High">High Priority</option>
-                    <option value="Medium">Medium Priority</option>
-                    <option value="Low">Low Priority</option>
+                    <option value="High">{t('highPriority', 'High Priority')}</option>
+                    <option value="Medium">{t('mediumPriority', 'Medium Priority')}</option>
+                    <option value="Low">{t('lowPriority', 'Low Priority')}</option>
                   </select>
                 </div>
               </div>
@@ -272,15 +279,15 @@ export function ActionLedgerPage() {
                 <button
                   type="button"
                   onClick={() => setIsCreateModalOpen(false)}
-                  className="px-3 py-2 text-on-surface-variant hover:bg-surface-container rounded-lg font-bold"
+                  className="px-3 py-2 text-on-surface-variant hover:bg-surface-container rounded-lg font-bold cursor-pointer"
                 >
-                  Cancel
+                  {t('cancel', 'Cancel')}
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-primary text-on-primary rounded-lg font-bold shadow-sm"
+                  className="px-4 py-2 bg-primary text-on-primary rounded-lg font-bold shadow-sm cursor-pointer hover:opacity-90"
                 >
-                  Save Action
+                  {t('saveAction', 'Save Action')}
                 </button>
               </div>
             </form>

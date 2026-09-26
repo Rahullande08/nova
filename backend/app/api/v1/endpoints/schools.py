@@ -83,37 +83,44 @@ def record_school_visit(
 ):
     school = db.query(School).filter(School.id == school_id).first()
     if not school:
-        raise HTTPException(status_code=404, detail="School not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="School not found")
 
-    school.days_since_visit = 0
-    school.status = "Visit Completed (Verified)"
+    try:
+        school.days_since_visit = 0
+        school.status = "Visit Completed (Verified)"
 
-    new_ev = {
-        "id": f"ev-{int(time.time() * 1000)}",
-        "teacher": visit_update.teacher or "Sunita Rao",
-        "grade": visit_update.grade or "Grade 3",
-        "time": "Just now (Visit Verified)",
-        "type": "Demonstration Visit",
-        "signal": visit_update.observation_note or "Classroom demonstration completed & verified"
-    }
+        new_ev = {
+            "id": f"ev-{int(time.time() * 1000)}",
+            "teacher": visit_update.teacher or "Sunita Rao",
+            "grade": visit_update.grade or "Grade 3",
+            "time": "Just now (Visit Verified)",
+            "type": "Demonstration Visit",
+            "signal": visit_update.observation_note or "Classroom demonstration completed & verified"
+        }
 
-    current_recent = list(school.recent_evidence or [])
-    school.recent_evidence = [new_ev] + current_recent
+        current_recent = list(school.recent_evidence or [])
+        school.recent_evidence = [new_ev] + current_recent
 
-    # Persist Visit record in DB
-    visit_id = f"vis-{int(time.time() * 1000)}"
-    new_visit = Visit(
-        id=visit_id,
-        school_id=school.id,
-        mentor_id=current_user.id if current_user else None,
-        scheduled_date=datetime.utcnow().strftime("%Y-%m-%d"),
-        status="Completed",
-        notes=visit_update.observation_note or "Demonstration visit completed & verified"
-    )
-    db.add(new_visit)
+        # Persist Visit record in DB
+        visit_id = f"vis-{int(time.time() * 1000)}"
+        new_visit = Visit(
+            id=visit_id,
+            school_id=school.id,
+            mentor_id=current_user.id if current_user else None,
+            scheduled_date=datetime.utcnow().strftime("%Y-%m-%d"),
+            status="Completed",
+            notes=visit_update.observation_note or "Demonstration visit completed & verified"
+        )
+        db.add(new_visit)
 
-    db.commit()
-    db.refresh(school)
+        db.commit()
+        db.refresh(school)
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to record school visit transaction."
+        )
 
     return {
         "success": True,
@@ -126,3 +133,4 @@ def record_school_visit(
             "recentEvidence": school.recent_evidence
         }
     }
+

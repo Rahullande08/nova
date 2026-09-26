@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useApp } from '../context/AppContext';
-import { TUTORIALS_DATA, ONBOARDING_TOUR_STEPS } from '../data/tutorialsData';
+import { getTutorialData, getTourSteps } from '../data/tutorialsData';
 import { getTranslation } from '../data/translations';
 
 export function TutorialModal() {
@@ -33,10 +33,12 @@ export function TutorialModal() {
 
   if (!isTutorialOpen && !isTourOpen) return null;
 
+  const tourSteps = getTourSteps(language);
+
   // Render Guided Tour Modal
   if (isTourOpen) {
-    const currentTourStep = ONBOARDING_TOUR_STEPS[tourStep] || ONBOARDING_TOUR_STEPS[0];
-    const isLastStep = tourStep === ONBOARDING_TOUR_STEPS.length - 1;
+    const currentTourStep = tourSteps[tourStep] || tourSteps[0];
+    const isLastStep = tourStep === tourSteps.length - 1;
 
     const handleNextTourStep = () => {
       if (isLastStep) {
@@ -45,7 +47,7 @@ export function TutorialModal() {
       } else {
         const nextIdx = tourStep + 1;
         setTourStep(nextIdx);
-        const nextRoute = ONBOARDING_TOUR_STEPS[nextIdx].targetRoute;
+        const nextRoute = tourSteps[nextIdx]?.targetRoute;
         if (nextRoute) {
           setCurrentRoute(nextRoute);
         }
@@ -56,7 +58,7 @@ export function TutorialModal() {
       if (tourStep > 0) {
         const prevIdx = tourStep - 1;
         setTourStep(prevIdx);
-        const prevRoute = ONBOARDING_TOUR_STEPS[prevIdx].targetRoute;
+        const prevRoute = tourSteps[prevIdx]?.targetRoute;
         if (prevRoute) {
           setCurrentRoute(prevRoute);
         }
@@ -102,7 +104,7 @@ export function TutorialModal() {
             </p>
 
             <div className="flex items-center justify-center gap-1.5 pt-2">
-              {ONBOARDING_TOUR_STEPS.map((_, idx) => (
+              {tourSteps.map((_, idx) => (
                 <div
                   key={idx}
                   className={`h-1.5 rounded-full transition-all ${
@@ -146,7 +148,7 @@ export function TutorialModal() {
 
   // Render Page-Specific Tutorial
   const activeKey = tutorialPageKey || currentRoute || 'overview-dashboard';
-  const tutorial = TUTORIALS_DATA[activeKey] || TUTORIALS_DATA['overview-dashboard'];
+  const tutorial = getTutorialData(activeKey, language);
 
   return (
     <div

@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useApp } from '../context/AppContext';
 import { cameraService } from '../services/cameraService';
 
 export function LiveCameraViewfinder({ onPhotoCaptured, onClose, showToast }) {
+  const { t } = useApp();
   const videoRef = useRef(null);
   const [isInitializing, setIsInitializing] = useState(true);
   const [isCapturing, setIsCapturing] = useState(false);
@@ -28,7 +30,7 @@ export function LiveCameraViewfinder({ onPhotoCaptured, onClose, showToast }) {
 
       if (!result.success) {
         setCameraError(result.error);
-        if (showToast) showToast('Camera access could not be initialized.', 4000);
+        if (showToast) showToast(t('cameraAccessError', 'Camera access could not be initialized.'), 4000);
       }
     }
 
@@ -56,12 +58,12 @@ export function LiveCameraViewfinder({ onPhotoCaptured, onClose, showToast }) {
           height: result.height
         });
       } else {
-        setCameraError(result.error || 'Failed to capture photo frame.');
+        setCameraError(result.error || t('failedToCaptureFrame', 'Failed to capture photo frame.'));
         setIsCapturing(false);
       }
     } catch (err) {
       console.error('[LiveCameraViewfinder] Capture error:', err);
-      setCameraError('An unexpected error occurred while capturing the photo.');
+      setCameraError(t('unexpectedCameraError', 'An unexpected error occurred while capturing the photo.'));
       setIsCapturing(false);
     }
   };
@@ -88,7 +90,7 @@ export function LiveCameraViewfinder({ onPhotoCaptured, onClose, showToast }) {
       <div className="absolute top-0 inset-x-0 z-20 p-3 flex items-center justify-between bg-gradient-to-b from-black/80 via-black/40 to-transparent">
         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white font-label-sm text-xs">
           <span className="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-          <span className="font-semibold">Live Camera Viewfinder</span>
+          <span className="font-semibold">{t('liveCameraViewfinder', 'Live Camera Viewfinder')}</span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -131,12 +133,12 @@ export function LiveCameraViewfinder({ onPhotoCaptured, onClose, showToast }) {
         {!isInitializing && !cameraError && (
           <div className="absolute inset-4 pointer-events-none border border-white/25 rounded-xl flex flex-col justify-between p-3">
             <div className="flex justify-between text-[10px] text-white/70 font-mono">
-              <span>┌ Align Register / Blackboard</span>
+              <span>┌ {t('alignRegister', 'Align Register / Blackboard')}</span>
               <span>┐</span>
             </div>
             <div className="flex justify-center">
               <span className="px-2 py-0.5 rounded bg-black/40 text-white/80 text-[10px] backdrop-blur-xs font-medium">
-                Keep student level tallies inside frame
+                {t('keepTalliesInsideFrame', 'Keep student level tallies inside frame')}
               </span>
             </div>
             <div className="flex justify-between text-[10px] text-white/70 font-mono">
@@ -152,8 +154,8 @@ export function LiveCameraViewfinder({ onPhotoCaptured, onClose, showToast }) {
             <span className="material-symbols-outlined text-4xl animate-spin text-secondary">
               progress_activity
             </span>
-            <p className="text-xs font-semibold">Requesting Camera Permission...</p>
-            <p className="text-[11px] text-slate-400">Please click "Allow" in your browser prompt</p>
+            <p className="text-xs font-semibold">{t('requestingCameraPermission', 'Requesting Camera Permission...')}</p>
+            <p className="text-[11px] text-slate-400">{t('allowBrowserPrompt', 'Please click "Allow" in your browser prompt')}</p>
           </div>
         )}
 
@@ -164,7 +166,7 @@ export function LiveCameraViewfinder({ onPhotoCaptured, onClose, showToast }) {
               <span className="material-symbols-outlined text-3xl">videocam_off</span>
             </div>
             <div className="max-w-sm space-y-1">
-              <h3 className="font-bold text-sm text-red-300">Camera Access Error</h3>
+              <h3 className="font-bold text-sm text-red-300">{t('cameraAccessError', 'Camera Access Error')}</h3>
               <p className="text-xs text-slate-300 leading-relaxed">{cameraError}</p>
             </div>
             <div className="flex items-center gap-2 pt-2">
@@ -174,14 +176,14 @@ export function LiveCameraViewfinder({ onPhotoCaptured, onClose, showToast }) {
                 className="px-4 py-2 rounded-xl bg-secondary text-on-secondary text-xs font-bold shadow-sm hover:bg-secondary/90 transition-colors flex items-center gap-1.5"
               >
                 <span className="material-symbols-outlined text-[16px]">refresh</span>
-                <span>Try Again</span>
+                <span>{t('tryAgain', 'Try Again')}</span>
               </button>
               <button
                 type="button"
                 onClick={onClose}
                 className="px-4 py-2 rounded-xl bg-slate-800 text-slate-200 text-xs font-bold hover:bg-slate-700 transition-colors"
               >
-                Use File Upload Instead
+                {t('useFileUploadInstead', 'Use File Upload Instead')}
               </button>
             </div>
           </div>
@@ -196,7 +198,7 @@ export function LiveCameraViewfinder({ onPhotoCaptured, onClose, showToast }) {
             onClick={onClose}
             className="text-xs font-semibold text-slate-300 hover:text-white px-3 py-1.5 rounded-lg bg-white/10"
           >
-            Cancel
+            {t('cancel', 'Cancel')}
           </button>
 
           {/* Big Shutter Button */}

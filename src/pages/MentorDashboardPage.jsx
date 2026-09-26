@@ -30,7 +30,7 @@ export function MentorDashboardPage() {
     if (isRecordingObservation) {
       setIsRecordingObservation(false);
       audioService.stopRecording();
-      showToast('Mentor observation transcribed and structured into Rubric!');
+      showToast(t('observationTranscribedToast', 'Mentor observation transcribed and structured into Rubric!'));
     } else {
       setIsRecordingObservation(true);
       await audioService.startRecording();
@@ -50,14 +50,14 @@ export function MentorDashboardPage() {
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant w-fit">
             <span className="material-symbols-outlined text-[14px] text-secondary">verified_user</span>
             <span className="font-label-sm text-[11px] uppercase tracking-wider font-bold">
-              Cluster Resource Person (CRP) Portal
+              {t('crpPortal', 'Cluster Resource Person (CRP) Portal')}
             </span>
           </div>
           <h1 className="font-headline-xl-mobile md:font-headline-xl text-xl md:text-2xl text-on-surface font-bold tracking-tight">
             {t('mentorDashboard', 'Mentor Dashboard')}
           </h1>
           <p className="font-body-md text-xs md:text-sm text-on-surface-variant">
-            Know where your support can make the biggest difference.
+            {t('mentorDashboardSubtitle', 'Know where your support can make the biggest difference.')}
           </p>
         </div>
         <TutorialButton pageKey="crp-mentor-dashboard" variant="outline" className="shrink-0" />
@@ -68,14 +68,14 @@ export function MentorDashboardPage() {
         {/* Metric 1 */}
         <div className="bg-surface-container-lowest p-3.5 md:p-4 rounded-xl shadow-sm border border-outline-variant/20 flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="font-label-md text-xs text-on-surface-variant">Schools to Visit</span>
+            <span className="font-label-md text-xs text-on-surface-variant">{t('schoolsToVisit', 'Schools to Visit')}</span>
             <span className="material-symbols-outlined text-secondary text-[20px]">corporate_fare</span>
           </div>
           <div className="mt-2 flex items-baseline gap-1.5">
             <span className="font-headline-xl text-2xl md:text-3xl text-on-surface font-bold font-numeric">
               8
             </span>
-            <span className="font-label-sm text-[11px] text-on-surface-variant">in cluster</span>
+            <span className="font-label-sm text-[11px] text-on-surface-variant">{t('inCluster', 'in cluster')}</span>
           </div>
           <div className="mt-2 w-full bg-surface-container h-1 rounded-full overflow-hidden">
             <div className="bg-secondary h-full w-3/5 rounded-full"></div>
@@ -85,7 +85,7 @@ export function MentorDashboardPage() {
         {/* Metric 2 */}
         <div className="bg-surface-container-lowest p-3.5 md:p-4 rounded-xl shadow-sm border border-outline-variant/20 flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="font-label-md text-xs text-on-surface-variant">High Priority</span>
+            <span className="font-label-md text-xs text-on-surface-variant">{t('highPriorityMetric', 'High Priority')}</span>
             <span className="w-2.5 h-2.5 rounded-full bg-error animate-pulse"></span>
           </div>
           <div className="mt-2 flex items-baseline gap-1.5">
@@ -93,45 +93,45 @@ export function MentorDashboardPage() {
               3
             </span>
             <span className="font-label-sm text-[10px] text-on-error-container bg-error-container px-1.5 py-0.5 rounded-full font-bold">
-              Immediate
+              {t('immediate', 'Immediate')}
             </span>
           </div>
           <span className="font-label-sm text-[11px] text-on-surface-variant mt-1.5">
-            &gt;14 days unvisited
+            {t('daysUnvisited', '>14 days unvisited')}
           </span>
         </div>
 
         {/* Metric 3 */}
         <div className="bg-surface-container-lowest p-3.5 md:p-4 rounded-xl shadow-sm border border-outline-variant/20 flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="font-label-md text-xs text-on-surface-variant">Actions Due</span>
+            <span className="font-label-md text-xs text-on-surface-variant">{t('actionsDue', 'Actions Due')}</span>
             <span className="material-symbols-outlined text-on-surface text-[20px]">checklist</span>
           </div>
           <div className="mt-2 flex items-baseline gap-1.5">
             <span className="font-headline-xl text-2xl md:text-3xl text-on-surface font-bold font-numeric">
               12
             </span>
-            <span className="font-label-sm text-[11px] text-secondary font-bold">4 overdue</span>
+            <span className="font-label-sm text-[11px] text-secondary font-bold">{t('overdueCount', '4 overdue')}</span>
           </div>
           <span className="font-label-sm text-[11px] text-on-surface-variant mt-1.5">
-            Post-demonstration
+            {t('postDemonstration', 'Post-demonstration')}
           </span>
         </div>
 
         {/* Metric 4 */}
         <div className="bg-surface-container-lowest p-3.5 md:p-4 rounded-xl shadow-sm border border-outline-variant/20 flex flex-col justify-between">
           <div className="flex items-center justify-between">
-            <span className="font-label-md text-xs text-on-surface-variant">Follow-ups</span>
+            <span className="font-label-md text-xs text-on-surface-variant">{t('followUps', 'Follow-ups')}</span>
             <span className="material-symbols-outlined text-secondary text-[20px]">sync</span>
           </div>
           <div className="mt-2 flex items-baseline gap-1.5">
             <span className="font-headline-xl text-2xl md:text-3xl text-on-surface font-bold font-numeric">
               5
             </span>
-            <span className="font-label-sm text-[11px] text-on-surface-variant">this block</span>
+            <span className="font-label-sm text-[11px] text-on-surface-variant">{t('thisBlock', 'this block')}</span>
           </div>
           <span className="font-label-sm text-[11px] text-on-tertiary-container font-bold mt-1.5">
-            2 completed
+            {t('twoCompleted', '2 completed')}
           </span>
         </div>
       </div>
@@ -145,37 +145,37 @@ export function MentorDashboardPage() {
             </div>
             <div>
               <h2 className="font-headline-sm text-sm md:text-base text-on-surface font-bold">
-                In-Visit Fast Capture
+                {t('inVisitFastCapture', 'In-Visit Fast Capture')}
               </h2>
               <p className="font-body-sm text-xs text-on-surface-variant">
-                Structured diagnostic entry during classroom observation
+                {t('inVisitFastCaptureSub', 'Structured diagnostic entry during classroom observation')}
               </p>
             </div>
           </div>
           <span className="px-2.5 py-0.5 rounded-full font-label-sm text-[11px] bg-surface-container-highest text-secondary font-bold">
-            Active Session
+            {t('activeSession', 'Active Session')}
           </span>
         </div>
 
         {/* Quick Observation Taps */}
         <div className="space-y-1.5 pt-1">
           <p className="font-label-sm text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">
-            Quick Observation Rubric Taps
+            {t('quickObservationTaps', 'Quick Observation Rubric Taps')}
           </p>
           <div className="flex flex-wrap gap-1.5">
             {[
-              { key: 'grouping', label: 'Grouping', icon: 'groups' },
-              { key: 'taskLevel', label: 'Task Level', icon: 'layers' },
-              { key: 'checkingUnderstanding', label: 'Checking Understanding', icon: 'fact_check' },
-              { key: 'learnerParticipation', label: 'Learner Participation', icon: 'record_voice_over' },
-              { key: 'adaptation', label: 'Adaptation', icon: 'auto_fix_high' }
+              { key: 'grouping', label: t('grouping', 'Grouping'), icon: 'groups' },
+              { key: 'taskLevel', label: t('taskLevel', 'Task Level'), icon: 'layers' },
+              { key: 'checkingUnderstanding', label: t('checkingUnderstanding', 'Checking Understanding'), icon: 'fact_check' },
+              { key: 'learnerParticipation', label: t('learnerParticipation', 'Learner Participation'), icon: 'record_voice_over' },
+              { key: 'adaptation', label: t('adaptation', 'Adaptation'), icon: 'auto_fix_high' }
             ].map((chip) => {
               const isSelected = selectedChips[chip.key];
               return (
                 <button
                   key={chip.key}
                   onClick={() => toggleChip(chip.key)}
-                  className={`px-3 py-1.5 rounded-full font-label-sm text-xs flex items-center gap-1 transition-all ${
+                  className={`px-3 py-1.5 rounded-full font-label-sm text-xs flex items-center gap-1 transition-all cursor-pointer ${
                     isSelected
                       ? 'bg-secondary text-on-secondary font-bold shadow-xs'
                       : 'bg-surface-container text-on-surface hover:bg-surface-container-high'
@@ -194,7 +194,7 @@ export function MentorDashboardPage() {
         <div className="pt-1">
           <button
             onClick={handleToggleRecording}
-            className={`w-full h-12 rounded-xl font-headline-sm text-xs md:text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all active:scale-98 ${
+            className={`w-full h-12 rounded-xl font-headline-sm text-xs md:text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all active:scale-98 cursor-pointer ${
               isRecordingObservation
                 ? 'bg-error text-on-error animate-pulse'
                 : 'bg-primary text-on-primary hover:opacity-90'
@@ -206,12 +206,12 @@ export function MentorDashboardPage() {
             </span>
             <span>
               {isRecordingObservation
-                ? 'Listening & Transcribing Observation... (Tap to Finish)'
-                : 'Record Visit Voice Observation'}
+                ? t('listeningTranscribing', 'Listening & Transcribing Observation... (Tap to Finish)')
+                : t('recordVisitVoiceObservation', 'Record Visit Voice Observation')}
             </span>
           </button>
           <p className="font-body-sm text-[11px] text-on-surface-variant text-center mt-1">
-            Transcribes live in Marathi/Hindi & maps against FLN rubrics
+            {t('transcribeLiveHelp', 'Transcribes live in Marathi/Hindi & maps against FLN rubrics')}
           </p>
         </div>
 
@@ -221,16 +221,16 @@ export function MentorDashboardPage() {
             <span className="material-symbols-outlined text-secondary text-[20px]">smart_toy</span>
             <div>
               <span className="font-label-md text-xs text-on-surface font-bold block">
-                Pre-draft Teacher WhatsApp Action Note
+                {t('predraftWhatsappTitle', 'Pre-draft Teacher WhatsApp Action Note')}
               </span>
               <span className="font-body-sm text-[11px] text-on-surface-variant">
-                Review before AI dispatches to teacher
+                {t('predraftWhatsappSub', 'Review before AI dispatches to teacher')}
               </span>
             </div>
           </div>
           <button
             onClick={() => setWhatsappDraftEnabled(!whatsappDraftEnabled)}
-            className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors ${
+            className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors cursor-pointer ${
               whatsappDraftEnabled ? 'bg-secondary justify-end' : 'bg-surface-container justify-start'
             }`}
           >
@@ -244,14 +244,14 @@ export function MentorDashboardPage() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="font-headline-md text-base md:text-lg text-on-surface font-bold">
-              Recommended Visit Plan
+              {t('recommendedVisitPlan', 'Recommended Visit Plan')}
             </h2>
             <p className="font-body-sm text-xs text-on-surface-variant">
-              Automated daily priority queue for field travel
+              {t('automatedPriorityQueue', 'Automated daily priority queue for field travel')}
             </p>
           </div>
           <span className="font-label-sm text-xs font-bold bg-surface-container-high px-2.5 py-0.5 rounded-full text-on-surface">
-            Haveli Cluster
+            {t('haveliCluster', 'Haveli Cluster')}
           </span>
         </div>
 
@@ -260,12 +260,10 @@ export function MentorDashboardPage() {
           <span className="material-symbols-outlined text-secondary text-[18px] mt-0.5">policy</span>
           <div className="space-y-0.5">
             <span className="font-label-sm text-xs font-bold uppercase text-secondary tracking-wider block">
-              Deterministic Governance Metric
+              {t('deterministicGovernanceMetric', 'Deterministic Governance Metric')}
             </span>
             <p className="font-body-sm text-xs text-on-surface leading-snug">
-              Priority ranking is deterministic based on: <strong>(1) Repeated practice signal</strong>,{' '}
-              <strong>(2) Days since mentor visit (&gt;14d)</strong>, and{' '}
-              <strong>(3) Direct teacher assistance request</strong>. Non-black-box governance standard.
+              {t('deterministicGovernanceDesc', 'Priority ranking is deterministic based on: (1) Repeated practice signal, (2) Days since mentor visit (>14d), and (3) Direct teacher assistance request. Non-black-box governance standard.')}
             </p>
           </div>
         </div>
@@ -279,7 +277,7 @@ export function MentorDashboardPage() {
                 <div className="flex items-center gap-2">
                   <span className="px-2 py-0.5 rounded-full font-label-sm text-[10px] bg-error-container text-on-error-container font-bold flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-error"></span>
-                    HIGH PRIORITY
+                    {t('highPriority', 'HIGH PRIORITY')}
                   </span>
                   <span className="font-label-sm text-xs text-on-surface-variant">Cycle 4</span>
                 </div>
@@ -294,7 +292,7 @@ export function MentorDashboardPage() {
                 <span className="font-headline-sm text-base md:text-lg text-error font-bold font-numeric">
                   16d
                 </span>
-                <p className="font-label-sm text-[10px] text-on-surface-variant">since visit</p>
+                <p className="font-label-sm text-[10px] text-on-surface-variant">{t('sinceVisit', 'since visit')}</p>
               </div>
             </div>
 
@@ -302,11 +300,11 @@ export function MentorDashboardPage() {
               <div className="flex items-center gap-1.5 text-on-surface-variant">
                 <span className="material-symbols-outlined text-[16px] text-error">warning</span>
                 <span className="font-label-sm text-[10px] font-bold uppercase">
-                  Flagged Pedagogical Signal
+                  {t('flaggedPedagogicalSignal', 'Flagged Pedagogical Signal')}
                 </span>
               </div>
               <p className="font-body-sm text-xs text-on-surface font-semibold">
-                Level-based grouping inconsistent (3 evidence submissions)
+                {t('groupingInconsistentThreeEvidence', 'Level-based grouping inconsistent (3 evidence submissions)')}
               </p>
             </div>
 
@@ -314,10 +312,10 @@ export function MentorDashboardPage() {
               <span className="material-symbols-outlined text-secondary text-[18px] mt-0.5">school</span>
               <div>
                 <span className="font-label-sm text-[10px] uppercase tracking-wider text-on-surface-variant font-bold">
-                  Suggested Demonstration
+                  {t('suggestedDemonstration', 'Suggested Demonstration')}
                 </span>
                 <p className="font-body-md text-xs md:text-sm text-on-surface font-bold">
-                  Demonstrate 4-corner level grouping
+                  {t('demoFourCorner', 'Demonstrate 4-corner level grouping')}
                 </p>
               </div>
             </div>
@@ -325,20 +323,20 @@ export function MentorDashboardPage() {
             <div className="pt-1 flex flex-col gap-2">
               <button
                 onClick={() => handleStartVisitWorkflow('sch-1')}
-                className="w-full h-11 rounded-lg bg-secondary text-on-secondary font-label-md text-xs font-bold flex items-center justify-center gap-2 shadow-sm hover:bg-secondary/90 transition-all active:scale-98"
+                className="w-full h-11 rounded-lg bg-secondary text-on-secondary font-label-md text-xs font-bold flex items-center justify-center gap-2 shadow-sm hover:bg-secondary/90 transition-all active:scale-98 cursor-pointer"
                 type="button"
               >
                 <span className="material-symbols-outlined text-[18px]">navigation</span>
-                <span>Start Visit Workflow</span>
+                <span>{t('startVisitWorkflow', 'Start Visit Workflow')}</span>
               </button>
 
               <div>
                 <button
                   onClick={() => toggleExpandSchool('sch-1')}
-                  className="w-full py-1.5 flex items-center justify-center gap-1 text-secondary font-label-sm text-xs font-bold hover:bg-surface-container rounded-lg transition-colors"
+                  className="w-full py-1.5 flex items-center justify-center gap-1 text-secondary font-label-sm text-xs font-bold hover:bg-surface-container rounded-lg transition-colors cursor-pointer"
                   type="button"
                 >
-                  <span>Why this school? (Deterministic breakdown)</span>
+                  <span>{t('whyThisSchool', 'Why this school? (Deterministic breakdown)')}</span>
                   <span
                     className={`material-symbols-outlined text-[16px] transition-transform duration-200 ${
                       expandedSchools['sch-1'] ? 'rotate-180' : ''
@@ -355,7 +353,7 @@ export function MentorDashboardPage() {
                         record_voice_over
                       </span>
                       <span>
-                        <strong>2 flagged audio notes</strong> from Teacher Sunita indicating confusion on letter vs. word grouping.
+                        <strong>{t('flaggedAudioNotesCount', '2 flagged audio notes')}</strong> {t('fromTeacherSunitaConfusion', 'from Teacher Sunita indicating confusion on letter vs. word grouping.')}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-on-surface">
@@ -363,7 +361,7 @@ export function MentorDashboardPage() {
                         event_busy
                       </span>
                       <span>
-                        <strong>0 visits this cycle</strong> (Exceeded target SLA interval by +2 days).
+                        <strong>{t('zeroVisitsCycle', '0 visits this cycle')}</strong> ({t('exceededSlaInterval', 'Exceeded target SLA interval by +2 days')}).
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-on-surface">
@@ -371,7 +369,7 @@ export function MentorDashboardPage() {
                         handshake
                       </span>
                       <span>
-                        <strong>Direct teacher request:</strong> Requested mentor modeling 48 hours ago via Practice Log.
+                        <strong>{t('directTeacherRequestColon', 'Direct teacher request:')}</strong> {t('requestedMentorModeling', 'Requested mentor modeling 48 hours ago via Practice Log.')}
                       </span>
                     </div>
                   </div>
@@ -387,7 +385,7 @@ export function MentorDashboardPage() {
                 <div className="flex items-center gap-2">
                   <span className="px-2 py-0.5 rounded-full font-label-sm text-[10px] bg-secondary-fixed text-on-secondary-fixed font-bold flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-                    MEDIUM PRIORITY
+                    {t('mediumPriority', 'MEDIUM PRIORITY')}
                   </span>
                   <span className="font-label-sm text-xs text-on-surface-variant">Cycle 4</span>
                 </div>
@@ -402,7 +400,7 @@ export function MentorDashboardPage() {
                 <span className="font-headline-sm text-base md:text-lg text-on-surface font-bold font-numeric">
                   8d
                 </span>
-                <p className="font-label-sm text-[10px] text-on-surface-variant">since visit</p>
+                <p className="font-label-sm text-[10px] text-on-surface-variant">{t('sinceVisit', 'since visit')}</p>
               </div>
             </div>
 
@@ -410,11 +408,11 @@ export function MentorDashboardPage() {
               <div className="flex items-center gap-1.5 text-on-surface-variant">
                 <span className="material-symbols-outlined text-[16px] text-secondary">insights</span>
                 <span className="font-label-sm text-[10px] font-bold uppercase">
-                  Practice Metric Alert
+                  {t('practiceMetricAlert', 'Practice Metric Alert')}
                 </span>
               </div>
               <p className="font-body-sm text-xs text-on-surface font-semibold">
-                Low learner practice time during phonics (&lt;10 min observed)
+                {t('lowLearnerPracticeAlert', 'Low learner practice time during phonics (<10 min observed)')}
               </p>
             </div>
 
@@ -422,10 +420,10 @@ export function MentorDashboardPage() {
               <span className="material-symbols-outlined text-secondary text-[18px] mt-0.5">school</span>
               <div>
                 <span className="font-label-sm text-[10px] uppercase tracking-wider text-on-surface-variant font-bold">
-                  Suggested Demonstration
+                  {t('suggestedDemonstration', 'Suggested Demonstration')}
                 </span>
                 <p className="font-body-md text-xs md:text-sm text-on-surface font-bold">
-                  Model peer-paired reading
+                  {t('modelPeerPairedReading', 'Model peer-paired reading')}
                 </p>
               </div>
             </div>
@@ -433,11 +431,11 @@ export function MentorDashboardPage() {
             <div className="pt-1">
               <button
                 onClick={() => setCurrentRoute('visit-plan')}
-                className="w-full h-11 rounded-lg bg-surface-container text-on-surface font-label-md text-xs font-bold flex items-center justify-center gap-2 hover:bg-surface-container-high transition-colors"
+                className="w-full h-11 rounded-lg bg-surface-container text-on-surface font-label-md text-xs font-bold flex items-center justify-center gap-2 hover:bg-surface-container-high transition-colors cursor-pointer"
                 type="button"
               >
                 <span className="material-symbols-outlined text-[18px] text-on-surface-variant">event</span>
-                <span>Scheduled for Thursday (10:30 AM)</span>
+                <span>{t('scheduledForThursday', 'Scheduled for Thursday (10:30 AM)')}</span>
               </button>
             </div>
           </div>
@@ -449,9 +447,9 @@ export function MentorDashboardPage() {
                 <div className="flex items-center gap-2">
                   <span className="px-2 py-0.5 rounded-full font-label-sm text-[10px] bg-tertiary-fixed text-on-tertiary-fixed font-bold flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-on-tertiary-container"></span>
-                    ON TRACK
+                    {t('onTrack', 'ON TRACK')}
                   </span>
-                  <span className="font-label-sm text-xs text-on-surface-variant">Exemplar Hub</span>
+                  <span className="font-label-sm text-xs text-on-surface-variant">{t('exemplarHub', 'Exemplar Hub')}</span>
                 </div>
                 <h3 className="font-headline-sm text-sm md:text-base text-on-surface font-bold mt-1">
                   ZP School Saswad
@@ -464,7 +462,7 @@ export function MentorDashboardPage() {
                 <span className="font-headline-sm text-base md:text-lg text-on-tertiary-container font-bold font-numeric">
                   3d
                 </span>
-                <p className="font-label-sm text-[10px] text-on-surface-variant">since visit</p>
+                <p className="font-label-sm text-[10px] text-on-surface-variant">{t('sinceVisit', 'since visit')}</p>
               </div>
             </div>
 
@@ -472,11 +470,11 @@ export function MentorDashboardPage() {
               <div className="flex items-center gap-1.5 text-on-tertiary-container">
                 <span className="material-symbols-outlined text-[16px]">check_circle</span>
                 <span className="font-label-sm text-[10px] font-bold uppercase">
-                  Rubric Milestone
+                  {t('rubricMilestone', 'Rubric Milestone')}
                 </span>
               </div>
               <p className="font-body-sm text-xs text-on-surface font-semibold">
-                All 5 rubric practices observed & verified by block monitor
+                {t('allFiveRubricsObservedVerified', 'All 5 rubric practices observed & verified by block monitor')}
               </p>
             </div>
 
@@ -486,11 +484,11 @@ export function MentorDashboardPage() {
                   setSelectedSchoolId('sch-3');
                   setCurrentRoute('school-evidence-feed');
                 }}
-                className="w-full h-11 rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-xs font-bold flex items-center justify-center gap-2 shadow-xs hover:bg-surface-container transition-colors border border-outline-variant/30"
+                className="w-full h-11 rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-xs font-bold flex items-center justify-center gap-2 shadow-xs hover:bg-surface-container transition-colors border border-outline-variant/30 cursor-pointer"
                 type="button"
               >
                 <span className="material-symbols-outlined text-[18px] text-secondary">visibility</span>
-                <span>View School Portfolio</span>
+                <span>{t('viewSchoolPortfolio', 'View School Portfolio')}</span>
               </button>
             </div>
           </div>
@@ -501,10 +499,10 @@ export function MentorDashboardPage() {
       <div className="bg-surface-container-lowest p-4 md:p-5 rounded-xl shadow-sm border border-outline-variant/20 space-y-2.5">
         <div className="flex items-center justify-between">
           <span className="font-label-sm text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-            Cluster Cohort Diagnostic Status
+            {t('clusterCohortStatus', 'Cluster Cohort Diagnostic Status')}
           </span>
           <span className="font-label-sm text-xs text-secondary font-bold">
-            412 Students Assessed
+            {t('studentsAssessedCount', '412 Students Assessed')}
           </span>
         </div>
 
@@ -518,19 +516,19 @@ export function MentorDashboardPage() {
         <div className="flex items-center justify-between text-xs text-on-surface-variant pt-1 font-medium">
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-error"></span>
-            <span>Beginner (18%)</span>
+            <span>{t('beginnerPercent', 'Beginner (18%)')}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-surface-container-highest border border-outline-variant/40"></span>
-            <span>Letter (24%)</span>
+            <span>{t('letterPercent', 'Letter (24%)')}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-secondary-fixed"></span>
-            <span>Word (32%)</span>
+            <span>{t('wordPercent', 'Word (32%)')}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-secondary"></span>
-            <span>Story (26%)</span>
+            <span>{t('storyPercent', 'Story (26%)')}</span>
           </div>
         </div>
       </div>

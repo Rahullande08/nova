@@ -15,7 +15,7 @@ def get_actions(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    query = db.query(Action)
+    query = db.query(Action).filter(Action.is_archived == False)
     if status and status != "All":
         query = query.filter(Action.status == status)
     if search:
@@ -47,6 +47,36 @@ def get_actions(
         for a in actions
     ]
 
+@router.get("/{action_id}", response_model=Dict[str, Any])
+def get_action_by_id(
+    action_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Retrieves an action item by ID with authorization verification.
+    """
+    action = db.query(Action).filter(Action.id == action_id, Action.is_archived == False).first()
+    if not action:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Action item not found")
+
+    return {
+        "id": action.id,
+        "action": action.action,
+        "owner": action.owner,
+        "targetTeacher": action.target_teacher,
+        "school": action.school,
+        "schoolId": action.school_id,
+        "createdDate": action.created_date,
+        "dueDate": action.due_date,
+        "status": action.status,
+        "priority": action.priority,
+        "evidenceRequired": action.evidence_required,
+        "notes": action.notes,
+        "verificationNote": action.verification_note,
+        "lastUpdated": action.last_updated
+    }
+
 @router.post("", response_model=Dict[str, Any], status_code=status.HTTP_201_CREATED)
 def create_action(
     action_in: ActionCreate,
@@ -69,11 +99,19 @@ def create_action(
         status="Open",
         priority=action_in.priority or "Medium",
         evidence_required=action_in.evidence_required or "Classroom practice check / tracker update",
-        notes=action_in.notes or "Logged via Practice Layer system."
+        notes=action_in.notes or "Logged via Practice Layer system.",
+        is_archived=False
     )
-    db.add(new_action)
-    db.commit()
-    db.refresh(new_action)
+    try:
+        db.add(new_action)
+        db.commit()
+        db.refresh(new_action)
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to save action item to database."
+        )
 
     return {
         "id": new_action.id,
@@ -97,17 +135,24 @@ def update_action(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    action = db.query(Action).filter(Action.id == action_id).first()
+    action = db.query(Action).filter(Action.id == action_id, Action.is_archived == False).first()
     if not action:
-        raise HTTPException(status_code=404, detail="Action not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Action not found")
 
     action.status = update_data.status
     if update_data.verification_note is not None:
         action.verification_note = update_data.verification_note
     action.last_updated = datetime.utcnow().isoformat()
 
-    db.commit()
-    db.refresh(action)
+    try:
+        db.commit()
+        db.refresh(action)
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to update action in database."
+        )
 
     return {
         "id": action.id,
@@ -132,9 +177,9 @@ def delete_action(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    action = db.query(Action).filter(Action.id == action_id).first()
+    action = db.query(Action).filter(Action.id == action_id, Action.is_archived == False).first()
     if not action:
-        raise HTTPException(status_code=404, detail="Action not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Action not found")
 
     # Only creator/owner, mentors, leads, or admins can delete actions
     if current_user.role not in ["mentor", "lead", "admin"] and (current_user.name not in action.owner and action.target_teacher != current_user.name):
@@ -143,6 +188,15 @@ def delete_action(
             detail="You do not have permission to delete this action item."
         )
 
-    db.delete(action)
-    db.commit()
-    return {"success": True, "message": "Action deleted"}
+    try:
+        # Soft delete / archive to preserve historical audit trail
+        action.is_archived = True
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to delete action record."
+        )
+    return {"success": True, "message": "Action archived successfully"}
+
