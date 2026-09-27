@@ -51,7 +51,12 @@ export function SettingsPage() {
           <div className="flex-1 min-w-0">
             <h3 className="font-headline-sm text-sm font-bold text-on-surface">{currentRole.name}</h3>
             <p className="font-body-sm text-xs text-on-surface-variant">{currentRole.school}</p>
-            <p className="font-label-sm text-[11px] text-secondary font-semibold">{currentRole.roleLabel}</p>
+            <p className="font-label-sm text-[11px] text-secondary font-semibold">
+              {currentRole.id === 'teacher' ? t('roleLabelTeacher', currentRole.roleLabel) :
+               currentRole.id === 'mentor' ? t('roleLabelMentor', currentRole.roleLabel) :
+               currentRole.id === 'lead' ? t('roleLabelLead', currentRole.roleLabel) :
+               currentRole.roleLabel}
+            </p>
           </div>
         </div>
 
@@ -77,7 +82,12 @@ export function SettingsPage() {
                   <span className="material-symbols-outlined text-[18px]">{role.avatar}</span>
                   <span className="text-xs font-bold">{role.name}</span>
                 </div>
-                <span className="text-[10px] block opacity-85 leading-tight">{role.roleLabel}</span>
+                <span className="text-[10px] block opacity-85 leading-tight">
+                  {role.id === 'teacher' ? t('roleLabelTeacher', role.roleLabel) :
+                   role.id === 'mentor' ? t('roleLabelMentor', role.roleLabel) :
+                   role.id === 'lead' ? t('roleLabelLead', role.roleLabel) :
+                   role.roleLabel}
+                </span>
               </button>
             ))}
           </div>

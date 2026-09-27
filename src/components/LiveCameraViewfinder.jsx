@@ -99,7 +99,7 @@ export function LiveCameraViewfinder({ onPhotoCaptured, onClose, showToast }) {
             type="button"
             onClick={handleToggleFacingMode}
             className="w-9 h-9 rounded-full bg-black/60 backdrop-blur-md text-white hover:bg-black/80 flex items-center justify-center transition-colors"
-            title="Switch Camera (Front / Rear)"
+            title={t('switchCameraFrontRear', 'Switch Camera (Front / Rear)')}
           >
             <span className="material-symbols-outlined text-[20px]">flip_camera_ios</span>
           </button>
@@ -112,7 +112,7 @@ export function LiveCameraViewfinder({ onPhotoCaptured, onClose, showToast }) {
               onClose();
             }}
             className="w-9 h-9 rounded-full bg-black/60 backdrop-blur-md text-white hover:bg-black/80 flex items-center justify-center transition-colors"
-            aria-label="Close Camera"
+            aria-label={t('closeCamera', 'Close Camera')}
           >
             <span className="material-symbols-outlined text-[20px]">close</span>
           </button>
@@ -207,7 +207,7 @@ export function LiveCameraViewfinder({ onPhotoCaptured, onClose, showToast }) {
             onClick={handleCapture}
             disabled={isInitializing || isCapturing}
             className="w-16 h-16 rounded-full border-4 border-white bg-secondary flex items-center justify-center shadow-2xl active:scale-90 hover:scale-105 transition-all disabled:opacity-50 cursor-pointer"
-            aria-label="Capture Photo"
+            aria-label={t('capturePhoto', 'Capture Photo')}
           >
             <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-secondary">
               <span className="material-symbols-outlined text-2xl font-bold">photo_camera</span>

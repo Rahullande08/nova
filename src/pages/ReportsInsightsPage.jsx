@@ -24,7 +24,7 @@ export function ReportsInsightsPage() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    showToast('CSV export downloaded successfully!');
+    showToast(t('csvExportSuccessToast', 'CSV export downloaded successfully!'));
   };
 
   const handlePrintReport = () => {

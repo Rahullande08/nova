@@ -9,39 +9,39 @@ export function MyPracticePage() {
   const practiceLogs = [
     {
       id: 'log-1',
-      date: 'Today, 11:42 AM',
-      activity: 'FLN Reading Corner (Word Level)',
-      signals: 'Level-based grouping observed • 3-min exit check omitted',
-      confidence: '87% Confidence',
-      status: 'Action Scheduled',
-      actionTitle: '3-min exit ticket for beginner learners'
+      date: t('todayTime', 'Today, 11:42 AM'),
+      activity: t('logReadingCornerActivity', 'FLN Reading Corner (Word Level)'),
+      signals: t('logReadingCornerSignals', 'Level-based grouping observed • 3-min exit check omitted'),
+      confidence: t('confidence87', '87% Confidence'),
+      status: t('actionScheduled', 'Action Scheduled'),
+      actionTitle: t('logReadingCornerAction', '3-min exit ticket for beginner learners')
     },
     {
       id: 'log-2',
-      date: 'Sept 23, 2026',
-      activity: 'Number Line Chalk Ladder',
-      signals: 'Active learner participation observed • 100% group engagement',
-      confidence: '92% Confidence',
-      status: 'Verified',
-      actionTitle: 'Peer flashcard check'
+      date: t('sept23Date', 'Sept 23, 2026'),
+      activity: t('logNumberLineActivity', 'Number Line Chalk Ladder'),
+      signals: t('logNumberLineSignals', 'Active learner participation observed • 100% group engagement'),
+      confidence: t('confidence92', '92% Confidence'),
+      status: t('verified', 'Verified'),
+      actionTitle: t('logNumberLineAction', 'Peer flashcard check')
     },
     {
       id: 'log-3',
-      date: 'Sept 21, 2026',
-      activity: 'Phonics Rhyme & Sand Tracing',
-      signals: 'Activity matched learner level • High vocal repetition',
-      confidence: '90% Confidence',
-      status: 'Verified',
-      actionTitle: 'Consonant blend cards deployed'
+      date: t('sept21Date', 'Sept 21, 2026'),
+      activity: t('logPhonicsActivity', 'Phonics Rhyme & Sand Tracing'),
+      signals: t('logPhonicsSignals', 'Activity matched learner level • High vocal repetition'),
+      confidence: t('confidence90', '90% Confidence'),
+      status: t('verified', 'Verified'),
+      actionTitle: t('logPhonicsAction', 'Consonant blend cards deployed')
     },
     {
       id: 'log-4',
-      date: 'Sept 18, 2026',
-      activity: 'Baseline TaRL Matrix Mapping',
-      signals: '31 students grouped into 4 learning tiers',
-      confidence: '95% Confidence',
-      status: 'Closed',
-      actionTitle: 'Initial assessment completed'
+      date: t('sept18Date', 'Sept 18, 2026'),
+      activity: t('logBaselineActivity', 'Baseline TaRL Matrix Mapping'),
+      signals: t('logBaselineSignals', '31 students grouped into 4 learning tiers'),
+      confidence: t('confidence95', '95% Confidence'),
+      status: t('closed', 'Closed'),
+      actionTitle: t('logBaselineAction', 'Initial assessment completed')
     }
   ];
 

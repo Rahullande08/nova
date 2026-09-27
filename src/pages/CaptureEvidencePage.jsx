@@ -28,12 +28,22 @@ export function CaptureEvidencePage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisError, setAnalysisError] = useState(null);
 
+  const defaultMrTranscript = '“आज मी वाचन गट केले होते, पण शब्द स्तरावरील मुलांना जास्तीचा वेळ लागला. मात्रा ओळखताना काही मुले अडखळत होती...”';
+  const defaultEnTranscript = '“...grouped 14 children by word level and 8 by letter level. Spent 12 minutes on reading cards, but ran out of time to verify all 4 beginner learners.”';
+
   const [liveTranscript, setLiveTranscript] = useState(
-    activeEvidence.transcript ||
-      (language === 'MR'
-        ? '“आज मी वाचन गट केले होते, पण शब्द स्तरावरील मुलांना जास्तीचा वेळ लागला. मात्रा ओळखताना काही मुले अडखळत होती...”'
-        : '“...grouped 14 children by word level and 8 by letter level. Spent 12 minutes on reading cards, but ran out of time to verify all 4 beginner learners.”')
+    activeEvidence.transcript || (language === 'MR' ? defaultMrTranscript : defaultEnTranscript)
   );
+
+  useEffect(() => {
+    if (!activeEvidence.transcript) {
+      if (language === 'MR' && liveTranscript === defaultEnTranscript) {
+        setLiveTranscript(defaultMrTranscript);
+      } else if (language !== 'MR' && liveTranscript === defaultMrTranscript) {
+        setLiveTranscript(defaultEnTranscript);
+      }
+    }
+  }, [language, activeEvidence.transcript]);
 
   const fileInputRef = useRef(null);
   const timerRef = useRef(null);
@@ -359,7 +369,7 @@ export function CaptureEvidencePage() {
           <button
             onClick={() => showToast(t('groupTrackerHelpToast', 'Capture your student grouping register or blackboard using device camera'))}
             className="text-on-surface-variant hover:text-on-surface p-1"
-            title="Help on group tracker"
+            title={t('helpOnGroupTracker', 'Help on group tracker')}
             type="button"
           >
             <span className="material-symbols-outlined text-[20px]">help_outline</span>

@@ -91,7 +91,7 @@ export function TutorialModal() {
             <button
               onClick={() => setIsTourOpen(false)}
               className="w-8 h-8 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors"
-              aria-label="Close tour"
+              aria-label={getTranslation('closeTour', language, 'Close tour')}
             >
               <span className="material-symbols-outlined text-[18px]">close</span>
             </button>

@@ -38,7 +38,7 @@ export function MentorVisitWorkflowPage() {
     if (res && res.url) {
       setRecordedAudioUrl(res.url);
     }
-    showToast('Observation audio captured! Running AI structuring...');
+    showToast(t('observationAudioCapturedToast', 'Observation audio captured! Running AI structuring...'));
     handleProcessObservation();
   };
 
@@ -97,7 +97,7 @@ export function MentorVisitWorkflowPage() {
       });
     }
 
-    showToast('Feedback sent to Teacher WhatsApp & Action created in Ledger!');
+    showToast(t('feedbackSentWhatsappToast', 'Feedback sent to Teacher WhatsApp & Action created in Ledger!'));
     setCurrentStep(4);
   };
 

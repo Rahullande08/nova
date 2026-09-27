@@ -151,8 +151,8 @@ export function AppProvider({ children }) {
 
   // Translation helper bound to active language
   const t = useCallback(
-    (key, fallback = '') => {
-      return getTranslation(key, language, fallback);
+    (key, paramsOrFallback = '', maybeFallback = '') => {
+      return getTranslation(key, language, paramsOrFallback, maybeFallback);
     },
     [language]
   );
@@ -206,21 +206,21 @@ export function AppProvider({ children }) {
   const markAllNotificationsRead = async () => {
     const updated = await apiService.markAllNotificationsRead();
     setNotifications(updated);
-    showToast('All notifications marked as read.');
+    showToast(getTranslation('allNotificationsMarkedReadToast', language, 'All notifications marked as read.'));
   };
 
   const updateActionStatus = async (actionId, newStatus, verificationNote = null) => {
     await apiService.updateActionStatus(actionId, newStatus, verificationNote);
     const updatedList = await apiService.getActions();
     setActions(updatedList);
-    showToast(`Action status updated to "${newStatus}"`);
+    showToast(getTranslation('actionStatusUpdatedToast', language, { status: newStatus }, `Action status updated to "${newStatus}"`));
   };
 
   const createAction = async (newAction) => {
     const created = await apiService.createAction(newAction);
     const updatedList = await apiService.getActions();
     setActions(updatedList);
-    showToast('New action item created and synced to Ledger!');
+    showToast(getTranslation('newActionSyncedToast', language, 'New action item created and synced to Ledger!'));
     return created;
   };
 
@@ -237,7 +237,7 @@ export function AppProvider({ children }) {
     setNotifications(NOTIFICATIONS_DATA);
     setCurrentRole(APP_ROLES.TEACHER);
     setLanguage('EN');
-    showToast('Reset system to default seed dataset.');
+    showToast(getTranslation('resetSystemDefaultsToast', language, 'Reset system to default seed dataset.'));
   };
 
   return (

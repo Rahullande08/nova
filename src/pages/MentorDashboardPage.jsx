@@ -507,10 +507,10 @@ export function MentorDashboardPage() {
         </div>
 
         <div className="flex h-3.5 w-full rounded-full overflow-hidden bg-surface-container gap-0.5">
-          <div className="bg-error h-full" style={{ width: '18%' }} title="Beginner (18%)"></div>
-          <div className="bg-surface-container-highest h-full" style={{ width: '24%' }} title="Letter Level (24%)"></div>
-          <div className="bg-secondary-fixed h-full" style={{ width: '32%' }} title="Word Level (32%)"></div>
-          <div className="bg-secondary h-full" style={{ width: '26%' }} title="Paragraph / Story (26%)"></div>
+          <div className="bg-error h-full" style={{ width: '18%' }} title={t('beginnerPercent', 'Beginner (18%)')}></div>
+          <div className="bg-surface-container-highest h-full" style={{ width: '24%' }} title={t('letterPercent', 'Letter Level (24%)')}></div>
+          <div className="bg-secondary-fixed h-full" style={{ width: '32%' }} title={t('wordPercent', 'Word Level (32%)')}></div>
+          <div className="bg-secondary h-full" style={{ width: '26%' }} title={t('storyPercent', 'Paragraph / Story (26%)')}></div>
         </div>
 
         <div className="flex items-center justify-between text-xs text-on-surface-variant pt-1 font-medium">

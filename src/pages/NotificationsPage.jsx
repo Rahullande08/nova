@@ -21,6 +21,36 @@ export function NotificationsPage() {
     markAllNotificationsRead();
   };
 
+  const getNotifTitle = (notif) => {
+    switch (notif.id) {
+      case 'notif-1': return t('notifNewEvidenceSubmitted', notif.title);
+      case 'notif-2': return t('notifAiCoachingGenerated', notif.title);
+      case 'notif-3': return t('notifVisitPriorityAlert', notif.title);
+      case 'notif-4': return t('notifActionItemVerified', notif.title);
+      default: return notif.titleKey ? t(notif.titleKey, notif.title) : notif.title;
+    }
+  };
+
+  const getNotifDesc = (notif) => {
+    switch (notif.id) {
+      case 'notif-1': return t('notifNewEvidenceDesc', notif.description);
+      case 'notif-2': return t('notifAiCoachingDesc', notif.description);
+      case 'notif-3': return t('notifVisitPriorityDesc', notif.description);
+      case 'notif-4': return t('notifActionItemDesc', notif.description);
+      default: return notif.descKey ? t(notif.descKey, notif.description) : notif.description;
+    }
+  };
+
+  const getNotifTime = (time) => {
+    switch (time) {
+      case '22m ago': return t('time22mAgo', time);
+      case '1h ago': return t('time1hAgo', time);
+      case '2h ago': return t('time2hAgo', time);
+      case '5h ago': return t('time5hAgo', time);
+      default: return time;
+    }
+  };
+
   return (
     <div className="space-y-4 md:space-y-6 animate-in fade-in duration-200 max-w-3xl mx-auto pb-8">
       {/* Header */}
@@ -100,14 +130,14 @@ export function NotificationsPage() {
             <div className="flex-1 min-w-0 space-y-0.5">
               <div className="flex items-center justify-between">
                 <h3 className={`font-headline-sm text-xs md:text-sm ${notif.unread ? 'font-bold text-on-surface' : 'font-semibold text-on-surface-variant'}`}>
-                  {notif.title}
+                  {getNotifTitle(notif)}
                 </h3>
                 <span className="font-label-sm text-[11px] text-on-surface-variant">
-                  {notif.time}
+                  {getNotifTime(notif.time)}
                 </span>
               </div>
               <p className="font-body-sm text-xs text-on-surface leading-relaxed">
-                {notif.description}
+                {getNotifDesc(notif)}
               </p>
             </div>
 

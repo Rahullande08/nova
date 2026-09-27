@@ -65,7 +65,7 @@ export function AppHeader() {
         {/* Left branding & menu button */}
         <div className="flex items-center gap-3 min-w-0">
           <button
-            aria-label="Open Navigation Menu"
+            aria-label={t('openNavigationMenu', 'Open Navigation Menu')}
             className="w-10 h-10 flex items-center justify-center rounded-lg text-on-surface hover:bg-surface-container transition-colors focus:outline-none focus:ring-2 focus:ring-secondary md:hidden"
             onClick={() => setIsNavDrawerOpen(true)}
             type="button"
@@ -95,7 +95,7 @@ export function AppHeader() {
           <button
             onClick={() => setIsDemoMode(!isDemoMode)}
             className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-label-sm text-[11px] bg-surface-container-high text-on-surface font-semibold hover:bg-surface-container-highest transition-colors"
-            title="Click to toggle Demo Mode indicator"
+            title={t('toggleDemoModeIndicator', 'Click to toggle Demo Mode indicator')}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-secondary"></span>
             {isDemoMode ? t('demoMode', 'Demo Mode') : t('liveSync', 'Live Sync')}
@@ -111,7 +111,7 @@ export function AppHeader() {
           <button
             onClick={() => setIsTransparencyModalOpen(true)}
             className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container text-label-sm font-medium border border-outline-variant/40 transition-colors"
-            title="View Deterministic AI Transparency Pipeline"
+            title={t('viewDeterministicAiTransparency', 'View Deterministic AI Transparency Pipeline')}
           >
             <span className="material-symbols-outlined text-[16px] text-secondary">policy</span>
             <span>{t('aiTrustGuardrails', 'AI Trust Guardrails')}</span>
@@ -137,7 +137,7 @@ export function AppHeader() {
 
           {/* Notifications button */}
           <button
-            aria-label="Notifications"
+            aria-label={t('notifications', 'Notifications')}
             onClick={() => setCurrentRoute('system-notifications')}
             className="relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"
             type="button"
@@ -151,7 +151,7 @@ export function AppHeader() {
           {/* Role Switcher Menu */}
           <div className="relative">
             <button
-              aria-label="User Profile & Role Switcher"
+              aria-label={t('userProfileRoleSwitcher', 'User Profile & Role Switcher')}
               onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
               className="flex items-center gap-1.5 p-1 rounded-full hover:ring-2 hover:ring-secondary/30 transition-all focus:outline-none"
               type="button"
@@ -170,7 +170,10 @@ export function AppHeader() {
                   <p className="font-label-sm font-semibold text-on-surface">{currentRole.name}</p>
                   <p className="font-body-sm text-[12px] text-on-surface-variant">{currentRole.school}</p>
                   <span className="inline-block mt-1 px-2 py-0.5 rounded text-[10px] uppercase font-bold bg-surface-container-highest text-secondary">
-                    {currentRole.roleLabel}
+                    {currentRole.id === 'teacher' ? t('roleLabelTeacher', currentRole.roleLabel) :
+                     currentRole.id === 'mentor' ? t('roleLabelMentor', currentRole.roleLabel) :
+                     currentRole.id === 'lead' ? t('roleLabelLead', currentRole.roleLabel) :
+                     currentRole.roleLabel}
                   </span>
                 </div>
 
@@ -194,7 +197,12 @@ export function AppHeader() {
                       <span className="material-symbols-outlined text-[16px]">{role.avatar}</span>
                       <div className="truncate">
                         <div className="font-medium">{role.name}</div>
-                        <div className="text-[10px] text-on-surface-variant">{role.roleLabel}</div>
+                        <div className="text-[10px] text-on-surface-variant">
+                          {role.id === 'teacher' ? t('roleLabelTeacher', role.roleLabel) :
+                           role.id === 'mentor' ? t('roleLabelMentor', role.roleLabel) :
+                           role.id === 'lead' ? t('roleLabelLead', role.roleLabel) :
+                           role.roleLabel}
+                        </div>
                       </div>
                     </button>
                   ))}

@@ -78,7 +78,7 @@ export function AppSidebar() {
           <button
             className="w-9 h-9 flex items-center justify-center rounded-lg text-on-surface-variant hover:bg-surface-container"
             onClick={() => setIsNavDrawerOpen(false)}
-            aria-label="Close navigation drawer"
+            aria-label={t('closeNavigationDrawer', 'Close navigation drawer')}
           >
             <span className="material-symbols-outlined text-[20px]">close</span>
           </button>
